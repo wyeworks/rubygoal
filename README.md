@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/wyeworks/rubygoal.svg)](https://travis-ci.org/wyeworks/rubygoal)
+
 #Welcome to RubyGoal!
 
 ## What is RubyGoal?
@@ -27,7 +29,7 @@ For other distros:  https://github.com/jlnr/gosu/wiki/Getting-Started-on-Linux
 gem install rubygoal
 ```
 
-Run the game with example `Coach` 
+Run the game with example `Coach`
 ```bash
 rubygoal
 ```
@@ -50,9 +52,9 @@ Specially pay attention to the file `lib/rubygoal/coaches/template.rb`
 
 
 ## Legal
-All source code, except the files under the `media/` folder, is 
+All source code, except the files under the `media/` folder, is
 licensed under the Apache License 2.0. Please see the `LICENSE` file under
 the gem root folder.
 
-All media files under the `media/` folder are licensed under the Creative 
+All media files under the `media/` folder are licensed under the Creative
 Commons 4.0 Attribution license. Please see https://creativecommons.org/licenses/by/4.0/
