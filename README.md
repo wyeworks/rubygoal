@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/wyeworks/rubygoal.png)](https://travis-ci.org/wyeworks/rubygoal)
+[![Code Climate](https://codeclimate.com/github/wyeworks/rubygoal.png)](https://codeclimate.com/github/wyeworks/rubygoal)
 [![Inline docs](http://inch-ci.org/github/wyeworks/rubygoal.png?branch=master)](http://inch-ci.org/github/wyeworks/rubygoal)
 
 #Welcome to RubyGoal!
