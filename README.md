@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/wyeworks/rubygoal.svg)](https://travis-ci.org/wyeworks/rubygoal)
-[![Inline docs](http://inch-ci.org/github/wyeworks/rubygoal.svg?branch=master)](http://inch-ci.org/github/wyeworks/rubygoal)
+[![Build Status](https://travis-ci.org/wyeworks/rubygoal.png)](https://travis-ci.org/wyeworks/rubygoal)
+[![Inline docs](http://inch-ci.org/github/wyeworks/rubygoal.png?branch=master)](http://inch-ci.org/github/wyeworks/rubygoal)
 
 #Welcome to RubyGoal!
 
