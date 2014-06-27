@@ -21,17 +21,10 @@ module Rubygoal
     end
 
     def kick(ball, target)
-      strength = Rubygoal.configuration.kick_strength * Random.rand(error_range)
+      direction = random_direction(target)
+      strength = random_strength
 
-      direction = Gosu.angle(position.x, position.y, target.x, target.y)
-      direction *= Random.rand(error_range)
-
-      velocity = Velocity.new(
-        Gosu.offset_x(direction, strength),
-        Gosu.offset_y(direction, strength)
-      )
-      ball.velocity = velocity
-
+      ball.move(direction, strength)
       reset_waiting_to_kick!
     end
 
@@ -76,8 +69,19 @@ module Rubygoal
       distance(ball.position) < Rubygoal.configuration.distance_control_ball
     end
 
-    def error_range
-      (1.0 - error) .. (1.0 + error)
+    def random_strength
+      error_range = (1 - error)..(1 + error)
+      error_coef = Random.rand(error_range)
+      Rubygoal.configuration.kick_strength * error_coef
+    end
+
+    def random_direction(target)
+      direction = Gosu.angle(position.x, position.y, target.x, target.y)
+
+      max_angle_error = 180 * error
+      angle_error_range = -max_angle_error..max_angle_error
+
+      direction += Random.rand(angle_error_range)
     end
   end
 end

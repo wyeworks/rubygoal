@@ -22,6 +22,13 @@ module Rubygoal
       Field.goal?(position)
     end
 
+    def move(direction, speed)
+      self.velocity = Velocity.new(
+        Gosu.offset_x(direction, speed),
+        Gosu.offset_y(direction, speed)
+      )
+    end
+
     def draw
       half_side_lenght = IMAGE_SIZE / 2
       image_center_x = position.x - half_side_lenght
