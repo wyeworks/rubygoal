@@ -9,6 +9,9 @@ module Rubygoal
   # Use only one Game instance when running tests to avoid this issue:
   # https://github.com/jlnr/gosu/issues/108
   def self.game_instance
-    @game ||= Game.new
+    return @game if @game
+
+    Random.srand(1)
+    @game = Game.new
   end
 end
