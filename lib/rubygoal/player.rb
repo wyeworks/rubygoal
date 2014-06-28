@@ -6,6 +6,8 @@ require 'rubygoal/configuration'
 
 module Rubygoal
   class Player
+    STRAIGHT_ANGLE = 180
+
     include Moveable
 
     def initialize(game_window, side)
@@ -78,7 +80,7 @@ module Rubygoal
     def random_direction(target)
       direction = Gosu.angle(position.x, position.y, target.x, target.y)
 
-      max_angle_error = 180 * error
+      max_angle_error = STRAIGHT_ANGLE * error
       angle_error_range = -max_angle_error..max_angle_error
 
       direction += Random.rand(angle_error_range)
