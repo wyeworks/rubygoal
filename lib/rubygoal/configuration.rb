@@ -4,7 +4,7 @@ module Rubygoal
   class Configuration
     attr_accessor :average_players_count, :fast_players_count, :captain_players_count,
                   :kick_strength, :kick_again_delay, :distance_control_ball,
-                  :initial_player_positions, :game_time,
+                  :deceleration_coef, :initial_player_positions, :game_time,
                   :average_lower_error, :average_upper_error, :average_speed,
                   :fast_lower_error, :fast_upper_error, :fast_speed,
                   :captain_error, :captain_speed
@@ -30,6 +30,7 @@ module Rubygoal
     config.kick_strength         = 20
     config.kick_again_delay      = 60
     config.distance_control_ball = 30
+    config.deceleration_coef     = 0.95
 
     config.average_lower_error   = 0.1
     config.average_upper_error   = 0.15

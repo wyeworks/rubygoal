@@ -39,18 +39,30 @@ module Rubygoal
 
     def update
       super
+
+      prevent_out_of_bounds
+      decelerate
+    end
+
+    private
+
+    def prevent_out_of_bounds
       if Field.out_of_bounds_width?(position)
         velocity.x *= -1
       end
       if Field.out_of_bounds_height?(position)
         velocity.y *= -1
       end
-
-      velocity.x *= 0.95
-      velocity.y *= 0.95
     end
 
-    private
+    def decelerate
+      velocity.x *= deceleration_coef
+      velocity.y *= deceleration_coef
+    end
+
+    def deceleration_coef
+      Rubygoal.configuration.deceleration_coef
+    end
 
     attr_reader :image
   end
