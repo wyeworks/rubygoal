@@ -4,6 +4,7 @@ module Rubygoal
       super
       config = Rubygoal.configuration
 
+      @type = :captain
       @error = config.captain_error
       @speed = config.captain_speed
     end

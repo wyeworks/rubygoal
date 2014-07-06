@@ -1,6 +1,7 @@
 module Rubygoal
   class Formation
     attr_accessor :lineup
+    attr_reader :old_formation
 
     def initialize
       @lineup = [
@@ -10,6 +11,7 @@ module Rubygoal
         [:none, :none, :none, :none, :none],
         [:none, :none, :none, :none, :none],
       ]
+      @old_formation = false
     end
 
     def defenders
@@ -49,10 +51,25 @@ module Rubygoal
     def errors
       errors = {}
 
-      unified       = lineup.flatten
-      captain_count = unified.count(:captain)
-      fast_count    = unified.count(:fast)
-      average_count = unified.count(:average)
+      unified        = lineup.flatten
+      captain_count  = unified.count(:captain)
+      fast_count    = unified.count(:fast1)
+      fast_count    += unified.count(:fast2)
+      fast_count    += unified.count(:fast3)
+      average_count = unified.count(:average1)
+      average_count += unified.count(:average2)
+      average_count += unified.count(:average3)
+      average_count += unified.count(:average4)
+      average_count += unified.count(:average5)
+      average_count += unified.count(:average6)
+
+      if fast_count == 0 && average_count == 0
+        fast_count = unified.count(:fast)
+        average_count = unified.count(:average)
+        @old_formation = true
+      else
+        @old_formation = false
+      end
 
       config = Rubygoal.configuration
 
