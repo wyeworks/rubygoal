@@ -133,14 +133,14 @@ module Rubygoal
           game_window.score_home,
           game_window.score_away,
           game_window.time,
-          team_away.formation
+          team_away.formation_for_opponent
         )
       when :away
         Match.new(
           game_window.score_away,
           game_window.score_home,
           game_window.time,
-          team_home.formation
+          team_home.formation_for_opponent
         )
       end
     end

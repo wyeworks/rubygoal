@@ -36,18 +36,18 @@ module Rubygoal
 
     def initialize(game_window, coach)
       @game = game_window
-      @players = []
+      @players = {}
       @coach = coach
 
       initialize_lineup_values
-      initialize_formation
       initialize_players(game_window)
+      initialize_formation
     end
 
     def players_to_initial_position
       initial_positions = Team.initial_player_positions
 
-      players.each_with_index do |player, index|
+      players.values.flatten.each_with_index do |player, index|
         field_position = initial_positions[index]
         player.position = Field.absolute_position(field_position, side)
       end
@@ -55,16 +55,11 @@ module Rubygoal
 
     def update(match)
       self.formation = coach.formation(match)
-      unless formation.valid?
-        puts formation.errors
-        puts formation.old_formation ? 'Old Formation' : 'New Formation'
-        raise "Invalid formation: #{coach.name}"
-      end
       update_positions(formation)
 
       player_to_move = nil
       min_distance_to_ball = INFINITE
-      players.each do |player|
+      players.values.flatten.each do |player|
         pass_or_shoot(player) if player.can_kick?(game.ball)
 
         distance_to_ball = player.distance(game.ball.position)
@@ -76,51 +71,39 @@ module Rubygoal
 
       player_to_move.move_to(game.ball.position)
 
-      if formation.old_formation
-        average_players = []
-        fast_players = []
-        captain_player = nil
-
-        players.each do |player|
-          if player.is_a? AveragePlayer
-            average_players << player
-          elsif player.is_a? FastPlayer
-            fast_players << player
-          else
-            captain_player = player
+      players.each do |name, player|
+        if player != player_to_move
+          unless positions[name]
+            puts positions.keys.inspect
+            raise "Undefined position for #{name}"
           end
+          player.move_to positions[name]
         end
-
-        if captain_player != player_to_move
-          captain_player.move_to(positions[:captain])
-        end
-        captain_player.update
-
-        average_players.each_with_index do |player, index|
-          if player != player_to_move
-            player.move_to(positions[:average][index])
-          end
-
-          player.update
-        end
-
-        fast_players.each_with_index do |player, index|
-          player.move_to(positions[:fast][index]) if player != player_to_move
-          player.update
-        end
-      else
-        players.each do |player|
-          if player != player_to_move
-            player.move_to(positions[player.type])
-          end
-
-          player.update
-        end
+        player.update
       end
     end
 
     def draw
-      players.each(&:draw)
+      players.values.flatten.each &:draw
+    end
+
+    def formation_for_opponent
+      f = Formation.new
+      formation.lineup.each_with_index do |line, i|
+        line.each_with_index do |name, j|
+          if name != :none
+            case players[name]
+            when CaptainPlayer
+              f.lineup[i][j] = :captain
+            when FastPlayer
+              f.lineup[i][j] = :fast
+            when AveragePlayer
+              f.lineup[i][j] = :average
+            end
+          end
+        end
+      end
+      f
     end
 
     private
@@ -139,29 +122,47 @@ module Rubygoal
     end
 
     def initialize_formation
+      average_players = @coach.players[:average]
+      fast_players = @coach.players[:fast]
+      captain_players = @coach.players[:captain]
       @formation = Formation.new
       @formation.lineup = [
-        [:average, :none, :average, :none, :none   ],
-        [:average, :none, :fast,    :none, :captain],
-        [:none,    :none, :none,    :none, :none   ],
-        [:average, :none, :fast,    :none, :fast   ],
-        [:average, :none, :average, :none, :none   ]
+        [average_players[0], :none, average_players[1], :none, :none              ],
+        [average_players[2], :none, fast_players[0],    :none, captain_players[0] ],
+        [:none,              :none, :none,              :none, :none              ],
+        [average_players[3], :none, fast_players[1],    :none, fast_players[2]    ],
+        [average_players[4], :none, average_players[5], :none, :none              ]
       ]
     end
 
     def initialize_players(game_window)
-      players << GoalKeeperPlayer.new(game_window, side, :goalkeeper)
+      @players = {goalkeeper: GoalKeeperPlayer.new(game_window, side)}
 
       config = Rubygoal.configuration
 
-      config.average_players_count.times do |x|
-        players << AveragePlayer.new(game_window, side, "average#{x+1}".to_sym)
+      errors = {}
+
+      if @coach.players[:captain].uniq.size != config.captain_players_count
+        errors[:captain] = "The number of captains is #{captain_count}"
       end
-      config.fast_players_count.times do |x|
-        players << FastPlayer.new(game_window, side, "fast#{x+1}".to_sym)
+      if @coach.players[:fast].uniq.size != config.fast_players_count
+        errors[:fast] = "The number of fast players is #{fast_count}"
       end
-      config.captain_players_count.times do
-        players << CaptainPlayer.new(game_window, side)
+      if @coach.players[:average].uniq.size != config.average_players_count
+        errors[:average] = "The number of average players is #{average_count}"
+      end
+
+      if errors.size > 0
+        puts errors
+        raise "Invalid formation: #{coach.name}"
+      end
+
+      @players[@coach.players[:captain].first] = CaptainPlayer.new(game_window, side)
+      @coach.players[:fast].each do |name|
+        @players[name] = FastPlayer.new(game_window, side)
+      end
+      @coach.players[:average].each do |name|
+        @players[name] = AveragePlayer.new(game_window, side)
       end
 
       players_to_initial_position
@@ -185,7 +186,7 @@ module Rubygoal
       min_dist = INFINITE
       nearest_teammate = nil
 
-      (players - [player]).each do |teammate|
+      (players.values - [player]).each do |teammate|
         if teammate_is_on_front?(player, teammate)
           dist = player.distance(teammate.position)
           if min_dist > dist
@@ -213,31 +214,13 @@ module Rubygoal
       field_goalkeeper_pos = Team.initial_player_positions.first
       goalkeeper_position = Field.absolute_position(field_goalkeeper_pos, side)
 
-      if formation.old_formation
-        self.positions = {
-          average: [goalkeeper_position],
-          fast: []
-        }
+      self.positions = {
+        goalkeeper: goalkeeper_position
+      }
 
-        lineup.each_with_index do |row, y|
-          row.each_with_index do |player_type, x|
-            case player_type
-            when :average, :fast
-              positions[player_type] << lineup_to_position(x, y)
-            when :captain
-              positions[:captain] = lineup_to_position(x, y)
-            end
-          end
-        end
-      else
-        self.positions = {
-          goalkeeper: goalkeeper_position,
-        }
-
-        lineup.each_with_index do |row, y|
-          row.each_with_index do |player_type, x|
-            positions[player_type] = lineup_to_position(x, y) if player_type != :none
-          end
+      lineup.each_with_index do |row, y|
+        row.each_with_index do |player_name, x|
+          self.positions[player_name] = lineup_to_position(x, y) if player_name != :none
         end
       end
     end
