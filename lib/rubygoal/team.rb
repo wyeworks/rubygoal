@@ -211,6 +211,9 @@ module Rubygoal
 
     def update_positions(formation)
       lineup = formation.lineup
+      if lineup.flatten.uniq.size != 11
+        raise 'Incorrect number of players, are you missing a name?'
+      end
       field_goalkeeper_pos = Team.initial_player_positions.first
       goalkeeper_position = Field.absolute_position(field_goalkeeper_pos, side)
 
