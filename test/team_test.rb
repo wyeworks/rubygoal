@@ -32,7 +32,7 @@ module Rubygoal
         Position.new(878, 608)
       ]
 
-      players_positions = @home_team.players.map(&:position)
+      players_positions = @home_team.players.values.map(&:position)
 
       assert_equal expected, players_positions
     end
@@ -52,30 +52,30 @@ module Rubygoal
         Position.new(1040, 554)
       ]
 
-      players_positions = @away_team.players.map(&:position)
+      players_positions = @away_team.players.values.map(&:position)
 
       assert_equal expected, players_positions
     end
 
     def test_home_goalkeeper_position
-      goalkeeper = @home_team.players.first
+      goalkeeper = @home_team.players[:goalkeeper]
 
       assert_equal Position.new(312, 581), goalkeeper.position
     end
 
     def test_away_goalkeeper_position
-      goalkeeper = @away_team.players.first
+      goalkeeper = @away_team.players[:goalkeeper]
 
       assert_equal Position.new(1606, 581), goalkeeper.position
     end
 
     def test_initial_lineup
       expected = [
-        [:average, :none, :average, :none, :none   ],
-        [:average, :none, :fast,    :none, :captain],
+        [:average1, :none, :average2, :none, :none   ],
+        [:average3, :none, :fast1,    :none, :captain],
         [:none,    :none, :none,    :none, :none   ],
-        [:average, :none, :fast,    :none, :fast   ],
-        [:average, :none, :average, :none, :none   ]
+        [:average4, :none, :fast2,    :none, :fast3   ],
+        [:average5, :none, :average6, :none, :none   ]
       ]
 
       assert_equal expected, @home_team.formation.lineup

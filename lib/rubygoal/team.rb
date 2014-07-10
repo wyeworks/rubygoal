@@ -47,7 +47,7 @@ module Rubygoal
     def players_to_initial_position
       initial_positions = Team.initial_player_positions
 
-      players.values.flatten.each_with_index do |player, index|
+      players.values.each_with_index do |player, index|
         field_position = initial_positions[index]
         player.position = Field.absolute_position(field_position, side)
       end
@@ -59,7 +59,7 @@ module Rubygoal
 
       player_to_move = nil
       min_distance_to_ball = INFINITE
-      players.values.flatten.each do |player|
+      players.values.each do |player|
         pass_or_shoot(player) if player.can_kick?(game.ball)
 
         distance_to_ball = player.distance(game.ball.position)
@@ -84,7 +84,7 @@ module Rubygoal
     end
 
     def draw
-      players.values.flatten.each &:draw
+      players.values.each &:draw
     end
 
     def formation_for_opponent

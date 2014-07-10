@@ -9,12 +9,10 @@ module Rubygoal
     STRAIGHT_ANGLE = 180
 
     include Moveable
-    attr_reader :type
 
-    def initialize(game_window, side, type=nil)
+    def initialize(game_window, side)
       super()
 
-      @type = type
       @image = Gosu::Image.new(game_window, image_filename(side), false)
       @time_to_kick_again = 0
       @field = game_window.field

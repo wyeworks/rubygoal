@@ -6,7 +6,7 @@ module Rubygoal
       @game = Rubygoal.game_instance
       home_team = @game.field.team_home
 
-      @player = home_team.players.first
+      @player = home_team.players.values.first
       @player.send(:time_to_kick_again=, 0)
     end
 
