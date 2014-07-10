@@ -138,23 +138,9 @@ module Rubygoal
     def initialize_players(game_window)
       @players = {goalkeeper: GoalKeeperPlayer.new(game_window, side)}
 
-      config = Rubygoal.configuration
-
-      errors = {}
-
-      if @coach.players[:captain].uniq.size != config.captain_players_count
-        errors[:captain] = "The number of captains is #{captain_count}"
-      end
-      if @coach.players[:fast].uniq.size != config.fast_players_count
-        errors[:fast] = "The number of fast players is #{fast_count}"
-      end
-      if @coach.players[:average].uniq.size != config.average_players_count
-        errors[:average] = "The number of average players is #{average_count}"
-      end
-
-      if errors.size > 0
-        puts errors
-        raise "Invalid formation: #{coach.name}"
+      unless @coach.valid_formation?
+        puts @coach.formation_errors
+        raise "Invalid formation: #{@coach.name}"
       end
 
       @players[@coach.players[:captain].first] = CaptainPlayer.new(game_window, side)
