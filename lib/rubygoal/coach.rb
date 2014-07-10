@@ -26,9 +26,6 @@ module Rubygoal
       if players[:average].uniq.size != config.average_players_count
         errors[:average] = "The number of average players is #{average_count}"
       end
-      if formation.lineup.flatten.uniq.size != 11
-        raise 'Incorrect number of players, are you missing a name?'
-      end
 
       errors
     end
