@@ -45,5 +45,24 @@ module Rubygoal
         lineup[row_index][index] = player
       end
     end
+
+    def formation_types(players)
+      types_formation = Formation.new
+      lineup.each_with_index do |line, i|
+        line.each_with_index do |name, j|
+          if name != :none
+            case players[name]
+            when CaptainPlayer
+              types_formation.lineup[i][j] = :captain
+            when FastPlayer
+              types_formation.lineup[i][j] = :fast
+            when AveragePlayer
+              types_formation.lineup[i][j] = :average
+            end
+          end
+        end
+      end
+      types_formation
+    end
   end
 end

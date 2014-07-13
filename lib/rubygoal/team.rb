@@ -87,25 +87,6 @@ module Rubygoal
       players.values.each &:draw
     end
 
-    def formation_for_opponent
-      f = Formation.new
-      formation.lineup.each_with_index do |line, i|
-        line.each_with_index do |name, j|
-          if name != :none
-            case players[name]
-            when CaptainPlayer
-              f.lineup[i][j] = :captain
-            when FastPlayer
-              f.lineup[i][j] = :fast
-            when AveragePlayer
-              f.lineup[i][j] = :average
-            end
-          end
-        end
-      end
-      f
-    end
-
     private
 
     attr_reader :lineup_step_x, :lineup_step_y, :lineup_offset_x
@@ -139,7 +120,7 @@ module Rubygoal
       @players = {goalkeeper: GoalKeeperPlayer.new(game_window, side)}
 
       unless @coach.valid_formation?
-        puts @coach.formation_errors
+        puts @coach.players_errors
         raise "Invalid formation: #{@coach.name}"
       end
 

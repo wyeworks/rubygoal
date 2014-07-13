@@ -12,18 +12,22 @@ module Rubygoal
       raise NotImplementedError
     end
 
-    def formation_errors
+    def players_errors
       errors = {}
 
       config = Rubygoal.configuration
 
-      if players[:captain].uniq.size != config.captain_players_count
+      captain_count = players[:captain].uniq.size
+      fast_count = players[:fast].uniq.size
+      average_count = players[:average].uniq.size
+
+      if captain_count != config.captain_players_count
         errors[:captain] = "The number of captains is #{captain_count}"
       end
-      if players[:fast].uniq.size != config.fast_players_count
+      if fast_count != config.fast_players_count
         errors[:fast] = "The number of fast players is #{fast_count}"
       end
-      if players[:average].uniq.size != config.average_players_count
+      if average_count != config.average_players_count
         errors[:average] = "The number of average players is #{average_count}"
       end
 
@@ -31,7 +35,7 @@ module Rubygoal
     end
 
     def valid_formation?
-      formation_errors.empty?
+      players_errors.empty?
     end
   end
 end

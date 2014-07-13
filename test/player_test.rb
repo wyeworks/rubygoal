@@ -1,4 +1,9 @@
 require 'test_helper'
+require 'fixtures/four_fast_players_coach'
+require 'fixtures/less_players_coach'
+require 'fixtures/more_players_coach'
+require 'fixtures/two_captains_coach'
+require 'fixtures/valid_coach'
 
 module Rubygoal
   class PlayerTest < Minitest::Test
@@ -116,6 +121,40 @@ module Rubygoal
       velocity_strength = Gosu.distance(0, 0, velocity.x, velocity.y)
 
       assert_in_delta 20, velocity_strength, 1
+    end
+
+    def test_valid_players
+      coach = ValidCoach.new
+      assert coach.valid_formation?
+      assert_empty coach.players_errors
+    end
+
+    def test_less_players
+      coach = LessPlayersCoach.new
+      assert !coach.valid_formation?
+      expected = {average: 'The number of average players is 5'}
+      assert_equal expected, coach.players_errors
+    end
+
+    def test_more_players
+      coach = MorePlayersCoach.new
+      expected = {average: 'The number of average players is 7'}
+      assert !coach.valid_formation?
+      assert_equal expected, coach.players_errors
+    end
+
+    def test_more_than_one_captain
+      coach = TwoCaptainsCoach.new
+      expected = {captain: 'The number of captains is 2', average: 'The number of average players is 5'}
+      assert !coach.valid_formation?
+      assert_equal expected, coach.players_errors
+    end
+
+    def test_more_than_three_fast
+      coach = FourFastPlayersCoach.new
+      expected = {fast: 'The number of fast players is 4', average: 'The number of average players is 5'}
+      assert !coach.valid_formation?
+      assert_equal expected, coach.players_errors
     end
   end
 end
