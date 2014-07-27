@@ -1,11 +1,41 @@
 module Rubygoal
   class Coach
+    def players
+      raise NotImplementedError
+    end
+
     def name
       raise NotImplementedError
     end
 
     def formation(match)
       raise NotImplementedError
+    end
+
+    def players_errors
+      errors = {}
+
+      config = Rubygoal.configuration
+
+      captain_count = players[:captain].uniq.size
+      fast_count = players[:fast].uniq.size
+      average_count = players[:average].uniq.size
+
+      if captain_count != config.captain_players_count
+        errors[:captain] = "The number of captains is #{captain_count}"
+      end
+      if fast_count != config.fast_players_count
+        errors[:fast] = "The number of fast players is #{fast_count}"
+      end
+      if average_count != config.average_players_count
+        errors[:average] = "The number of average players is #{average_count}"
+      end
+
+      errors
+    end
+
+    def valid_formation?
+      players_errors.empty?
     end
   end
 end

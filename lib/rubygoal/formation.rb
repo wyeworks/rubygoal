@@ -46,31 +46,23 @@ module Rubygoal
       end
     end
 
-    def errors
-      errors = {}
-
-      unified       = lineup.flatten
-      captain_count = unified.count(:captain)
-      fast_count    = unified.count(:fast)
-      average_count = unified.count(:average)
-
-      config = Rubygoal.configuration
-
-      if captain_count != config.captain_players_count
-        errors[:captain] = "The number of captains is #{captain_count}"
+    def formation_types(players)
+      types_formation = Formation.new
+      lineup.each_with_index do |line, i|
+        line.each_with_index do |name, j|
+          if name != :none
+            case players[name]
+            when CaptainPlayer
+              types_formation.lineup[i][j] = :captain
+            when FastPlayer
+              types_formation.lineup[i][j] = :fast
+            when AveragePlayer
+              types_formation.lineup[i][j] = :average
+            end
+          end
+        end
       end
-      if fast_count != config.fast_players_count
-        errors[:fast] = "The number of fast players is #{fast_count}"
-      end
-      if average_count != config.average_players_count
-        errors[:average] = "The number of average players is #{average_count}"
-      end
-
-      errors
-    end
-
-    def valid?
-      errors.empty?
+      types_formation
     end
   end
 end

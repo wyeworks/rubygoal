@@ -4,9 +4,22 @@
 #
 # This class must implement at least the methods `name` and `formation(match)`
 # This class must be implemented within Rubygoal module.
-
 module Rubygoal
   class MyCoach < Coach
+    # Define player names for each type of player
+    # These names will later be used to setup the lineup in the formation method
+    # This method must return a hash with:
+    # - captain: An array with one elment, the captains name
+    # - fast: An array of 3 elements with the fast players' names
+    # - average: An array of 6 elements with the average players' names
+    def players
+      {
+        captain: [:captain],
+        fast: [:fast1, :fast2, :fast3],
+        average: [:average1, :average2, :average3, :average4, :average5, :average6]
+      }
+    end
+
     # Team's name
     # Method must always return the same string
     def name
@@ -41,9 +54,9 @@ module Rubygoal
       # :average -> These players haven't any special skills
       # It is not necessary to include the goalkeeper
 
-      formation.defenders = [:none, :average, :average, :average, :none]
-      formation.midfielders = [:average, :fast, :captain, :none, :average]
-      formation.attackers = [:none, :fast, :none, :fast, :average]
+      formation.defenders = [:none, :average1, :average2, :average3, :none]
+      formation.midfielders = [:average4, :fast1, :captain, :none, :average5]
+      formation.attackers = [:none, :fast2, :none, :fast3, :average6]
       # Above lineup produce
       #
       #   ------------------------------
@@ -64,6 +77,14 @@ module Rubygoal
   end
 
   class AnotherCoach < Coach
+    def players
+      {
+        captain: [:captain],
+        fast: [:fast1, :fast2, :fast3],
+        average: [:average1, :average2, :average3, :average4, :average5, :average6]
+      }
+    end
+
     def name
       "Maeso FC"
     end
@@ -96,11 +117,11 @@ module Rubygoal
       # ]              |                            |
       #                |                            |
          formation.lineup = [
-        [:average, :none, :average, :none,    :none],
-        [:fast,    :none, :none,    :average, :none],
-        [:none,    :none, :captain, :none,    :fast],
-        [:fast,    :none, :none,    :average, :average],
-        [:average, :none, :average, :none,    :none],
+        [:average1, :none, :average2, :none,    :none],
+        [:fast1,    :none, :none,    :average3, :none],
+        [:none,    :none, :captain, :none,    :fast2],
+        [:fast3,    :none, :none,    :average4, :none],
+        [:average5, :none, :average6, :none,    :none],
       ]
 
       formation
@@ -110,6 +131,14 @@ module Rubygoal
   # Next example shows how to change players's position when match is
   # being played
   class MyCoach < Coach
+    def players
+      {
+        captain: [:captain],
+        fast: [:fast1, :fast2, :fast3],
+        average: [:average1, :average2, :average3, :average4, :average5, :average6]
+      }
+    end
+
     def name
       "Blue Tigers"
     end
@@ -123,14 +152,14 @@ module Rubygoal
       # me.draw?
       # me.score - returns the number of goals scored
       if match.me.winning?
-        formation.defenders = [:average, :average, :average, :captain, :average]
-        formation.midfielders = [:average, :none, :fast, :none, :average]
-        formation.attackers = [:none, :fast, :none, :fast, :none]
+        formation.defenders = [:average1, :average2, :average3, :captain, :average4]
+        formation.midfielders = [:average5, :none, :fast1, :none, :average6]
+        formation.attackers = [:none, :fast2, :none, :fast3, :none]
       # `time` method shows how much time ( seconds ) left
       elsif match.time < 10
-        formation.defenders = [:none, :average, :average, :average, :none]
-        formation.midfielders = [:average, :average, :captain, :none, :average]
-        formation.attackers = [:fast, :fast, :none, :fast, :average]
+        formation.defenders = [:none, :average1, :average2, :average3, :none]
+        formation.midfielders = [:average4, :average5, :captain, :none, :average6]
+        formation.attackers = [:fast1, :fast2, :none, :fast3, :none]
       else
       # `other` brings opponent's information ( just like `me` method )
       # Next line shows mirror strategy, in which my lineup is a copy

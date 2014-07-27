@@ -3,6 +3,14 @@ require 'rubygoal/formation'
 
 module Rubygoal
   class CoachHome < Coach
+    def players
+      {
+        captain: [:captain],
+        fast: [:fast1, :fast2, :fast3],
+        average: [:average1, :average2, :average3, :average4, :average5, :average6]
+      }
+    end
+
     def name
       "Wanderers"
     end
@@ -11,15 +19,29 @@ module Rubygoal
       formation = Formation.new
 
       if match.me.winning?
-        formation.defenders = [:average, :average, :average, :captain, :average]
-        formation.midfielders = [:average, :none, :fast, :none, :average]
-        formation.attackers = [:none, :fast, :none, :fast, :none]
+        formation.defenders = [:average1, :average2, :average3, :captain, :average4]
+        formation.midfielders = [:average5, :none, :fast1, :none, :average6]
+        formation.attackers = [:none, :fast2, :none, :fast3, :none]
       elsif match.time < 20
-        formation.defenders = [:none, :fast, :average, :average, :none]
-        formation.midfielders = [:average, :average, :captain, :none, :average]
-        formation.attackers = [:fast, :none, :none, :fast, :average]
+        formation.defenders = [:none, :fast1, :average1, :average2, :none]
+        formation.midfielders = [:average3, :average4, :captain, :none, :average5]
+        formation.attackers = [:fast2, :none, :none, :fast3, :average6]
       else
         formation.lineup = match.other.formation.lineup
+        average_counter = -1
+        fast_counter = -1
+        5.times do |i|
+          5.times do |j|
+            case formation.lineup[i][j]
+            when :average
+              formation.lineup[i][j] = players[:average][average_counter+=1]
+            when :fast
+              formation.lineup[i][j] = players[:fast][fast_counter+=1]
+            when :captain
+              formation.lineup[i][j] = players[:captain][0]
+            end
+          end
+        end
       end
 
       formation
