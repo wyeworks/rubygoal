@@ -12,11 +12,13 @@ module Rubygoal
     # - captain: An array with one elment, the captains name
     # - fast: An array of 3 elements with the fast players' names
     # - average: An array of 6 elements with the average players' names
+    # If not set, it will be inherited from Coach class, having player names
+    # set by default as: :captain, :fast1..3 and :average1..6
     def players
       {
-        captain: [:captain],
-        fast: [:fast1, :fast2, :fast3],
-        average: [:average1, :average2, :average3, :average4, :average5, :average6]
+        captain: [:oliver_atom],
+        fast: [:steve_hyuga, :tom_misaki, :andy_johnson],
+        average: [:carlos_santana, :bruce_harper, :juan_diaz, :rivaul, :paul_diamond, :ralph_sawada]
       }
     end
 
@@ -54,9 +56,9 @@ module Rubygoal
       # :average -> These players haven't any special skills
       # It is not necessary to include the goalkeeper
 
-      formation.defenders = [:none, :average1, :average2, :average3, :none]
-      formation.midfielders = [:average4, :fast1, :captain, :none, :average5]
-      formation.attackers = [:none, :fast2, :none, :fast3, :average6]
+      formation.defenders = [:none, :carlos_santana, :bruce_harper, :juan_diaz, :none]
+      formation.midfielders = [:rivaul, :steve_hyuga, :oliver_atom, :none, :paul_diamond]
+      formation.attackers = [:none, :tom_misaki, :none, :andy_johnson, :ralph_sawada]
       # Above lineup produce
       #
       #   ------------------------------
@@ -77,13 +79,7 @@ module Rubygoal
   end
 
   class AnotherCoach < Coach
-    def players
-      {
-        captain: [:captain],
-        fast: [:fast1, :fast2, :fast3],
-        average: [:average1, :average2, :average3, :average4, :average5, :average6]
-      }
-    end
+    # Inheriting player names from Coach Class
 
     def name
       "Maeso FC"
@@ -131,13 +127,7 @@ module Rubygoal
   # Next example shows how to change players's position when match is
   # being played
   class MyCoach < Coach
-    def players
-      {
-        captain: [:captain],
-        fast: [:fast1, :fast2, :fast3],
-        average: [:average1, :average2, :average3, :average4, :average5, :average6]
-      }
-    end
+    # Inheriting player names from Coach Class
 
     def name
       "Blue Tigers"

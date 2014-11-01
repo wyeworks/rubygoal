@@ -1,7 +1,11 @@
 module Rubygoal
   class Coach
     def players
-      raise NotImplementedError
+      {
+        captain: [:captain],
+        fast: [:fast1, :fast2, :fast3],
+        average: [:average1, :average2, :average3, :average4, :average5, :average6]
+      }
     end
 
     def name
