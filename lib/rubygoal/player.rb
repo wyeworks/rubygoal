@@ -1,5 +1,6 @@
 require 'gosu'
 
+require 'rubygoal/util'
 require 'rubygoal/coordinate'
 require 'rubygoal/moveable'
 require 'rubygoal/configuration'
@@ -37,8 +38,8 @@ module Rubygoal
 
     def draw
       if moving?
-        angle = Gosu.angle(position.x, position.y, destination.x, destination.y)
-        angle -= 90
+        angle = Util.angle(position.x, position.y, destination.x, destination.y)
+        angle -= 180
       else
         angle = 0.0
       end
@@ -78,7 +79,7 @@ module Rubygoal
     end
 
     def random_direction(target)
-      direction = Gosu.angle(position.x, position.y, target.x, target.y)
+      direction = Util.angle(position.x, position.y, target.x, target.y)
 
       max_angle_error = STRAIGHT_ANGLE * error
       angle_error_range = -max_angle_error..max_angle_error

@@ -1,5 +1,6 @@
 require 'gosu'
 
+require 'rubygoal/util'
 require 'rubygoal/coordinate'
 
 module Rubygoal
@@ -20,15 +21,15 @@ module Rubygoal
     end
 
     def distance(position)
-      Gosu.distance(self.position.x, self.position.y, position.x, position.y)
+      Util.distance(self.position.x, self.position.y, position.x, position.y)
     end
 
     def move_to(destination)
       self.destination = destination
 
-      angle = Gosu.angle(position.x, position.y, destination.x, destination.y)
-      velocity.x = Gosu.offset_x(angle, speed)
-      velocity.y = Gosu.offset_y(angle, speed)
+      angle = Util.angle(position.x, position.y, destination.x, destination.y)
+      velocity.x = Util.offset_x(angle, speed)
+      velocity.y = Util.offset_y(angle, speed)
     end
 
     def update

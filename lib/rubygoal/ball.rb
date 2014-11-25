@@ -1,5 +1,6 @@
 require 'gosu'
 
+require 'rubygoal/util'
 require 'rubygoal/field'
 require 'rubygoal/moveable'
 
@@ -24,8 +25,8 @@ module Rubygoal
 
     def move(direction, speed)
       self.velocity = Velocity.new(
-        Gosu.offset_x(direction, speed),
-        Gosu.offset_y(direction, speed)
+        Util.offset_x(direction, speed),
+        Util.offset_y(direction, speed)
       )
     end
 

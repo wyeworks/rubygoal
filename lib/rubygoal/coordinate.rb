@@ -1,9 +1,9 @@
-require 'gosu'
+require 'rubygoal/util'
 
 module Rubygoal
   class Coordinate < Struct.new(:x, :y)
     def distance(coordinate)
-      Gosu.distance(x, y, coordinate.x, coordinate.y)
+      Util.distance(x, y, coordinate.x, coordinate.y)
     end
 
     def add(coordinate)
