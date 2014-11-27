@@ -34,13 +34,13 @@ module Rubygoal
       initial_player_positions.first
     end
 
-    def initialize(game_window, coach)
-      @game = game_window
+    def initialize(game, window, coach)
+      @game = game
       @players = {}
       @coach = coach
 
       initialize_lineup_values
-      initialize_players(game_window)
+      initialize_players(window)
       initialize_formation
     end
 
@@ -116,20 +116,20 @@ module Rubygoal
       ]
     end
 
-    def initialize_players(game_window)
-      @players = {goalkeeper: GoalKeeperPlayer.new(game_window, side)}
+    def initialize_players(window)
+      @players = {goalkeeper: GoalKeeperPlayer.new(game, window, side)}
 
       unless @coach.valid_formation?
         puts @coach.players_errors
         raise "Invalid formation: #{@coach.name}"
       end
 
-      @players[@coach.players[:captain].first] = CaptainPlayer.new(game_window, side)
+      @players[@coach.players[:captain].first] = CaptainPlayer.new(game, window, side)
       @coach.players[:fast].each do |name|
-        @players[name] = FastPlayer.new(game_window, side)
+        @players[name] = FastPlayer.new(game, window, side)
       end
       @coach.players[:average].each do |name|
-        @players[name] = AveragePlayer.new(game_window, side)
+        @players[name] = AveragePlayer.new(game, window, side)
       end
 
       players_to_initial_position

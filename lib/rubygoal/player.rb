@@ -11,12 +11,12 @@ module Rubygoal
 
     include Moveable
 
-    def initialize(game_window, side)
+    def initialize(game, window, side)
       super()
 
-      @image = Gosu::Image.new(game_window, image_filename(side), false)
+      @image = Gosu::Image.new(window, image_filename(side), false)
       @time_to_kick_again = 0
-      @field = game_window.field
+      @field = game.field
     end
 
     def can_kick?(ball)

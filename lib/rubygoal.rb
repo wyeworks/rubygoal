@@ -1,7 +1,7 @@
-require 'rubygoal/game'
+require 'rubygoal/gui/game'
 
 module Rubygoal
   def self.start
-    Game.new.show
+    Gui::Game.new.show
   end
 end

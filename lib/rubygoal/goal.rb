@@ -6,9 +6,9 @@ module Rubygoal
   class Goal
     CELEBRATION_IMAGE_POSITION = Position.new(680, 466)
 
-    def initialize(game_window)
+    def initialize(game, window)
       image_path = File.dirname(__FILE__) + '/../../media/goal.png'
-      @image = Gosu::Image.new(game_window, image_path, true)
+      @image = Gosu::Image.new(window, image_path, true)
 
       @celebration_time = 0
     end
