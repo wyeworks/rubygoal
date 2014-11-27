@@ -31,7 +31,7 @@ module Rubygoal
 
       update_elapsed_time
 
-      if field.goal?
+      if goal?
         update_goal
       else
         update_remaining_time
@@ -39,6 +39,10 @@ module Rubygoal
       end
 
       end_match! if time <= 0
+    end
+
+    def goal?
+      field.goal?
     end
 
     protected

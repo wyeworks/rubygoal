@@ -1,4 +1,7 @@
 require 'gosu'
+
+require 'rubygoal/gui/goal'
+
 require 'rubygoal/coordinate'
 require 'rubygoal/game'
 
@@ -11,7 +14,7 @@ module Rubygoal::Gui
       @game = Rubygoal::Game.new(self)
 
       #@field = Field.new(game.field)
-      #@goal = Goal.new(game.goal)
+      @goal = Goal.new(self)
 
       default_font_size = 48
       @font = Gosu::Font.new(
@@ -32,7 +35,7 @@ module Rubygoal::Gui
       game.field.draw
       draw_scoreboard
       draw_team_labels
-      game.goal.draw if game.field.goal?
+      goal.draw if game.goal?
     end
 
     def button_down(id)
