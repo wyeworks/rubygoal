@@ -1,5 +1,3 @@
-require 'gosu'
-
 require 'rubygoal/util'
 require 'rubygoal/coordinate'
 
