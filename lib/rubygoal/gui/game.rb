@@ -14,8 +14,8 @@ module Rubygoal::Gui
 
       @game = Rubygoal::Game.new(self)
 
-      @field = Field.new(self, game.field)
-      @goal = Goal.new(self)
+      @gui_field = Field.new(self, game.field)
+      @gui_goal = Goal.new(self)
 
       default_font_size = 48
       @font = Gosu::Font.new(
@@ -33,10 +33,10 @@ module Rubygoal::Gui
     end
 
     def draw
-      field.draw
+      gui_field.draw
       draw_scoreboard
       draw_team_labels
-      goal.draw if game.goal?
+      gui_goal.draw if game.goal?
     end
 
     def button_down(id)
@@ -120,7 +120,7 @@ module Rubygoal::Gui
       end
     end
 
-    attr_reader :game, :field, :goal
+    attr_reader :game, :gui_field, :gui_goal
     attr_reader :font, :home_team_label, :away_team_label
   end
 end

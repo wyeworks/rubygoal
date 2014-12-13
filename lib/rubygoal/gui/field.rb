@@ -1,12 +1,14 @@
 require 'gosu'
 
 require 'rubygoal/gui/ball'
+require 'rubygoal/gui/players'
 
 module Rubygoal::Gui
   class Field
     def initialize(window, field)
       @field = field
-      @ball = Ball.new(window, field.ball)
+      @gui_ball = Ball.new(window, field.ball)
+      @gui_players = players.map { |p| Players.new(window, p) }
 
       image_path = File.dirname(__FILE__) + '/../../../media/background.png'
       @background_image = Gosu::Image.new(window, image_path, true)
@@ -14,13 +16,16 @@ module Rubygoal::Gui
 
     def draw
       background_image.draw(0, 0, 0);
-      ball.draw
-      field.team_home.draw
-      field.team_away.draw
+      gui_ball.draw
+      gui_players.each(&:draw)
     end
 
     private
 
-    attr_reader :field, :ball, :background_image
+    def players
+      field.team_home.players.values + field.team_away.players.values
+    end
+
+    attr_reader :field, :gui_ball, :gui_players, :background_image
   end
 end
