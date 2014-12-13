@@ -1,5 +1,4 @@
 require 'forwardable'
-require 'gosu'
 
 require 'rubygoal/ball'
 require 'rubygoal/coach_loader'
@@ -96,9 +95,6 @@ module Rubygoal
     def initialize(game, window, coach_home, coach_away)
       @game = game
 
-      image_path = File.dirname(__FILE__) + '/../../media/background.png'
-      @background_image = Gosu::Image.new(window, image_path, true)
-
       @ball = Ball.new(window, Field.center_position)
 
       @team_home = HomeTeam.new(game, window, coach_home)
@@ -118,7 +114,6 @@ module Rubygoal
     end
 
     def draw
-      background_image.draw(0, 0, 0);
       ball.draw
       team_home.draw
       team_away.draw
@@ -145,6 +140,6 @@ module Rubygoal
       end
     end
 
-    attr_reader :background_image, :game
+    attr_reader :game
   end
 end
