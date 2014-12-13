@@ -8,11 +8,11 @@ require 'rubygoal/game'
 
 module Rubygoal::Gui
   class Game < Gosu::Window
-    def initialize
+    def initialize(game)
       super(1920, 1080, true)
       self.caption = "Ruby Goal"
 
-      @game = Rubygoal::Game.new
+      @game = game
 
       @gui_field = Field.new(self, game.field)
       @gui_goal = Goal.new(self)
