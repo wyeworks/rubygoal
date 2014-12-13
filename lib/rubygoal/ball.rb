@@ -6,7 +6,7 @@ module Rubygoal
   class Ball
     include Moveable
 
-    def initialize(window, position)
+    def initialize(position)
       super()
 
       @position = position

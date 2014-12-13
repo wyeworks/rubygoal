@@ -92,13 +92,13 @@ module Rubygoal
       end
     end
 
-    def initialize(game, window, coach_home, coach_away)
+    def initialize(game, coach_home, coach_away)
       @game = game
 
-      @ball = Ball.new(window, Field.center_position)
+      @ball = Ball.new(Field.center_position)
 
-      @team_home = HomeTeam.new(game, window, coach_home)
-      @team_away = AwayTeam.new(game, window, coach_away)
+      @team_home = HomeTeam.new(game, coach_home)
+      @team_away = AwayTeam.new(game, coach_away)
     end
 
     def reinitialize

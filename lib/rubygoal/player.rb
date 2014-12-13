@@ -1,4 +1,3 @@
-require 'rubygoal/util'
 require 'rubygoal/coordinate'
 require 'rubygoal/moveable'
 require 'rubygoal/configuration'
@@ -11,7 +10,7 @@ module Rubygoal
 
     attr_reader :side, :type
 
-    def initialize(game, window, side)
+    def initialize(game, side)
       super()
 
       @time_to_kick_again = 0

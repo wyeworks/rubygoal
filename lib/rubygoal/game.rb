@@ -13,11 +13,11 @@ module Rubygoal
     extend Forwardable
     def_delegators :field, :ball, :close_to_goal?
 
-    def initialize(window)
+    def initialize
       initialize_coaches
 
-      @field = Field.new(self, window, coach_home, coach_away)
-      @goal = Goal.new(self, window)
+      @field = Field.new(self, coach_home, coach_away)
+      @goal = Goal.new(self)
 
       @state = :playing
 

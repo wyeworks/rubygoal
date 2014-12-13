@@ -12,7 +12,7 @@ module Rubygoal::Gui
       super(1920, 1080, true)
       self.caption = "Ruby Goal"
 
-      @game = Rubygoal::Game.new(self)
+      @game = Rubygoal::Game.new
 
       @gui_field = Field.new(self, game.field)
       @gui_goal = Goal.new(self)
