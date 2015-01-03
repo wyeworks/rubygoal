@@ -80,7 +80,7 @@ module Rubygoal::Gui
         left -= word.length + 1
       end
 
-      truncated.join(' ')[0..limit]
+      truncated.join(' ')
     end
 
     def draw_scoreboard

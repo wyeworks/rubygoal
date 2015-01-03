@@ -2,8 +2,6 @@ require 'rubygoal/configuration'
 
 module Rubygoal
   class Goal
-    CELEBRATION_IMAGE_POSITION = Position.new(680, 466)
-
     def initialize(game)
       @celebration_time = 0
     end
