@@ -11,7 +11,7 @@ module Rubygoal
                 :score_home, :score_away
 
     extend Forwardable
-    def_delegators :field, :ball, :close_to_goal?
+    def_delegators :field, :ball, :goal?, :close_to_goal?
 
     def initialize
       initialize_coaches
@@ -39,10 +39,6 @@ module Rubygoal
       end
 
       end_match! if time <= 0
-    end
-
-    def goal?
-      field.goal?
     end
 
     protected
