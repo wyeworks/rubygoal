@@ -86,10 +86,10 @@ module Rubygoal
 
     def end_match!
       self.state = :ended
-      write_score
+      puts_score
     end
 
-    def write_score
+    def puts_score
       puts "#{coach_home.name} #{score_home} - #{score_away} #{coach_away.name}"
     end
   end
