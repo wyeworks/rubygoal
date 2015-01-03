@@ -8,8 +8,23 @@ require 'rubygoal/game'
 
 module Rubygoal::Gui
   class Game < Gosu::Window
+    WINDOW_WIDTH  = 1920
+    WINDOW_HEIGHT = 1080
+
+    TIME_LABEL_POSITION       = Rubygoal::Position.new(870, 68)
+    SCORE_HOME_LABEL_POSITION = Rubygoal::Position.new(1150, 68)
+    SCORE_AWAY_LABEL_POSITION = Rubygoal::Position.new(1220, 68)
+
+    TEAM_NAME_HOME_LABEL_POSITION = Rubygoal::Position.new(105, 580)
+    TEAM_NAME_AWAY_LABEL_POSITION = Rubygoal::Position.new(1815, 580)
+
+    DEFAULT_FONT_SIZE = 48
+
+    LABEL_IMAGE_FONT_SIZE = 64
+    LABEL_IMAGE_WIDTH     = 669
+
     def initialize(game)
-      super(1920, 1080, true)
+      super(WINDOW_WIDTH, WINDOW_HEIGHT, true)
       self.caption = "Ruby Goal"
 
       @game = game
@@ -17,11 +32,10 @@ module Rubygoal::Gui
       @gui_field = Field.new(self, game.field)
       @gui_goal = Goal.new(self)
 
-      default_font_size = 48
       @font = Gosu::Font.new(
         self,
         Gosu.default_font_name,
-        default_font_size
+        DEFAULT_FONT_SIZE
       )
 
       @home_team_label = create_label_image(game.coach_home.name)
@@ -52,9 +66,9 @@ module Rubygoal::Gui
       name = truncate_label(name, name_characters_limit)
 
       font_name    = Gosu.default_font_name
-      font_size    = 64
+      font_size    = LABEL_IMAGE_FONT_SIZE
       line_spacing = 1
-      label_width  = 669
+      label_width  = LABEL_IMAGE_WIDTH
       alignment    = :center
 
       Gosu::Image.from_text(
@@ -84,25 +98,39 @@ module Rubygoal::Gui
     end
 
     def draw_scoreboard
-      time_label_position = Rubygoal::Position.new(870, 68)
-      draw_text(time_text, time_label_position, :gray)
-
-      score_home_label_position = Rubygoal::Position.new(1150, 68)
-      score_away_label_position = Rubygoal::Position.new(1220, 68)
-      draw_text(game.score_home.to_s, score_home_label_position, :white)
-      draw_text(game.score_away.to_s, score_away_label_position, :white)
+      draw_text(time_text, TIME_LABEL_POSITION, :gray)
+      draw_text(game.score_home.to_s, SCORE_HOME_LABEL_POSITION, :white)
+      draw_text(game.score_away.to_s, SCORE_AWAY_LABEL_POSITION, :white)
     end
 
     def draw_team_labels
-      home_position = Rubygoal::Position.new(105, 580)
-      home_team_label.draw_rot(home_position.x, home_position.y, 1, -90)
-
-      away_position = Rubygoal::Position.new(1815, 580)
-      away_team_label.draw_rot(away_position.x, away_position.y, 1, 90)
+      draw_vertical_text(home_team_label, TEAM_NAME_HOME_LABEL_POSITION, :down)
+      draw_vertical_text(away_team_label, TEAM_NAME_AWAY_LABEL_POSITION, :up)
     end
 
-    def draw_text(text, position, color, size = 1)
-      font.draw_rel(text, position.x, position.y, 0.5, 0.5, 1, size, size, color_to_hex(color))
+    def draw_text(text, position, color, scale = 1)
+      horizontal_alignment = 0.5
+      vertical_alignment   = 0.5
+      z_order              = 1
+      horizontal_scale     = scale
+      vertical_scale       = scale
+
+      font.draw_rel(
+        text,
+        position.x,
+        position.y,
+        horizontal_alignment,
+        vertical_alignment,
+        z_order,
+        horizontal_scale,
+        vertical_scale,
+        color_to_hex(color)
+      )
+    end
+
+    def draw_vertical_text(label, position, direction = :down)
+      angle = direction == :down ? -90 : 90
+      label.draw_rot(position.x, position.y, 1, angle)
     end
 
     def time_text
@@ -120,7 +148,7 @@ module Rubygoal::Gui
       end
     end
 
-    attr_reader :game, :gui_field, :gui_goal
-    attr_reader :font, :home_team_label, :away_team_label
+    attr_reader :game, :gui_field, :gui_goal,
+                :font, :home_team_label, :away_team_label
   end
 end
