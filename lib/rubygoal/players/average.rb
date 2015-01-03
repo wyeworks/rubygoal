@@ -9,12 +9,8 @@ module Rubygoal
 
       @error = Random.rand(error_range)
       @speed = config.average_speed
-    end
 
-    protected
-
-    def image_filename(side)
-      File.dirname(__FILE__) + "/../../../media/average_#{side}.png"
+      @type = :average
     end
   end
 

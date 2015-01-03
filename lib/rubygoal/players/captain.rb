@@ -6,12 +6,8 @@ module Rubygoal
 
       @error = config.captain_error
       @speed = config.captain_speed
-    end
 
-    protected
-
-    def image_filename(side)
-      File.dirname(__FILE__) + "/../../../media/captain_#{side}.png"
+      @type = :captain
     end
   end
 end

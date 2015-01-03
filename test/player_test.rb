@@ -8,7 +8,7 @@ require 'fixtures/valid_coach'
 module Rubygoal
   class PlayerTest < Minitest::Test
     def setup
-      @game = Rubygoal.game_instance
+      @game = Game.new
       home_team = @game.field.team_home
 
       @player = home_team.players.values.first
@@ -79,13 +79,13 @@ module Rubygoal
       @game.ball.velocity = Velocity.new(0, 0)
       @player.position = position
 
-      # 90 degree kick
+      # 0 degree kick
       @player.kick(@game.ball, Position.new(200, 100))
 
       velocity = @game.ball.velocity
-      velocity_angle = Gosu.angle(0, 0, velocity.x, velocity.y)
+      velocity_angle = Util.angle(0, 0, velocity.x, velocity.y)
 
-      assert_in_delta 90, velocity_angle, 2
+      assert_in_delta 0, velocity_angle, 2
     end
 
     def test_kick_direction_range_left
@@ -97,13 +97,13 @@ module Rubygoal
       @game.ball.velocity = Velocity.new(0, 0)
       @player.position = position
 
-      # 270 degree kick
+      # 180 degree kick
       @player.kick(@game.ball, Position.new(0, 100))
 
       velocity = @game.ball.velocity
-      velocity_angle = Gosu.angle(0, 0, velocity.x, velocity.y)
+      velocity_angle = Util.positive_angle(0, 0, velocity.x, velocity.y)
 
-      assert_in_delta 270, velocity_angle, 2
+      assert_in_delta 180, velocity_angle, 2
     end
 
     def test_kick_strength
@@ -118,7 +118,7 @@ module Rubygoal
       @player.kick(@game.ball, Position.new(200, 200))
 
       velocity = @game.ball.velocity
-      velocity_strength = Gosu.distance(0, 0, velocity.x, velocity.y)
+      velocity_strength = Util.distance(0, 0, velocity.x, velocity.y)
 
       assert_in_delta 20, velocity_strength, 1
     end

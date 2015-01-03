@@ -9,7 +9,7 @@ module Rubygoal
     end
 
     def test_formation_types
-      game = Rubygoal.game_instance
+      game = Game.new
       players = {
         average1: AveragePlayer.new(game, :home),
         average2: AveragePlayer.new(game, :home),

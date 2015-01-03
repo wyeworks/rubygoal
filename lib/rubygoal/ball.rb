@@ -1,21 +1,15 @@
-require 'gosu'
-
+require 'rubygoal/util'
 require 'rubygoal/field'
 require 'rubygoal/moveable'
 
 module Rubygoal
   class Ball
-    IMAGE_SIZE = 20
-
     include Moveable
 
-    def initialize(window, position)
+    def initialize(position)
       super()
 
       @position = position
-
-      image_path = File.dirname(__FILE__) + '/../../media/ball.png'
-      @image = Gosu::Image.new(window, image_path, false)
     end
 
     def goal?
@@ -24,17 +18,9 @@ module Rubygoal
 
     def move(direction, speed)
       self.velocity = Velocity.new(
-        Gosu.offset_x(direction, speed),
-        Gosu.offset_y(direction, speed)
+        Util.offset_x(direction, speed),
+        Util.offset_y(direction, speed)
       )
-    end
-
-    def draw
-      half_side_lenght = IMAGE_SIZE / 2
-      image_center_x = position.x - half_side_lenght
-      image_center_y = position.y - half_side_lenght
-
-      image.draw(image_center_x, image_center_y, 1)
     end
 
     def update
@@ -63,7 +49,5 @@ module Rubygoal
     def deceleration_coef
       Rubygoal.configuration.deceleration_coef
     end
-
-    attr_reader :image
   end
 end

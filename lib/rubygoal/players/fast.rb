@@ -7,12 +7,8 @@ module Rubygoal
 
       @error = Random.rand(error_range)
       @speed = config.fast_speed
-    end
 
-    protected
-
-    def image_filename(side)
-      File.dirname(__FILE__) + "/../../../media/fast_#{side}.png"
+      @type = :fast
     end
   end
 end

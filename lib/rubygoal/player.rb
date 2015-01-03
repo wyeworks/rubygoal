@@ -1,5 +1,3 @@
-require 'gosu'
-
 require 'rubygoal/coordinate'
 require 'rubygoal/moveable'
 require 'rubygoal/configuration'
@@ -10,12 +8,14 @@ module Rubygoal
 
     include Moveable
 
-    def initialize(game_window, side)
+    attr_reader :side, :type
+
+    def initialize(game, side)
       super()
 
-      @image = Gosu::Image.new(game_window, image_filename(side), false)
       @time_to_kick_again = 0
-      @field = game_window.field
+      @field = game.field
+      @side = side
     end
 
     def can_kick?(ball)
@@ -33,17 +33,6 @@ module Rubygoal
     def update
       update_waiting_to_kick!
       super
-    end
-
-    def draw
-      if moving?
-        angle = Gosu.angle(position.x, position.y, destination.x, destination.y)
-        angle -= 90
-      else
-        angle = 0.0
-      end
-
-      image.draw_rot(position.x, position.y, 1, angle)
     end
 
     protected
@@ -78,7 +67,7 @@ module Rubygoal
     end
 
     def random_direction(target)
-      direction = Gosu.angle(position.x, position.y, target.x, target.y)
+      direction = Util.angle(position.x, position.y, target.x, target.y)
 
       max_angle_error = STRAIGHT_ANGLE * error
       angle_error_range = -max_angle_error..max_angle_error

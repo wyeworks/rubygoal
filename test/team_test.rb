@@ -3,7 +3,7 @@ require 'test_helper'
 module Rubygoal
   class TeamTest < Minitest::Test
     def setup
-      game = Rubygoal.game_instance
+      game = Game.new
       game.field.reinitialize
       @home_team = game.field.team_home
       @away_team = game.field.team_away
