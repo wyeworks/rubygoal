@@ -10,11 +10,6 @@ require 'rubygoal/coaches/coach_away'
 
 module Rubygoal
   class Field
-    attr_reader :ball, :team_home, :team_away
-
-    extend Forwardable
-    def_delegators :ball, :goal?
-
     @width                  = 1394
     @height                 = 938
     @offset                 = Position.new(262, 112)
@@ -91,49 +86,5 @@ module Rubygoal
         goal_position.distance(position) < close_to_goal_distance
       end
     end
-
-    def initialize(game, coach_home, coach_away)
-      @game = game
-
-      @ball = Ball.new(Field.center_position)
-
-      @team_home = HomeTeam.new(game, coach_home)
-      @team_away = AwayTeam.new(game, coach_away)
-    end
-
-    def reinitialize
-      team_home.players_to_initial_position
-      team_away.players_to_initial_position
-      ball.position = Field.center_position
-    end
-
-    def update
-      team_home.update(game_data(:home))
-      team_away.update(game_data(:away))
-      ball.update
-    end
-
-    private
-
-    def game_data(side)
-      case side
-      when :home
-        Match.new(
-          game.score_home,
-          game.score_away,
-          game.time,
-          team_away.formation.formation_types(team_home.players)
-        )
-      when :away
-        Match.new(
-          game.score_away,
-          game.score_home,
-          game.time,
-          team_home.formation.formation_types(team_home.players)
-        )
-      end
-    end
-
-    attr_reader :game
   end
 end

@@ -9,7 +9,7 @@ module Rubygoal
   class PlayerTest < Minitest::Test
     def setup
       @game = Game.new
-      home_team = @game.field.team_home
+      home_team = @game.team_home
 
       @player = home_team.players.values.first
       @player.send(:time_to_kick_again=, 0)

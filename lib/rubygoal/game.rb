@@ -6,17 +6,19 @@ require 'rubygoal/goal'
 
 module Rubygoal
   class Game
-    attr_reader :field, :time, :goal,
+    attr_reader :team_home, :team_away, :ball,
+                :time, :goal,
                 :coach_home, :coach_away,
                 :score_home, :score_away
-
-    extend Forwardable
-    def_delegators :field, :ball, :goal?, :close_to_goal?
 
     def initialize
       initialize_coaches
 
-      @field = Field.new(self, coach_home, coach_away)
+      @ball = Ball.new
+
+      @team_home = HomeTeam.new(self, coach_home)
+      @team_away = AwayTeam.new(self, coach_away)
+
       @goal = Goal.new(self)
 
       @state = :playing
@@ -31,14 +33,25 @@ module Rubygoal
 
       update_elapsed_time
 
-      if goal?
+      if celebrating_goal?
         update_goal
       else
         update_remaining_time
-        field.update
+        team_home.update(game_data(:home))
+        team_away.update(game_data(:away))
+        ball.update
       end
 
       end_match! if time <= 0
+    end
+
+    def players
+      teams.map { |t| t.players.values }.flatten
+    end
+
+    def celebrating_goal?
+      # TODO improve this condition
+      ball.goal?
     end
 
     protected
@@ -75,13 +88,49 @@ module Rubygoal
     end
 
     def reinitialize_match
+      update_score
+      reinitialize_players
+      reinitialize_ball
+    end
+
+    def update_score
       if Field.position_side(ball.position) == :home
         self.score_away += 1
       else
         self.score_home += 1
       end
+    end
 
-      field.reinitialize
+    def reinitialize_players
+      teams.map(&:players_to_initial_position)
+    end
+
+    def reinitialize_ball
+      ball.position = Field.center_position
+    end
+
+    def teams
+      [team_home, team_away]
+    end
+
+    # TODO think a better name
+    def game_data(side)
+      case side
+      when :home
+        Match.new(
+          score_home,
+          score_away,
+          time,
+          team_away.formation.formation_types(team_home.players)
+        )
+      when :away
+        Match.new(
+          score_away,
+          score_home,
+          time,
+          team_home.formation.formation_types(team_home.players)
+        )
+      end
     end
 
     def end_match!

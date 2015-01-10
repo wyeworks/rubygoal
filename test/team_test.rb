@@ -4,9 +4,9 @@ module Rubygoal
   class TeamTest < Minitest::Test
     def setup
       game = Game.new
-      game.field.reinitialize
-      @home_team = game.field.team_home
-      @away_team = game.field.team_away
+      #game.reinitialize
+      @home_team = game.team_home
+      @away_team = game.team_away
     end
 
     def test_default_home_coach
