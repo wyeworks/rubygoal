@@ -85,6 +85,7 @@ module Rubygoal
     def update_ball
       ball.update
       if ball.goal?
+        update_score
         goal.start_celebration
       end
     end
@@ -95,7 +96,6 @@ module Rubygoal
     end
 
     def reinitialize_match
-      update_score
       reinitialize_players
       reinitialize_ball
     end
