@@ -83,10 +83,6 @@ module Rubygoal
       end
     end
 
-    def draw
-      players.values.each &:draw
-    end
-
     private
 
     attr_reader :lineup_step_x, :lineup_step_y, :lineup_offset_x

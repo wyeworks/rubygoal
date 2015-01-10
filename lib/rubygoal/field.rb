@@ -113,12 +113,6 @@ module Rubygoal
       ball.update
     end
 
-    def draw
-      ball.draw
-      team_home.draw
-      team_away.draw
-    end
-
     private
 
     def game_data(side)
