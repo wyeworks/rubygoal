@@ -35,9 +35,9 @@ module Rubygoal
     end
 
     def initialize(game, coach)
-      @game = game
+      @game    = game
       @players = {}
-      @coach = coach
+      @coach   = coach
 
       initialize_lineup_values
       initialize_players
@@ -81,6 +81,10 @@ module Rubygoal
         end
         player.update
       end
+    end
+
+    def formation_for_opponent
+      formation.formation_types(players)
     end
 
     private

@@ -120,24 +120,15 @@ module Rubygoal
       [team_home, team_away]
     end
 
-    # TODO think a better name
     def game_data(side)
-      case side
-      when :home
-        Match.new(
-          score_home,
-          score_away,
-          time,
-          team_away.formation.formation_types(team_home.players)
-        )
-      when :away
-        Match.new(
-          score_away,
-          score_home,
-          time,
-          team_home.formation.formation_types(team_home.players)
-        )
-      end
+      Match.create_for(
+        side,
+        time,
+        score_home,
+        score_away,
+        team_home.formation_for_opponent,
+        team_away.formation_for_opponent
+      )
     end
 
     def end_match!
