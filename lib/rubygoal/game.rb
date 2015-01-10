@@ -39,19 +39,19 @@ module Rubygoal
         update_remaining_time
         team_home.update(game_data(:home))
         team_away.update(game_data(:away))
-        ball.update
+        update_ball
       end
 
       end_match! if time <= 0
     end
 
     def players
+      # TODO improve this!
       teams.map { |t| t.players.values }.flatten
     end
 
     def celebrating_goal?
-      # TODO improve this condition
-      ball.goal?
+      goal.celebrating?
     end
 
     protected
@@ -82,9 +82,16 @@ module Rubygoal
       self.time -= elapsed_time
     end
 
+    def update_ball
+      ball.update
+      if ball.goal?
+        goal.start_celebration
+      end
+    end
+
     def update_goal
       goal.update(elapsed_time)
-      reinitialize_match if goal.celebration_done?
+      reinitialize_match unless goal.celebrating?
     end
 
     def reinitialize_match
