@@ -95,8 +95,8 @@ module Rubygoal
 
     def initialize_lineup_values
       @lineup_offset_x = 30
-      @lineup_step_x = Field.width / 6
-      @lineup_step_y = Field.height / 6
+      @lineup_step_x = Field::WIDTH / 6
+      @lineup_step_y = Field::HEIGHT / 6
 
       @average_players_count = 6
       @fast_players_count = 3
@@ -168,7 +168,7 @@ module Rubygoal
 
     def shoot_target
       # Do not kick always to the center, look for the sides of the goal
-      limit = Field.goal_height / 2
+      limit = Field::GOAL_HEIGHT / 2
       offset = Random.rand(-limit..limit)
 
       target = Field.goal_position(opponent_side)
