@@ -46,8 +46,7 @@ module Rubygoal
     end
 
     def players
-      # TODO improve this!
-      teams.map { |t| t.players.values }.flatten
+      teams.map(&:players_list).flatten
     end
 
     def celebrating_goal?

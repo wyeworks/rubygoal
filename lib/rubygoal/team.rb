@@ -87,6 +87,10 @@ module Rubygoal
       formation.formation_types(players)
     end
 
+    def players_list
+      players.values
+    end
+
     private
 
     attr_reader :lineup_step_x, :lineup_step_y, :lineup_offset_x
