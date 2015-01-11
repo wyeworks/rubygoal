@@ -6,13 +6,14 @@ require 'rubygoal/player'
 
 module Rubygoal
   class Team
-    attr_reader :game, :players, :side, :opponent_side, :coach, :formation
+    attr_reader :players, :side, :opponent_side, :coach, :formation
     attr_accessor :goalkeeper, :positions
 
     INFINITE = 100_000
 
     extend Forwardable
     def_delegators :coach, :name
+    def_delegators :game, :ball
 
     def self.initial_player_positions
       [
@@ -60,16 +61,16 @@ module Rubygoal
       player_to_move = nil
       min_distance_to_ball = INFINITE
       players.values.each do |player|
-        pass_or_shoot(player) if player.can_kick?(game.ball)
+        pass_or_shoot(player) if player.can_kick?(ball)
 
-        distance_to_ball = player.distance(game.ball.position)
+        distance_to_ball = player.distance(ball.position)
         if min_distance_to_ball > distance_to_ball
           min_distance_to_ball = distance_to_ball
           player_to_move = player
         end
       end
 
-      player_to_move.move_to(game.ball.position)
+      player_to_move.move_to(ball.position)
 
       players.each do |name, player|
         if player != player_to_move
@@ -93,7 +94,7 @@ module Rubygoal
 
     private
 
-    attr_reader :lineup_step_x, :lineup_step_y, :lineup_offset_x
+    attr_reader :game, :lineup_step_x, :lineup_step_y, :lineup_offset_x
     attr_writer :formation
 
 
@@ -150,7 +151,7 @@ module Rubygoal
         end
       end
 
-      player.kick(game.ball, target)
+      player.kick(ball, target)
     end
 
     def nearest_forward_teammate(player)

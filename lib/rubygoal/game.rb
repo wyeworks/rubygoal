@@ -37,8 +37,8 @@ module Rubygoal
         update_goal
       else
         update_remaining_time
-        team_home.update(game_data(:home))
-        team_away.update(game_data(:away))
+        team_home.update(match_data(:home))
+        team_away.update(match_data(:away))
         update_ball
       end
 
@@ -108,7 +108,7 @@ module Rubygoal
     end
 
     def reinitialize_players
-      teams.map(&:players_to_initial_position)
+      teams.each(&:players_to_initial_position)
     end
 
     def reinitialize_ball
@@ -119,7 +119,7 @@ module Rubygoal
       [team_home, team_away]
     end
 
-    def game_data(side)
+    def match_data(side)
       Match.create_for(
         side,
         time,
