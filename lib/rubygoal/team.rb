@@ -6,13 +6,14 @@ require 'rubygoal/player'
 
 module Rubygoal
   class Team
-    attr_reader :game, :players, :side, :opponent_side, :coach, :formation
+    attr_reader :players, :side, :opponent_side, :coach, :formation
     attr_accessor :goalkeeper, :positions
 
     INFINITE = 100_000
 
     extend Forwardable
     def_delegators :coach, :name
+    def_delegators :game, :ball
 
     def self.initial_player_positions
       [
@@ -35,9 +36,9 @@ module Rubygoal
     end
 
     def initialize(game, coach)
-      @game = game
+      @game    = game
       @players = {}
-      @coach = coach
+      @coach   = coach
 
       initialize_lineup_values
       initialize_players
@@ -60,16 +61,16 @@ module Rubygoal
       player_to_move = nil
       min_distance_to_ball = INFINITE
       players.values.each do |player|
-        pass_or_shoot(player) if player.can_kick?(game.ball)
+        pass_or_shoot(player) if player.can_kick?(ball)
 
-        distance_to_ball = player.distance(game.ball.position)
+        distance_to_ball = player.distance(ball.position)
         if min_distance_to_ball > distance_to_ball
           min_distance_to_ball = distance_to_ball
           player_to_move = player
         end
       end
 
-      player_to_move.move_to(game.ball.position)
+      player_to_move.move_to(ball.position)
 
       players.each do |name, player|
         if player != player_to_move
@@ -83,16 +84,24 @@ module Rubygoal
       end
     end
 
+    def formation_for_opponent
+      formation.formation_types(players)
+    end
+
+    def players_list
+      players.values
+    end
+
     private
 
-    attr_reader :lineup_step_x, :lineup_step_y, :lineup_offset_x
+    attr_reader :game, :lineup_step_x, :lineup_step_y, :lineup_offset_x
     attr_writer :formation
 
 
     def initialize_lineup_values
       @lineup_offset_x = 30
-      @lineup_step_x = Field.width / 6
-      @lineup_step_y = Field.height / 6
+      @lineup_step_x = Field::WIDTH / 6
+      @lineup_step_y = Field::HEIGHT / 6
 
       @average_players_count = 6
       @fast_players_count = 3
@@ -113,19 +122,19 @@ module Rubygoal
     end
 
     def initialize_players
-      @players = {goalkeeper: GoalKeeperPlayer.new(game, side)}
+      @players = {goalkeeper: GoalKeeperPlayer.new(side)}
 
       unless @coach.valid_formation?
         puts @coach.players_errors
         raise "Invalid formation: #{@coach.name}"
       end
 
-      @players[@coach.players[:captain].first] = CaptainPlayer.new(game, side)
+      @players[@coach.players[:captain].first] = CaptainPlayer.new(side)
       @coach.players[:fast].each do |name|
-        @players[name] = FastPlayer.new(game, side)
+        @players[name] = FastPlayer.new(side)
       end
       @coach.players[:average].each do |name|
-        @players[name] = AveragePlayer.new(game, side)
+        @players[name] = AveragePlayer.new(side)
       end
 
       players_to_initial_position
@@ -142,7 +151,7 @@ module Rubygoal
         end
       end
 
-      player.kick(game.ball, target)
+      player.kick(ball, target)
     end
 
     def nearest_forward_teammate(player)
@@ -164,7 +173,7 @@ module Rubygoal
 
     def shoot_target
       # Do not kick always to the center, look for the sides of the goal
-      limit = Field.goal_height / 2
+      limit = Field::GOAL_HEIGHT / 2
       offset = Random.rand(-limit..limit)
 
       target = Field.goal_position(opponent_side)

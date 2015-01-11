@@ -6,7 +6,7 @@ require 'rubygoal/field'
 module Rubygoal
   class BallTest < Minitest::Test
     def setup
-      @ball = Ball.new(Field.center_position)
+      @ball = Ball.new
     end
 
     def test_ball_is_in_home_goal_position

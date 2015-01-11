@@ -2,6 +2,8 @@ require 'gosu'
 
 require 'rubygoal/gui/goal'
 require 'rubygoal/gui/field'
+require 'rubygoal/gui/ball'
+require 'rubygoal/gui/players'
 
 require 'rubygoal/coordinate'
 require 'rubygoal/game'
@@ -29,8 +31,10 @@ module Rubygoal::Gui
 
       @game = game
 
-      @gui_field = Field.new(self, game.field)
+      @gui_field = Field.new(self)
       @gui_goal = Goal.new(self)
+      @gui_ball = Ball.new(self, game.ball)
+      @gui_players = players.map { |p| Players.new(self, p) }
 
       @font = Gosu::Font.new(
         self,
@@ -48,9 +52,12 @@ module Rubygoal::Gui
 
     def draw
       gui_field.draw
+      gui_ball.draw
+      gui_players.each(&:draw)
+
       draw_scoreboard
       draw_team_labels
-      gui_goal.draw if game.goal?
+      gui_goal.draw if game.celebrating_goal?
     end
 
     def button_down(id)
@@ -60,6 +67,10 @@ module Rubygoal::Gui
     end
 
     private
+
+    def players
+      game.players
+    end
 
     def create_label_image(name)
       name_characters_limit = 20
@@ -149,6 +160,7 @@ module Rubygoal::Gui
     end
 
     attr_reader :game, :gui_field, :gui_goal,
+                :gui_ball, :gui_players,
                 :font, :home_team_label, :away_team_label
   end
 end

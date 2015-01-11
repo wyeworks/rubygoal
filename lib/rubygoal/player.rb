@@ -10,11 +10,10 @@ module Rubygoal
 
     attr_reader :side, :type
 
-    def initialize(game, side)
+    def initialize(side)
       super()
 
       @time_to_kick_again = 0
-      @field = game.field
       @side = side
     end
 
@@ -41,7 +40,7 @@ module Rubygoal
 
     private
 
-    attr_reader :field, :image, :error
+    attr_reader :error
 
     def waiting_to_kick_again?
       time_to_kick_again > 0

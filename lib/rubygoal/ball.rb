@@ -6,10 +6,9 @@ module Rubygoal
   class Ball
     include Moveable
 
-    def initialize(position)
-      super()
-
-      @position = position
+    def initialize
+      super
+      reinitialize_position
     end
 
     def goal?
@@ -21,6 +20,10 @@ module Rubygoal
         Util.offset_x(direction, speed),
         Util.offset_y(direction, speed)
       )
+    end
+
+    def reinitialize_position
+      self.position = Field.center_position
     end
 
     def update

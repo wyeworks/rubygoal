@@ -4,9 +4,8 @@ module Rubygoal
   class TeamTest < Minitest::Test
     def setup
       game = Game.new
-      game.field.reinitialize
-      @home_team = game.field.team_home
-      @away_team = game.field.team_away
+      @home_team = game.team_home
+      @away_team = game.team_away
     end
 
     def test_default_home_coach
@@ -32,9 +31,7 @@ module Rubygoal
         Position.new(878, 608)
       ]
 
-      players_positions = @home_team.players.values.map(&:position)
-
-      assert_equal expected, players_positions
+      assert_equal expected, players_positions(@home_team)
     end
 
     def test_away_initial_player_positions
@@ -52,9 +49,7 @@ module Rubygoal
         Position.new(1040, 554)
       ]
 
-      players_positions = @away_team.players.values.map(&:position)
-
-      assert_equal expected, players_positions
+      assert_equal expected, players_positions(@away_team)
     end
 
     def test_home_goalkeeper_position
@@ -80,6 +75,12 @@ module Rubygoal
 
       assert_equal expected, @home_team.formation.lineup
       assert_equal expected, @away_team.formation.lineup
+    end
+
+    private
+
+    def players_positions(team)
+      team.players_list.map(&:position)
     end
   end
 end

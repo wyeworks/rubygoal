@@ -6,17 +6,19 @@ require 'rubygoal/goal'
 
 module Rubygoal
   class Game
-    attr_reader :field, :time, :goal,
+    attr_reader :team_home, :team_away, :ball,
+                :time, :goal,
                 :coach_home, :coach_away,
                 :score_home, :score_away
-
-    extend Forwardable
-    def_delegators :field, :ball, :goal?, :close_to_goal?
 
     def initialize
       initialize_coaches
 
-      @field = Field.new(self, coach_home, coach_away)
+      @ball = Ball.new
+
+      @team_home = HomeTeam.new(self, coach_home)
+      @team_away = AwayTeam.new(self, coach_away)
+
       @goal = Goal.new(self)
 
       @state = :playing
@@ -31,14 +33,24 @@ module Rubygoal
 
       update_elapsed_time
 
-      if goal?
+      if celebrating_goal?
         update_goal
       else
         update_remaining_time
-        field.update
+        team_home.update(match_data(:home))
+        team_away.update(match_data(:away))
+        update_ball
       end
 
       end_match! if time <= 0
+    end
+
+    def players
+      teams.map(&:players_list).flatten
+    end
+
+    def celebrating_goal?
+      goal.celebrating?
     end
 
     protected
@@ -69,19 +81,53 @@ module Rubygoal
       self.time -= elapsed_time
     end
 
+    def update_ball
+      ball.update
+      if ball.goal?
+        update_score
+        goal.start_celebration
+      end
+    end
+
     def update_goal
       goal.update(elapsed_time)
-      reinitialize_match if goal.celebration_done?
+      reinitialize_match unless goal.celebrating?
     end
 
     def reinitialize_match
+      reinitialize_players
+      reinitialize_ball
+    end
+
+    def update_score
       if Field.position_side(ball.position) == :home
         self.score_away += 1
       else
         self.score_home += 1
       end
+    end
 
-      field.reinitialize
+    def reinitialize_players
+      teams.each(&:players_to_initial_position)
+    end
+
+    def reinitialize_ball
+      ball.position = Field.center_position
+    end
+
+    def teams
+      [team_home, team_away]
+    end
+
+    def match_data(side)
+      Match.create_for(
+        side,
+        time,
+        score_home,
+        score_away,
+        team_home.formation_for_opponent,
+        team_away.formation_for_opponent
+      )
     end
 
     def end_match!

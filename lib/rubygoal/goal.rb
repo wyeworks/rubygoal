@@ -6,8 +6,12 @@ module Rubygoal
       @celebration_time = 0
     end
 
-    def celebration_done?
-      !celebrating?
+    def celebrating?
+      celebration_time > 0
+    end
+
+    def start_celebration
+      self.celebration_time = 3
     end
 
     def update(elapsed_time)
@@ -18,15 +22,5 @@ module Rubygoal
     protected
 
     attr_accessor :celebration_time
-
-    private
-
-    def start_celebration
-      self.celebration_time = 3
-    end
-
-    def celebrating?
-      celebration_time > 0
-    end
   end
 end
