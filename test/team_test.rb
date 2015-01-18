@@ -66,11 +66,11 @@ module Rubygoal
 
     def test_initial_lineup
       expected = [
-        [:average1, :none, :average2, :none, :none   ],
-        [:average3, :none, :fast1,    :none, :captain],
-        [:none,    :none, :none,    :none, :none   ],
+        [:average1, :none, :average2, :none, :none    ],
+        [:average3, :none, :fast1,    :none, :captain ],
+        [:none,     :none, :none,     :none, :none    ],
         [:average4, :none, :fast2,    :none, :fast3   ],
-        [:average5, :none, :average6, :none, :none   ]
+        [:average5, :none, :average6, :none, :none    ]
       ]
 
       assert_equal expected, @home_team.formation.lineup

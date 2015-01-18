@@ -29,11 +29,11 @@ module Rubygoal
     end
 
     def test_inside_left_bounds_width
-      assert !Field.out_of_bounds_width?(Position.new(262, 0))
+      refute Field.out_of_bounds_width?(Position.new(262, 0))
     end
 
     def test_inside_right_bounds_width
-      assert !Field.out_of_bounds_width?(Position.new(1656, 0))
+      refute Field.out_of_bounds_width?(Position.new(1656, 0))
     end
 
     def test_right_out_of_bounds_width
@@ -45,11 +45,11 @@ module Rubygoal
     end
 
     def test_inside_upper_bounds_height
-      assert !Field.out_of_bounds_height?(Position.new(0, 112))
+      refute Field.out_of_bounds_height?(Position.new(0, 112))
     end
 
     def test_inside_bottom_bounds_height
-      assert !Field.out_of_bounds_height?(Position.new(0, 1050))
+      refute Field.out_of_bounds_height?(Position.new(0, 1050))
     end
 
     def test_down_out_of_bounds_width
@@ -69,11 +69,11 @@ module Rubygoal
     end
 
     def test_upper_missed_goal
-      assert !Field.goal?(Position.new(261, 719))
+      refute Field.goal?(Position.new(261, 719))
     end
 
     def test_bottom_missed_goal
-      assert !Field.goal?(Position.new(261, 443))
+      refute Field.goal?(Position.new(261, 443))
     end
 
     def test_close_to_goal_straight
@@ -81,7 +81,7 @@ module Rubygoal
     end
 
     def test_not_close_to_goal_straight
-      assert !Field.close_to_goal?(Position.new(537, 581), :home)
+      refute Field.close_to_goal?(Position.new(537, 581), :home)
     end
 
     def test_close_to_goal_upper_diagonal
@@ -89,7 +89,7 @@ module Rubygoal
     end
 
     def test_not_close_to_goal_upper_diagonal
-      assert !Field.close_to_goal?(Position.new(457, 776), :home)
+      refute Field.close_to_goal?(Position.new(457, 776), :home)
     end
 
     def test_close_to_goal_lower_diagonal
@@ -97,7 +97,7 @@ module Rubygoal
     end
 
     def test_not_close_to_goal_lower_diagonal
-      assert !Field.close_to_goal?(Position.new(457, 386), :home)
+      refute Field.close_to_goal?(Position.new(457, 386), :home)
     end
   end
 end
