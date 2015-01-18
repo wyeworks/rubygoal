@@ -16,7 +16,7 @@ module Rubygoal
       raise NotImplementedError
     end
 
-    def players_errors
+    def errors
       errors = {}
 
       config = Rubygoal.configuration
@@ -38,8 +38,8 @@ module Rubygoal
       errors
     end
 
-    def valid_formation?
-      players_errors.empty?
+    def valid?
+      errors.empty?
     end
   end
 end

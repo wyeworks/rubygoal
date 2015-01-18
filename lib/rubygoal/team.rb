@@ -56,6 +56,11 @@ module Rubygoal
 
     def update(match)
       self.formation = coach.formation(match)
+      unless formation.valid?
+        puts formation.errors
+        raise "Invalid formation: #{coach.name}"
+      end
+
       update_positions(formation)
 
       player_to_move = nil
@@ -124,9 +129,9 @@ module Rubygoal
     def initialize_players
       @players = {goalkeeper: GoalKeeperPlayer.new(side)}
 
-      unless @coach.valid_formation?
-        puts @coach.players_errors
-        raise "Invalid formation: #{@coach.name}"
+      unless @coach.valid?
+        puts @coach.errors
+        raise "Invalid team definition: #{@coach.name}"
       end
 
       @players[@coach.players[:captain].first] = CaptainPlayer.new(side)
@@ -183,9 +188,6 @@ module Rubygoal
 
     def update_positions(formation)
       lineup = formation.lineup
-      if lineup.flatten.uniq.size != 11
-        raise 'Incorrect number of players, are you missing a name?'
-      end
       field_goalkeeper_pos = Team.initial_player_positions.first
       goalkeeper_position = Field.absolute_position(field_goalkeeper_pos, side)
 

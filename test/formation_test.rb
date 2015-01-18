@@ -38,4 +38,9 @@ module Rubygoal
       assert_equal expected, @formation.formation_types(players).lineup
     end
   end
+
+  def test_default_formation_is_valid
+    assert @formation.valid?
+    assert_empty @formation.errors
+  end
 end

@@ -64,5 +64,18 @@ module Rubygoal
       end
       types_formation
     end
+
+    def errors
+      errors = {}
+      if lineup.flatten.uniq.size != 11
+        errors << 'Incorrect number of players, are you missing a name?'
+      end
+
+      errors
+    end
+
+    def valid?
+      errors.empty?
+    end
   end
 end
