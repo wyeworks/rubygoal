@@ -41,5 +41,28 @@ module Rubygoal
     def valid?
       errors.empty?
     end
+
+    protected
+
+    def mirror_formation(lineup)
+      formation = Formation.new
+      average_counter = -1
+      fast_counter = -1
+
+      5.times do |i|
+        5.times do |j|
+          case lineup[i][j]
+          when :average
+            formation.lineup[i][j] = players[:average][average_counter+=1]
+          when :fast
+            formation.lineup[i][j] = players[:fast][fast_counter+=1]
+          when :captain
+            formation.lineup[i][j] = players[:captain].first
+          end
+        end
+      end
+
+      formation
+    end
   end
 end

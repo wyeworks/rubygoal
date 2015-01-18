@@ -89,8 +89,8 @@ module Rubygoal
       end
     end
 
-    def formation_for_opponent
-      formation.formation_types(players)
+    def lineup_for_opponent
+      formation.lineup_for_opponent(players)
     end
 
     def players_list

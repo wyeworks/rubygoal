@@ -20,7 +20,7 @@ module Rubygoal
       assert_empty @formation.errors
     end
 
-    def test_formation_types
+    def test_lineup_for_opponent
       players = {
         average1: AveragePlayer.new(:home),
         average2: AveragePlayer.new(:home),
@@ -42,7 +42,7 @@ module Rubygoal
         [:average, :none, :average, :none,    :none],
       ]
 
-      assert_equal expected, @formation.formation_types(players).lineup
+      assert_equal expected, @formation.lineup_for_opponent(players)
     end
   end
 end
