@@ -151,10 +151,14 @@ module Rubygoal
         formation.midfielders = [:average4, :average5, :captain, :none, :average6]
         formation.attackers = [:fast1, :fast2, :none, :fast3, :none]
       else
-      # `other` brings opponent's information ( just like `me` method )
-      # Next line shows mirror strategy, in which my lineup is a copy
-      # of the opponent lineup
-        formation.lineup = match.other.formation.lineup
+        # `other` brings opponent's information ( just like `me` method )
+        # Next line shows mirror strategy, in which my lineup is a copy
+        # of the opponent lineup
+        #
+        # The mirror_formation helper method translates the lineup array
+        # which defines where each opponent player is located (opponent names
+        # are not included, only player types)
+        formation = mirror_formation(match.other.lineup)
       end
 
       formation
