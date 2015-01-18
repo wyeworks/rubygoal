@@ -25,7 +25,6 @@ module Rubygoal
   Rubygoal.configure do |config|
     config.average_players_count = 6
     config.fast_players_count    = 3
-    config.captain_players_count = 1
 
     config.kick_strength         = 20
     config.kick_again_delay      = 60

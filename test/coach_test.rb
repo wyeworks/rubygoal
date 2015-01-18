@@ -44,8 +44,8 @@ module Rubygoal
     def test_more_than_three_fast
       coach = FourFastPlayersCoach.new
       expected_errors = [
-        'The number of fast players is 4',
-        'The number of average players is 5'
+        'The number of average players is 5',
+        'The number of fast players is 4'
       ]
 
       refute coach.valid?
