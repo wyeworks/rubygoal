@@ -17,7 +17,7 @@ module Rubygoal
     end
 
     def errors
-      errors = {}
+      errors = []
 
       config = Rubygoal.configuration
 
@@ -26,13 +26,13 @@ module Rubygoal
       average_count = players[:average].uniq.size
 
       if captain_count != config.captain_players_count
-        errors[:captain] = "The number of captains is #{captain_count}"
+        errors << "The number of captains is #{captain_count}"
       end
       if fast_count != config.fast_players_count
-        errors[:fast] = "The number of fast players is #{fast_count}"
+        errors << "The number of fast players is #{fast_count}"
       end
       if average_count != config.average_players_count
-        errors[:average] = "The number of average players is #{average_count}"
+        errors << "The number of average players is #{average_count}"
       end
 
       errors

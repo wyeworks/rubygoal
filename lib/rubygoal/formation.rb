@@ -66,7 +66,7 @@ module Rubygoal
     end
 
     def errors
-      errors = {}
+      errors = []
       if lineup.flatten.uniq.size != 11
         errors << 'Incorrect number of players, are you missing a name?'
       end
