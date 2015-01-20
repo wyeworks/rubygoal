@@ -125,8 +125,8 @@ module Rubygoal
         time,
         score_home,
         score_away,
-        team_home.formation_for_opponent,
-        team_away.formation_for_opponent
+        team_home.lineup_for_opponent,
+        team_away.lineup_for_opponent
       )
     end
 

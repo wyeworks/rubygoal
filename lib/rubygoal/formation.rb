@@ -3,13 +3,7 @@ module Rubygoal
     attr_accessor :lineup
 
     def initialize
-      @lineup = [
-        [:none, :none, :none, :none, :none],
-        [:none, :none, :none, :none, :none],
-        [:none, :none, :none, :none, :none],
-        [:none, :none, :none, :none, :none],
-        [:none, :none, :none, :none, :none],
-      ]
+      @lineup = empty_lineup
     end
 
     def defenders
@@ -46,23 +40,44 @@ module Rubygoal
       end
     end
 
-    def formation_types(players)
-      types_formation = Formation.new
+    def lineup_for_opponent(players)
+      result = empty_lineup
+
       lineup.each_with_index do |line, i|
         line.each_with_index do |name, j|
           if name != :none
             case players[name]
             when CaptainPlayer
-              types_formation.lineup[i][j] = :captain
+              result[i][j] = :captain
             when FastPlayer
-              types_formation.lineup[i][j] = :fast
+              result[i][j] = :fast
             when AveragePlayer
-              types_formation.lineup[i][j] = :average
+              result[i][j] = :average
             end
           end
         end
       end
-      types_formation
+
+      result
+    end
+
+    def errors
+      errors = []
+      if lineup.flatten.uniq.size != 11
+        errors << 'Incorrect number of players, are you missing a name?'
+      end
+
+      errors
+    end
+
+    def valid?
+      errors.empty?
+    end
+
+    private
+
+    def empty_lineup
+      Array.new(5) { Array.new(5, :none) }
     end
   end
 end

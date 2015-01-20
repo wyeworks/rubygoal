@@ -20,21 +20,7 @@ module Rubygoal
         formation.midfielders = [:average3, :average4, :captain, :none, :average5]
         formation.attackers = [:fast2, :none, :none, :fast3, :average6]
       else
-        formation.lineup = match.other.formation.lineup
-        average_counter = -1
-        fast_counter = -1
-        5.times do |i|
-          5.times do |j|
-            case formation.lineup[i][j]
-            when :average
-              formation.lineup[i][j] = players[:average][average_counter+=1]
-            when :fast
-              formation.lineup[i][j] = players[:fast][fast_counter+=1]
-            when :captain
-              formation.lineup[i][j] = players[:captain][0]
-            end
-          end
-        end
+        formation = mirror_formation(match.other.lineup)
       end
 
       formation

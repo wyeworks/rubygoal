@@ -16,30 +16,79 @@ module Rubygoal
       raise NotImplementedError
     end
 
-    def players_errors
-      errors = {}
+    def errors
+      @errors = []
 
-      config = Rubygoal.configuration
+      check_unique_captain
+      check_players_count(:average)
+      check_players_count(:fast)
 
-      captain_count = players[:captain].uniq.size
-      fast_count = players[:fast].uniq.size
-      average_count = players[:average].uniq.size
-
-      if captain_count != config.captain_players_count
-        errors[:captain] = "The number of captains is #{captain_count}"
-      end
-      if fast_count != config.fast_players_count
-        errors[:fast] = "The number of fast players is #{fast_count}"
-      end
-      if average_count != config.average_players_count
-        errors[:average] = "The number of average players is #{average_count}"
-      end
-
-      errors
+      @errors
     end
 
-    def valid_formation?
-      players_errors.empty?
+    def valid?
+      errors.empty?
+    end
+
+    protected
+
+    def mirror_formation(lineup)
+      average_to_add = average_players.dup
+      fast_to_add = fast_players.dup
+
+      Formation.new.tap do |formation|
+        formation.lineup =
+          Array.new(5) do |i|
+            mirror_formation_line(lineup[i], average_to_add, fast_to_add)
+          end
+      end
+    end
+
+    private
+
+    def game_config
+      Rubygoal.configuration
+    end
+
+    def check_unique_captain
+      captain_count = players[:captain].uniq.size
+
+      if captain_count != 1
+        @errors << "The number of captains is #{captain_count}"
+      end
+    end
+
+    def check_players_count(type)
+      players_count = players[type].uniq.size
+
+      if players_count != game_config.send("#{type}_players_count")
+        @errors << "The number of #{type} players is #{players_count}"
+      end
+    end
+
+    def mirror_formation_line(line, average_to_add, fast_to_add)
+      line.map do |player_type|
+        case player_type
+        when :average
+          average_to_add.shift
+        when :fast
+          fast_to_add.shift
+        when :captain
+          captain_player
+        end
+      end
+    end
+
+    def average_players
+      players[:average]
+    end
+
+    def fast_players
+      players[:fast]
+    end
+
+    def captain_player
+      players[:captain].first
     end
   end
 end

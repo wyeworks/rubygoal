@@ -1,12 +1,12 @@
 module Rubygoal
   class Match
     class Team
-      attr_reader :score, :result, :formation
+      attr_reader :score, :result, :lineup
 
-      def initialize(score, result, other_formation = nil)
+      def initialize(score, result, other_lineup = nil)
         @score     = score
         @result    = result
-        @formation = other_formation
+        @lineup = other_lineup
       end
 
       def draw?
@@ -25,22 +25,22 @@ module Rubygoal
     attr_reader :me, :other, :time
 
     def self.create_for(side, time, score_home, score_away,
-                        formation_home, formation_away)
+                        lineup_home, lineup_away)
       case side
       when :home
         my_score    = score_home
         other_score = score_away
-        formation   = formation_away
+        lineup      = lineup_away
       when :away
         my_score    = score_away
         other_score = score_home
-        formation   = formation_home
+        lineup      = lineup_home
       end
 
-      Match.new(my_score, other_score, time, formation)
+      Match.new(my_score, other_score, time, lineup)
     end
 
-    def initialize(my_score, other_score, time, other_formation)
+    def initialize(my_score, other_score, time, other_lineup)
       @me = Match::Team.new(
         my_score,
         result(my_score, other_score)
@@ -48,7 +48,7 @@ module Rubygoal
       @other = Match::Team.new(
         other_score,
         result(other_score, my_score),
-        other_formation
+        other_lineup
       )
       @time = time
     end
