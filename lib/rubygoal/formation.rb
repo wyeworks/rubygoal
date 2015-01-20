@@ -3,7 +3,7 @@ module Rubygoal
     attr_accessor :lineup
 
     def initialize
-      @lineup = Array.new(5) { Array.new(5, :none) }
+      @lineup = empty_lineup
     end
 
     def defenders
@@ -41,7 +41,7 @@ module Rubygoal
     end
 
     def lineup_for_opponent(players)
-      result = Array.new(5) { Array.new(5, :none) }
+      result = empty_lineup
 
       lineup.each_with_index do |line, i|
         line.each_with_index do |name, j|
@@ -72,6 +72,12 @@ module Rubygoal
 
     def valid?
       errors.empty?
+    end
+
+    private
+
+    def empty_lineup
+      Array.new(5) { Array.new(5, :none) }
     end
   end
 end
