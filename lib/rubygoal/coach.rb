@@ -17,13 +17,11 @@ module Rubygoal
     end
 
     def errors
-      @errors = []
-
-      check_unique_captain
-      check_players_count(:average)
-      check_players_count(:fast)
-
-      @errors
+      [].tap do |errors|
+        check_unique_captain(errors)
+        check_players_count(:average, errors)
+        check_players_count(:fast, errors)
+      end
     end
 
     def valid?
@@ -50,19 +48,19 @@ module Rubygoal
       Rubygoal.configuration
     end
 
-    def check_unique_captain
+    def check_unique_captain(errors)
       captain_count = players[:captain].uniq.size
 
       if captain_count != 1
-        @errors << "The number of captains is #{captain_count}"
+        errors << "The number of captains is #{captain_count}"
       end
     end
 
-    def check_players_count(type)
+    def check_players_count(type, errors)
       players_count = players[type].uniq.size
 
       if players_count != game_config.send("#{type}_players_count")
-        @errors << "The number of #{type} players is #{players_count}"
+        errors << "The number of #{type} players is #{players_count}"
       end
     end
 
