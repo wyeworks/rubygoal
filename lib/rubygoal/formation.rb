@@ -1,69 +1,63 @@
 module Rubygoal
   class Formation
-    attr_accessor :lineup
+    attr_accessor :players_position
 
     def initialize
-      @lineup = empty_lineup
+      @players_position = {}
+
+      @position_lines = {
+        defenders:   Field::WIDTH / 6 - 30,
+        midfielders: (Field::WIDTH / 6) * 3 - 30,
+        attackers:   (Field::WIDTH / 6) * 5 - 30
+      }
     end
 
-    def defenders
-      column(0)
+    def defenders=(players)
+      set_players_in_predefined_line(:defenders, players)
     end
 
-    def midfielders
-      column(2)
+    def midfielders=(players)
+      set_players_in_predefined_line(:midfielders, players)
     end
 
-    def attackers
-      column(4)
+    def attackers=(players)
+      set_players_in_predefined_line(:attackers, players)
     end
 
-    def column(i)
-      lineup.map { |row| row[i] }
-    end
+    def set_players_in_custom_line(position_x, players)
+      base_position = Position.new(position_x, 0)
+      separation = line_position_separation(players)
 
-    def defenders=(f)
-      assign_column(0, f)
-    end
+      players.each_with_index do |player, i|
+        next if player == :none
 
-    def midfielders=(f)
-      assign_column(2, f)
-    end
+        offset = Position.new(0, separation * (i + 1))
+        position = base_position.add(offset)
 
-    def attackers=(f)
-      assign_column(4, f)
-    end
-
-    def assign_column(index, column)
-      column.each_with_index do |player, row_index|
-        lineup[row_index][index] = player
+        self.players_position[player] = position
       end
     end
 
     def lineup_for_opponent(players)
-      result = empty_lineup
+      positions = {
+        captain: [],
+        average: [],
+        fast: []
+      }
 
-      lineup.each_with_index do |line, i|
-        line.each_with_index do |name, j|
-          if name != :none
-            case players[name]
-            when CaptainPlayer
-              result[i][j] = :captain
-            when FastPlayer
-              result[i][j] = :fast
-            when AveragePlayer
-              result[i][j] = :average
-            end
-          end
-        end
+      players_position.each do |name, pos|
+        player_type = players[name].type
+        positions[player_type] << pos
       end
 
-      result
+      positions
     end
 
     def errors
       errors = []
-      if lineup.flatten.uniq.size != 11
+
+      # TODO Check if we need to count for the goalkeeper as well
+      if players_position.size != 10
         errors << 'Incorrect number of players, are you missing a name?'
       end
 
@@ -76,8 +70,14 @@ module Rubygoal
 
     private
 
-    def empty_lineup
-      Array.new(5) { Array.new(5, :none) }
+    attr_accessor :position_lines
+
+    def set_players_in_predefined_line(line, players)
+      set_players_in_custom_line(position_lines[line], players)
+    end
+
+    def line_position_separation(players)
+      Field::HEIGHT / (players.size + 1)
     end
   end
 end

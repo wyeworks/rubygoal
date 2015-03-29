@@ -4,8 +4,8 @@ module Rubygoal
       attr_reader :score, :result, :lineup
 
       def initialize(score, result, other_lineup = nil)
-        @score     = score
-        @result    = result
+        @score  = score
+        @result = result
         @lineup = other_lineup
       end
 

@@ -30,15 +30,19 @@ module Rubygoal
 
     protected
 
-    def mirror_formation(lineup)
-      average_to_add = average_players.dup
-      fast_to_add = fast_players.dup
-
+    def mirror_formation(players_position)
       Formation.new.tap do |formation|
-        formation.lineup =
-          Array.new(5) do |i|
-            mirror_formation_line(lineup[i], average_to_add, fast_to_add)
-          end
+        mirror_positions = {}
+
+        players_position[:average].each_with_index do |pos, i|
+          mirror_positions[average_players[i]] = pos
+        end
+        players_position[:fast].each_with_index do |pos, i|
+          mirror_positions[fast_players[i]] = pos
+        end
+        mirror_positions[captain_player] = players_position[:captain].first
+
+        formation.players_position = mirror_positions
       end
     end
 
@@ -64,16 +68,14 @@ module Rubygoal
       end
     end
 
-    def mirror_formation_line(line, average_to_add, fast_to_add)
-      line.map do |player_type|
-        case player_type
-        when :average
-          average_to_add.shift
-        when :fast
-          fast_to_add.shift
-        when :captain
-          captain_player
-        end
+    def player_to_mirror(player_type, average_to_add, fast_to_add)
+      case player_type
+      when :average
+        average_to_add.shift
+      when :fast
+        fast_to_add.shift
+      when :captain
+        captain_player
       end
     end
 

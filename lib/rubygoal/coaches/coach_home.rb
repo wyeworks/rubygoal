@@ -4,6 +4,30 @@ require 'rubygoal/formation'
 module Rubygoal
   class CoachHome < Coach
 
+    #team do
+      #name "Wanderers"
+
+      #primary_colors [:black, :white]
+      #secondary_colors :red
+
+      #players do
+        #goalkeeper :goalkeeper
+
+        #captain :captain
+
+        #fast1 :fast
+        #fast2 :fast
+        #fast3 :fast
+
+        #average1 :average
+        #average2 :average
+        #average3 :average
+        #average4 :average
+        #average5 :average
+        #average6 :average
+      #end
+    #end
+
     def name
       "Wanderers"
     end

@@ -56,6 +56,7 @@ module Rubygoal
 
     def update(match)
       self.formation = coach.formation(match)
+
       unless formation.valid?
         puts formation.errors
         raise "Invalid formation: #{coach.name}"
@@ -99,30 +100,29 @@ module Rubygoal
 
     private
 
-    attr_reader :game, :lineup_step_x, :lineup_step_y, :lineup_offset_x
+    attr_reader :game
     attr_writer :formation
 
 
     def initialize_lineup_values
-      @lineup_offset_x = 30
-      @lineup_step_x = Field::WIDTH / 6
-      @lineup_step_y = Field::HEIGHT / 6
-
       @average_players_count = 6
       @fast_players_count = 3
     end
 
     def initialize_formation
       average_players = @coach.players[:average]
-      fast_players = @coach.players[:fast]
+      fast_players    = @coach.players[:fast]
       captain_players = @coach.players[:captain]
+
       @formation = Formation.new
-      @formation.lineup = [
-        [average_players[0], :none, average_players[1], :none, :none              ],
-        [average_players[2], :none, fast_players[0],    :none, captain_players[0] ],
-        [:none,              :none, :none,              :none, :none              ],
-        [average_players[3], :none, fast_players[1],    :none, fast_players[2]    ],
-        [average_players[4], :none, average_players[5], :none, :none              ]
+      @formation.defenders = [
+        average_players[0], average_players[2], :none, average_players[3], average_players[4]
+      ]
+      @formation.midfielders = [
+        average_players[1], fast_players[0], :none, fast_players[1], average_players[5]
+      ]
+      @formation.midfielders = [
+        :none, captain_players[0], :none, fast_players[2], :none
       ]
     end
 
@@ -187,7 +187,6 @@ module Rubygoal
     end
 
     def update_positions(formation)
-      lineup = formation.lineup
       field_goalkeeper_pos = Team.initial_player_positions.first
       goalkeeper_position = Field.absolute_position(field_goalkeeper_pos, side)
 
@@ -195,18 +194,12 @@ module Rubygoal
         goalkeeper: goalkeeper_position
       }
 
-      lineup.each_with_index do |row, y|
-        row.each_with_index do |player_name, x|
-          self.positions[player_name] = lineup_to_position(x, y) if player_name != :none
-        end
+      formation.players_position.each do |player_name, pos|
+        self.positions[player_name] = lineup_to_position(pos)
       end
     end
 
-    def lineup_to_position(x, y)
-      field_position = Position.new(
-        (x + 1) * lineup_step_x - lineup_offset_x,
-        (y + 1) * lineup_step_y
-      )
+    def lineup_to_position(field_position)
       Field.absolute_position(field_position, side)
     end
   end
