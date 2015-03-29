@@ -2,6 +2,25 @@ module Rubygoal
   class Formation
     attr_accessor :players_position, :lines_definition
 
+    class CustomLines
+      def self.build(&block)
+        custom_lines = self.new
+        custom_lines.instance_eval(&block)
+        custom_lines
+      end
+
+      def to_hash
+        @lines
+      end
+
+      private
+
+      def method_missing(method, *args)
+        @lines ||= {}
+        @lines[method] = args.first
+      end
+    end
+
     class CustomPosition
       def self.build(&block)
         custom_position = self.new
@@ -43,11 +62,6 @@ module Rubygoal
       end
     end
 
-    def set_player_position(player, pos_x, pos_y)
-      position = Position.new(pos_x, pos_y)
-      players_position[player] = position
-    end
-
     def lineup(&block)
       instance_eval(&block)
     end
@@ -83,6 +97,11 @@ module Rubygoal
     end
 
     private
+
+    def lines(&block)
+      cl = CustomLines.build(&block)
+      lines_definition.merge!(cl.to_hash)
+    end
 
     def custom_position(&block)
       cp = CustomPosition.build(&block)

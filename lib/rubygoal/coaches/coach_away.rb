@@ -20,17 +20,23 @@ module Rubygoal
         end
       elsif match.me.draw?
         formation.lineup do
+          lines do
+            defenders 180
+            midfielders 600
+            attackers 900
+          end
+
           defenders :average1, :fast1, :none, :average3, :average5
           midfielders :average2, :none, :none, :none, :average6
           attackers :none, :fast2, :none, :average4, :none
 
           custom_position do
             player :fast3
-            position Field::WIDTH / 3, Field::HEIGHT / 2
+            position 400, Field::HEIGHT / 2
           end
           custom_position do
             player :captain
-            position Field::WIDTH / 3 * 2, Field::HEIGHT / 2
+            position 800, Field::HEIGHT / 2
           end
         end
       elsif match.me.losing?
