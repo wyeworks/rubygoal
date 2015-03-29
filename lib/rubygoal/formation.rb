@@ -1,40 +1,21 @@
 module Rubygoal
   class Formation
-    attr_accessor :players_position
+    attr_accessor :players_position, :lines_definition
 
     def initialize
       @players_position = {}
 
-      @position_lines = {
-        defenders:   Field::WIDTH / 6 - 30,
-        midfielders: (Field::WIDTH / 6) * 3 - 30,
-        attackers:   (Field::WIDTH / 6) * 5 - 30
+      @lines_definition = {
+        defenders: Field::WIDTH / 6,
+        midfielders: Field::WIDTH / 2,
+        attackers: Field::WIDTH / 6 * 5,
       }
     end
 
-    def defenders=(players)
-      set_players_in_predefined_line(:defenders, players)
-    end
-
-    def midfielders=(players)
-      set_players_in_predefined_line(:midfielders, players)
-    end
-
-    def attackers=(players)
-      set_players_in_predefined_line(:attackers, players)
-    end
-
-    def set_players_in_custom_line(position_x, players)
-      base_position = Position.new(position_x, 0)
-      separation = line_position_separation(players)
-
-      players.each_with_index do |player, i|
-        next if player == :none
-
-        offset = Position.new(0, separation * (i + 1))
-        position = base_position.add(offset)
-
-        self.players_position[player] = position
+    def method_missing(method, *args)
+      line_name = method.to_s.chomp('=').to_sym
+      if lines_definition[line_name]
+        set_players_in_custom_line(lines_definition[line_name], args.first)
       end
     end
 
@@ -70,10 +51,18 @@ module Rubygoal
 
     private
 
-    attr_accessor :position_lines
+    def set_players_in_custom_line(position_x, players)
+      base_position = Position.new(position_x, 0)
+      separation = line_position_separation(players)
 
-    def set_players_in_predefined_line(line, players)
-      set_players_in_custom_line(position_lines[line], players)
+      players.each_with_index do |player, i|
+        next if player == :none
+
+        offset = Position.new(0, separation * (i + 1))
+        position = base_position.add(offset)
+
+        self.players_position[player] = position
+      end
     end
 
     def line_position_separation(players)
