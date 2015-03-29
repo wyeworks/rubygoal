@@ -2,12 +2,36 @@ module Rubygoal
   class Formation
     attr_accessor :players_position, :lines_definition
 
+    class CustomPosition
+      def self.build(&block)
+        custom_position = self.new
+        custom_position.instance_eval(&block)
+        custom_position
+      end
+
+      def to_hash
+        { @player => @position }
+      end
+
+      private
+
+      def player(name)
+        @player = name
+      end
+
+      def position(x, y)
+        @position = Position.new(x, y)
+      end
+    end
+
     def initialize
       @players_position = {}
 
       @lines_definition = {
         defenders: Field::WIDTH / 6,
+        def_midfielders: Field::WIDTH / 3,
         midfielders: Field::WIDTH / 2,
+        att_midfielders: Field::WIDTH / 3 * 2,
         attackers: Field::WIDTH / 6 * 5,
       }
     end
@@ -15,13 +39,17 @@ module Rubygoal
     def method_missing(method, *args)
       line_name = method.to_s.chomp('=').to_sym
       if lines_definition[line_name]
-        set_players_in_custom_line(lines_definition[line_name], args.first)
+        set_players_in_custom_line(lines_definition[line_name], args)
       end
     end
 
     def set_player_position(player, pos_x, pos_y)
       position = Position.new(pos_x, pos_y)
       players_position[player] = position
+    end
+
+    def lineup(&block)
+      instance_eval(&block)
     end
 
     def lineup_for_opponent(players)
@@ -55,6 +83,11 @@ module Rubygoal
     end
 
     private
+
+    def custom_position(&block)
+      cp = CustomPosition.build(&block)
+      players_position.merge!(cp.to_hash)
+    end
 
     def set_players_in_custom_line(position_x, players)
       base_position = Position.new(position_x, 0)

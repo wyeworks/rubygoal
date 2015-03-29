@@ -115,15 +115,9 @@ module Rubygoal
       captain_players = @coach.players[:captain]
 
       @formation = Formation.new
-      @formation.defenders = [
-        average_players[0], average_players[2], :none, average_players[3], average_players[4]
-      ]
-      @formation.midfielders = [
-        average_players[1], fast_players[0], :none, fast_players[1], average_players[5]
-      ]
-      @formation.midfielders = [
-        :none, captain_players[0], :none, fast_players[2], :none
-      ]
+      @formation.defenders average_players[0], average_players[2], :none, average_players[3], average_players[4]
+      @formation.midfielders average_players[1], fast_players[0], :none, fast_players[1], average_players[5]
+      @formation.attackers :none, captain_players[0], :none, fast_players[2], :none
     end
 
     def initialize_players
