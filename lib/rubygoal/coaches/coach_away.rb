@@ -33,9 +33,9 @@ module Rubygoal
       elsif match.me.losing?
         if match.time < 30
           formation.defenders = [:none, :average2, :average4, :average5, :none]
-          formation.def_midfielders = [:fast1]
+          formation.set_player_position(:fast1, Field::WIDTH / 3, Field::HEIGHT / 2)
           formation.midfielders = [:average1, :none, :none, :fast2, :average6]
-          formation.att_midfielders = [:captain]
+          formation.set_player_position(:captain, Field::WIDTH / 3 * 2, Field::HEIGHT / 2)
           formation.attackers = [:none, :average3, :none, :fast3, :none]
         else
           formation.defenders = [:none, :average2, :fast1, :average5, :none]

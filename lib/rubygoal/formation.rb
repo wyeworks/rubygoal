@@ -19,6 +19,11 @@ module Rubygoal
       end
     end
 
+    def set_player_position(player, pos_x, pos_y)
+      position = Position.new(pos_x, pos_y)
+      players_position[player] = position
+    end
+
     def lineup_for_opponent(players)
       positions = {
         captain: [],
