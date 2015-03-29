@@ -32,11 +32,11 @@ module Rubygoal
 
           custom_position do
             player :fast3
-            position 400, Field::HEIGHT / 2
+            position 400, field_height / 2
           end
           custom_position do
             player :captain
-            position 800, Field::HEIGHT / 2
+            position 800, field_height / 2
           end
         end
       elsif match.me.losing?
@@ -48,11 +48,11 @@ module Rubygoal
 
             custom_position do
               player :fast1
-              position Field::WIDTH / 3, Field::HEIGHT / 2
+              position field_width / 3, field_height / 2
             end
             custom_position do
               player :captain
-              position Field::WIDTH / 3 * 2, Field::HEIGHT / 2
+              position field_width / 3 * 2, field_height / 2
             end
           end
         else

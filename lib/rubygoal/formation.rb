@@ -2,44 +2,67 @@ module Rubygoal
   class Formation
     attr_accessor :players_position, :lines_definition
 
-    class CustomLines
-      def self.build(&block)
-        custom_lines = self.new
-        custom_lines.instance_eval(&block)
-        custom_lines
-      end
-
-      def to_hash
-        @lines
+    class FormationDSL
+      def self.apply(formation, &block)
+        dsl = self.new(formation)
+        dsl.instance_eval(&block)
+        dsl.apply
       end
 
       private
 
-      def method_missing(method, *args)
-        @lines ||= {}
-        @lines[method] = args.first
+      def field_width
+        Field::WIDTH
+      end
+
+      def field_height
+        Field::HEIGHT
       end
     end
 
-    class CustomPosition
-      def self.build(&block)
-        custom_position = self.new
-        custom_position.instance_eval(&block)
-        custom_position
+    class CustomLines < FormationDSL
+      def initialize(formation)
+        @formation = formation
+        @lines = {}
       end
 
-      def to_hash
-        { @player => @position }
+      def apply
+        formation.lines_definition.merge!(lines)
       end
 
       private
 
+      attr_reader :formation, :lines
+
+      def method_missing(method, *args)
+        define_line(method, args.first)
+      end
+
+      def define_line(name, position)
+        lines[name] = position
+      end
+    end
+
+    class CustomPosition < FormationDSL
+      def initialize(formation)
+        @formation = formation
+      end
+
+      def apply
+        formation.players_position[player_name] = player_position
+      end
+
+      private
+
+      attr_reader :formation
+      attr_accessor :player_name, :player_position
+
       def player(name)
-        @player = name
+        self.player_name = name
       end
 
       def position(x, y)
-        @position = Position.new(x, y)
+        self.player_position = Position.new(x, y)
       end
     end
 
@@ -99,13 +122,11 @@ module Rubygoal
     private
 
     def lines(&block)
-      cl = CustomLines.build(&block)
-      lines_definition.merge!(cl.to_hash)
+      CustomLines.apply(self, &block)
     end
 
     def custom_position(&block)
-      cp = CustomPosition.build(&block)
-      players_position.merge!(cp.to_hash)
+      CustomPosition.apply(self, &block)
     end
 
     def set_players_in_custom_line(position_x, players)
