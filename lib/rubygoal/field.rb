@@ -51,6 +51,23 @@ module Rubygoal
         end
       end
 
+      def field_position(absolute_position, side)
+        case side
+        when :home
+          absolute_position.add(
+            Position.new(
+              - OFFSET.x,
+              - OFFSET.y
+            )
+          )
+        when :away
+          Position.new(
+            WIDTH - (absolute_position.x - OFFSET.x),
+            HEIGHT - (absolute_position.y - OFFSET.y)
+          )
+        end
+      end
+
       def position_side(position)
         position.x < center_position.x ? :home : :away
       end

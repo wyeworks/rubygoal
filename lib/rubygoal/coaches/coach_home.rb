@@ -44,7 +44,19 @@ module Rubygoal
         formation.midfielders :average3, :average4, :captain, :none, :average5
         formation.attackers :fast2, :none, :none, :fast3, :average6
       else
-        formation = mirror_formation(match.other.lineup)
+        # Mirror opponent players
+
+        opponent = match.other.positions
+        my_players = players.values.flatten
+
+        opponent.each do |name, pos|
+          formation.lineup do
+            custom_position do
+              player my_players.pop
+              position pos.x, pos.y
+            end
+          end
+        end
       end
 
       formation

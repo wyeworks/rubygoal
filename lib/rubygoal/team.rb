@@ -90,12 +90,15 @@ module Rubygoal
       end
     end
 
-    def lineup_for_opponent
-      formation.lineup_for_opponent(players)
-    end
-
     def players_list
       players.values
+    end
+
+    def players_position
+      players.each_with_object({}) do |(name, player), hash|
+        next if name == :goalkeeper
+        hash[name] = Field.field_position(player.position, side)
+      end
     end
 
     private

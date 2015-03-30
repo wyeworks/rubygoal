@@ -32,7 +32,7 @@ module Rubygoal
 
           custom_position do
             player :fast3
-            position 400, field_height / 2
+            position 400, 100
           end
           custom_position do
             player :captain

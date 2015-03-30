@@ -89,21 +89,6 @@ module Rubygoal
       instance_eval(&block)
     end
 
-    def lineup_for_opponent(players)
-      positions = {
-        captain: [],
-        average: [],
-        fast: []
-      }
-
-      players_position.each do |name, pos|
-        player_type = players[name].type
-        positions[player_type] << pos
-      end
-
-      positions
-    end
-
     def errors
       errors = []
 

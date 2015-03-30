@@ -125,9 +125,14 @@ module Rubygoal
         time,
         score_home,
         score_away,
-        team_home.lineup_for_opponent,
-        team_away.lineup_for_opponent
+        players_position(:home),
+        players_position(:away)
       )
+    end
+
+    def players_position(side)
+      team = side == :home ? team_home : team_away
+      team.players_position
     end
 
     def end_match!

@@ -28,24 +28,6 @@ module Rubygoal
       errors.empty?
     end
 
-    protected
-
-    def mirror_formation(players_position)
-      Formation.new.tap do |formation|
-        mirror_positions = {}
-
-        players_position[:average].each_with_index do |pos, i|
-          mirror_positions[average_players[i]] = pos
-        end
-        players_position[:fast].each_with_index do |pos, i|
-          mirror_positions[fast_players[i]] = pos
-        end
-        mirror_positions[captain_player] = players_position[:captain].first
-
-        formation.players_position = mirror_positions
-      end
-    end
-
     private
 
     def game_config
@@ -66,29 +48,6 @@ module Rubygoal
       if players_count != game_config.send("#{type}_players_count")
         errors << "The number of #{type} players is #{players_count}"
       end
-    end
-
-    def player_to_mirror(player_type, average_to_add, fast_to_add)
-      case player_type
-      when :average
-        average_to_add.shift
-      when :fast
-        fast_to_add.shift
-      when :captain
-        captain_player
-      end
-    end
-
-    def average_players
-      players[:average]
-    end
-
-    def fast_players
-      players[:fast]
-    end
-
-    def captain_player
-      players[:captain].first
     end
   end
 end
