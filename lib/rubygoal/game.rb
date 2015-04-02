@@ -63,8 +63,8 @@ module Rubygoal
     attr_reader :font, :home_team_label, :away_team_label
 
     def initialize_coaches
-      @coach_home = CoachLoader.get(CoachHome)
-      @coach_away = CoachLoader.get(CoachAway)
+      @coach_home = CoachLoader.new(:home).coach
+      @coach_away = CoachLoader.new(:away).coach
 
       puts "Home coach: #{@coach_home.name}"
       puts "Away coach: #{@coach_away.name}"

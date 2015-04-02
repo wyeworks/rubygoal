@@ -5,9 +5,6 @@ require 'rubygoal/coach_loader'
 require 'rubygoal/teams/home'
 require 'rubygoal/teams/away'
 require 'rubygoal/match'
-require 'rubygoal/coaches/coach_home'
-require 'rubygoal/coaches/coach_away'
-
 module Rubygoal
   module Field
     WIDTH               = 1394
