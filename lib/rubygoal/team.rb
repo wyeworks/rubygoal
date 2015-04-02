@@ -113,17 +113,7 @@ module Rubygoal
     end
 
     def initialize_formation
-      average_players = @coach.players_by_type(:average)
-      fast_players    = @coach.players_by_type(:fast)
-
-      average_names = average_players.map(&:name)
-      fast_names    = fast_players.map(&:name)
-      captain_name  = @coach.captain_player.name
-
-      @formation = Formation.new
-      @formation.defenders average_names[0], average_names[2], :none, average_names[3], average_names[4]
-      @formation.midfielders average_names[1], fast_names[0], :none, fast_names[1], average_names[5]
-      @formation.attackers :none, captain_name, :none, fast_names[2], :none
+      @formation = @coach.initial_formation
     end
 
     def initialize_players

@@ -45,6 +45,30 @@ module Rubygoal
       players_by_type(:captain).first
     end
 
+    def fast_players
+      players_by_type(:fast)
+    end
+
+    def average_players
+      players_by_type(:average)
+    end
+
+    def initial_formation
+      average_names = average_players.map(&:name)
+      fast_names    = fast_players.map(&:name)
+      captain_name  = captain_player.name
+
+      formation = Formation.new
+
+      formation.lineup do
+        defenders average_names[0], average_names[2], :none, average_names[3], average_names[4]
+        midfielders average_names[1], fast_names[0], :none, fast_names[1], average_names[5]
+        attackers :none, captain_name, :none, fast_names[2], :none
+      end
+
+      formation
+    end
+
     private
 
     def game_config
