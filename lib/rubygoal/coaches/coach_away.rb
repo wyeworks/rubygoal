@@ -1,8 +1,8 @@
-require 'rubygoal/coach'
+require 'rubygoal/coach_definition'
 require 'rubygoal/formation'
 
 module Rubygoal
-  class CoachAway < Coach
+  class CoachAway < CoachDefinition
 
     def name
       "Danubio"

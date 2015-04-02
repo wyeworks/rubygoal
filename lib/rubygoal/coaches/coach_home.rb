@@ -1,8 +1,8 @@
-require 'rubygoal/coach'
+require 'rubygoal/coach_definition'
 require 'rubygoal/formation'
 
 module Rubygoal
-  class CoachHome < Coach
+  class CoachHome < CoachDefinition
 
     #team do
       #name "Wanderers"

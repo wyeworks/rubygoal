@@ -1,21 +1,26 @@
+require 'rubygoal/coach'
+
 module Rubygoal
   module CoachLoader
     class << self
       def get(default)
         file = ARGV.shift
 
-        if file && File.exists?(file)
-          load file
+        definition =
+          if file && File.exists?(file)
+            load file
 
-          class_name = camelize(File.basename(file, ".rb"))
-          Rubygoal.const_get(class_name).new
-        else
-          if file
-            puts "File `#{file}` doesn't exist. Using #{default.name}."
+            class_name = camelize(File.basename(file, ".rb"))
+            Rubygoal.const_get(class_name).new
+          else
+            if file
+              puts "File `#{file}` doesn't exist. Using #{default.name}."
+            end
+
+            default.new
           end
 
-          default.new
-        end
+        Coach.new(definition)
       end
 
       private

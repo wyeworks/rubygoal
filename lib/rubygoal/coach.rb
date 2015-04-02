@@ -1,28 +1,13 @@
+require 'forwardable'
+
 module Rubygoal
   class Coach
-    PlayerDefinition = Struct.new(:name, :type)
+    extend Forwardable
 
-    def players
-      [
-        PlayerDefinition.new(:captain, :captain),
-        PlayerDefinition.new(:fast1, :fast),
-        PlayerDefinition.new(:fast2, :fast),
-        PlayerDefinition.new(:fast3, :fast),
-        PlayerDefinition.new(:average1, :average),
-        PlayerDefinition.new(:average2, :average),
-        PlayerDefinition.new(:average3, :average),
-        PlayerDefinition.new(:average4, :average),
-        PlayerDefinition.new(:average5, :average),
-        PlayerDefinition.new(:average6, :average),
-      ]
-    end
+    def_delegators :coach_definition, :players, :name, :formation
 
-    def name
-      raise NotImplementedError
-    end
-
-    def formation(match)
-      raise NotImplementedError
+    def initialize(coach_definition)
+      @coach_definition = coach_definition
     end
 
     def errors
@@ -70,6 +55,8 @@ module Rubygoal
     end
 
     private
+
+    attr_reader :coach_definition
 
     def game_config
       Rubygoal.configuration
