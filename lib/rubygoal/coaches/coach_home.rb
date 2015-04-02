@@ -47,13 +47,13 @@ module Rubygoal
         # Mirror opponent players
 
         opponent = match.other.positions
-        my_players = players.values.flatten
+        my_players = players
 
-        opponent.each_with_index do |(name, pos), index|
+        opponent.each_with_index do |(opponent_name, opponent_pos), index|
           formation.lineup do
             custom_position do
-              player my_players[index]
-              position pos.x, pos.y
+              player my_players[index].name
+              position opponent_pos.x, opponent_pos.y
             end
           end
         end

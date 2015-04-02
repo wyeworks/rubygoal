@@ -1,11 +1,20 @@
 module Rubygoal
   class Coach
+    PlayerDefinition = Struct.new(:name, :type)
+
     def players
-      {
-        captain: [:captain],
-        fast: [:fast1, :fast2, :fast3],
-        average: [:average1, :average2, :average3, :average4, :average5, :average6]
-      }
+      [
+        PlayerDefinition.new(:captain, :captain),
+        PlayerDefinition.new(:fast1, :fast),
+        PlayerDefinition.new(:fast2, :fast),
+        PlayerDefinition.new(:fast3, :fast),
+        PlayerDefinition.new(:average1, :average),
+        PlayerDefinition.new(:average2, :average),
+        PlayerDefinition.new(:average3, :average),
+        PlayerDefinition.new(:average4, :average),
+        PlayerDefinition.new(:average5, :average),
+        PlayerDefinition.new(:average6, :average),
+      ]
     end
 
     def name
@@ -28,6 +37,14 @@ module Rubygoal
       errors.empty?
     end
 
+    def players_by_type(type)
+      players.select { |p| p.type == type }
+    end
+
+    def captain_player
+      players_by_type(:captain).first
+    end
+
     private
 
     def game_config
@@ -35,7 +52,7 @@ module Rubygoal
     end
 
     def check_unique_captain(errors)
-      captain_count = players[:captain].uniq.size
+      captain_count = players_by_type(:captain).size
 
       if captain_count != 1
         errors << "The number of captains is #{captain_count}"
@@ -43,7 +60,7 @@ module Rubygoal
     end
 
     def check_players_count(type, errors)
-      players_count = players[type].uniq.size
+      players_count = players_by_type(type).size
 
       if players_count != game_config.send("#{type}_players_count")
         errors << "The number of #{type} players is #{players_count}"

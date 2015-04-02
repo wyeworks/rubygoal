@@ -113,30 +113,35 @@ module Rubygoal
     end
 
     def initialize_formation
-      average_players = @coach.players[:average]
-      fast_players    = @coach.players[:fast]
-      captain_players = @coach.players[:captain]
+      average_players = @coach.players_by_type(:average)
+      fast_players    = @coach.players_by_type(:fast)
+
+      average_names = average_players.map(&:name)
+      fast_names    = fast_players.map(&:name)
+      captain_name  = @coach.captain_player.name
 
       @formation = Formation.new
-      @formation.defenders average_players[0], average_players[2], :none, average_players[3], average_players[4]
-      @formation.midfielders average_players[1], fast_players[0], :none, fast_players[1], average_players[5]
-      @formation.attackers :none, captain_players[0], :none, fast_players[2], :none
+      @formation.defenders average_names[0], average_names[2], :none, average_names[3], average_names[4]
+      @formation.midfielders average_names[1], fast_names[0], :none, fast_names[1], average_names[5]
+      @formation.attackers :none, captain_name, :none, fast_names[2], :none
     end
 
     def initialize_players
-      @players = {goalkeeper: GoalKeeperPlayer.new(side)}
+      @players = { goalkeeper: GoalKeeperPlayer.new(side) }
 
       unless @coach.valid?
         puts @coach.errors
         raise "Invalid team definition: #{@coach.name}"
       end
 
-      @players[@coach.players[:captain].first] = CaptainPlayer.new(side)
-      @coach.players[:fast].each do |name|
-        @players[name] = FastPlayer.new(side)
+      @players[@coach.captain_player.name] = CaptainPlayer.new(side)
+
+      @coach.players_by_type(:fast).each do |player_def|
+        @players[player_def.name] = FastPlayer.new(side)
       end
-      @coach.players[:average].each do |name|
-        @players[name] = AveragePlayer.new(side)
+
+      @coach.players_by_type(:average).each do |player_def|
+        @players[player_def.name] = AveragePlayer.new(side)
       end
 
       players_to_initial_position
