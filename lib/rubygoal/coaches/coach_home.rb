@@ -49,10 +49,10 @@ module Rubygoal
         opponent = match.other.positions
         my_players = players.values.flatten
 
-        opponent.each do |name, pos|
+        opponent.each_with_index do |(name, pos), index|
           formation.lineup do
             custom_position do
-              player my_players.pop
+              player my_players[index]
               position pos.x, pos.y
             end
           end
