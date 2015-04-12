@@ -32,7 +32,7 @@ module Rubygoal
         class_name = camelize(File.basename(filename, ".rb"))
         Rubygoal.const_get(class_name).new
       else
-        if filename
+        if filename && Rubygoal.configuration.debug_output
           puts "File `#{filename}` doesn't exist. Using #{default_definition_class.name}."
         end
 

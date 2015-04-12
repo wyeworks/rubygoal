@@ -66,8 +66,10 @@ module Rubygoal
       @coach_home = CoachLoader.new(:home).coach
       @coach_away = CoachLoader.new(:away).coach
 
-      puts "Home coach: #{@coach_home.name}"
-      puts "Away coach: #{@coach_away.name}"
+      if debug_output?
+        puts "Home coach: #{@coach_home.name}"
+        puts "Away coach: #{@coach_away.name}"
+      end
     end
 
     def update_elapsed_time
@@ -137,11 +139,15 @@ module Rubygoal
 
     def end_match!
       self.state = :ended
-      puts_score
+      puts_score if debug_output?
     end
 
     def puts_score
       puts "#{coach_home.name} #{score_home} - #{score_away} #{coach_away.name}"
+    end
+
+    def debug_output?
+      Rubygoal.configuration.debug_output
     end
   end
 end
