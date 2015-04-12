@@ -1,21 +1,21 @@
 require 'test_helper'
-require 'fixtures/four_fast_players_coach'
-require 'fixtures/less_players_coach'
-require 'fixtures/more_players_coach'
-require 'fixtures/two_captains_coach'
-require 'fixtures/valid_coach'
+require 'fixtures/four_fast_players_coach_definition'
+require 'fixtures/less_players_coach_definition'
+require 'fixtures/more_players_coach_definition'
+require 'fixtures/two_captains_coach_definition'
+require 'fixtures/valid_coach_definition'
 
 module Rubygoal
-  class PlayerTest < Minitest::Test
+  class CoachTest < Minitest::Test
     def test_valid_players
-      coach = ValidCoach.new
+      coach = Coach.new(ValidCoachDefinition.new)
 
       assert coach.valid?
       assert_empty coach.errors
     end
 
     def test_less_players
-      coach = LessPlayersCoach.new
+      coach = Coach.new(LessPlayersCoachDefnition.new)
       expected_error = ['The number of average players is 5']
 
       refute coach.valid?
@@ -23,7 +23,7 @@ module Rubygoal
     end
 
     def test_more_players
-      coach = MorePlayersCoach.new
+      coach = Coach.new(MorePlayersCoachDefinition.new)
       expected_error = ['The number of average players is 7']
 
       refute coach.valid?
@@ -31,22 +31,16 @@ module Rubygoal
     end
 
     def test_more_than_one_captain
-      coach = TwoCaptainsCoach.new
-      expected_errors = [
-        'The number of captains is 2',
-        'The number of average players is 5'
-      ]
+      coach = Coach.new(TwoCaptainsCoachDefinition.new)
+      expected_errors = ['The number of captains is 2']
 
       refute coach.valid?
       assert_equal expected_errors, coach.errors
     end
 
     def test_more_than_three_fast
-      coach = FourFastPlayersCoach.new
-      expected_errors = [
-        'The number of average players is 5',
-        'The number of fast players is 4'
-      ]
+      coach = Coach.new(FourFastPlayersCoachDefinition.new)
+      expected_errors = ['The number of fast players is 4']
 
       refute coach.valid?
       assert_equal expected_errors, coach.errors
