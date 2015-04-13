@@ -19,7 +19,7 @@ module Rubygoal
     end
 
     def formation(match)
-      match.other.formation
+      Formation.new
     end
   end
 end
