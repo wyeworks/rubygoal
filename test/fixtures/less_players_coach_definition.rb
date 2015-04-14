@@ -1,21 +1,21 @@
 module Rubygoal
   class LessPlayersCoachDefnition < CoachDefinition
-    def players
-      [
-        PlayerDefinition.new(:captain, :captain),
-        PlayerDefinition.new(:fast1, :fast),
-        PlayerDefinition.new(:fast2, :fast),
-        PlayerDefinition.new(:fast3, :fast),
-        PlayerDefinition.new(:average2, :average),
-        PlayerDefinition.new(:average3, :average),
-        PlayerDefinition.new(:average4, :average),
-        PlayerDefinition.new(:average5, :average),
-        PlayerDefinition.new(:average6, :average),
-      ]
-    end
+    team do
+      name "LessPlayers"
 
-    def name
-      "Wanderers"
+      players do
+        captain :captain
+
+        fast :fast1
+        fast :fast2
+        fast :fast3
+
+        average :average2
+        average :average3
+        average :average4
+        average :average5
+        average :average6
+      end
     end
 
     def formation(match)

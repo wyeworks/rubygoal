@@ -4,8 +4,8 @@ require 'rubygoal/formation'
 module Rubygoal
   class CoachDefinitionAway < CoachDefinition
 
-    def name
-      "Danubio"
+    team do
+      name "Marruecos"
     end
 
     def formation(match)

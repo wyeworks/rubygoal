@@ -4,45 +4,36 @@ require 'rubygoal/formation'
 module Rubygoal
   class CoachDefinitionHome < CoachDefinition
 
-    #team do
-      #name "Wanderers"
+    team do
+      name "Uruguay"
 
-      #primary_colors [:black, :white]
-      #secondary_colors :red
+      players do
+        captain :godin
 
-      #players do
-        #goalkeeper :goalkeeper
+        fast :cavani
+        fast :rolan
+        fast :suarez
 
-        #captain :captain
-
-        #fast1 :fast
-        #fast2 :fast
-        #fast3 :fast
-
-        #average1 :average
-        #average2 :average
-        #average3 :average
-        #average4 :average
-        #average5 :average
-        #average6 :average
-      #end
-    #end
-
-    def name
-      "Wanderers"
+        average :pereira
+        average :gimenez
+        average :arevalo
+        average :lodeiro
+        average :cacerez
+        average :rodriguez
+      end
     end
 
     def formation(match)
       formation = Formation.new
 
       if match.me.winning?
-        formation.defenders :average1, :average2, :average3, :captain, :average4
-        formation.midfielders :average5, :none, :fast1, :none, :average6
-        formation.attackers :none, :fast2, :none, :fast3, :none
+        formation.defenders :pereira, :cacerez, :gimenez, :godin, :rodriguez
+        formation.midfielders :lodeiro, :none, :rolan, :none, :arevalo
+        formation.attackers :none, :cavani, :none, :suarez, :none
       elsif match.time < 20
-        formation.defenders :none, :fast1, :average1, :average2, :none
-        formation.midfielders :average3, :average4, :captain, :none, :average5
-        formation.attackers :fast2, :none, :none, :fast3, :average6
+        formation.defenders :none, :rolan, :cacerez, :gimenez, :none
+        formation.midfielders :arevalo, :lodeiro, :godin, :none, :pereira
+        formation.attackers :suarez, :none, :none, :cavani, :rodriguez
       else
         # Mirror opponent players
 

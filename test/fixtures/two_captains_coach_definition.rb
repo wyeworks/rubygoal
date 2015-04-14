@@ -1,23 +1,23 @@
 module Rubygoal
   class TwoCaptainsCoachDefinition < CoachDefinition
-    def players
-      [
-        PlayerDefinition.new(:captain, :captain),
-        PlayerDefinition.new(:captain2, :captain),
-        PlayerDefinition.new(:fast1, :fast),
-        PlayerDefinition.new(:fast2, :fast),
-        PlayerDefinition.new(:fast3, :fast),
-        PlayerDefinition.new(:average1, :average),
-        PlayerDefinition.new(:average2, :average),
-        PlayerDefinition.new(:average3, :average),
-        PlayerDefinition.new(:average4, :average),
-        PlayerDefinition.new(:average5, :average),
-        PlayerDefinition.new(:average6, :average),
-      ]
-    end
+    team do
+      name "TwoCaptains"
 
-    def name
-      "Wanderers"
+      players do
+        captain :captain
+        captain :captain2
+
+        fast :fast1
+        fast :fast2
+        fast :fast3
+
+        average :average1
+        average :average2
+        average :average3
+        average :average4
+        average :average5
+        average :average6
+      end
     end
 
     def formation(match)
