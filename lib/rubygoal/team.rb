@@ -86,7 +86,7 @@ module Rubygoal
           end
           player.move_to positions[name]
         end
-        player.update
+        player.update(game.players)
       end
     end
 

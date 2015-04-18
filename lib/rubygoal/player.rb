@@ -1,6 +1,7 @@
 require 'rubygoal/coordinate'
 require 'rubygoal/moveable'
 require 'rubygoal/configuration'
+require 'rubygoal/util'
 
 module Rubygoal
   class Player
@@ -29,9 +30,32 @@ module Rubygoal
       reset_waiting_to_kick!
     end
 
-    def update
+    def update(obstacles)
       update_waiting_to_kick!
-      super
+
+      if moving?
+        next_position = position.add(velocity)
+        blocking = obstacles.select do |obs|
+          obs != self && obs.position.distance(next_position) < 50 &&
+            next_position.distance(destination) > destination.distance(obs.position)
+        end
+
+        if blocking.any?
+          if position.distance(destination) < 60 || blocking.any?(&:moving?)
+            stop
+          else
+            vel_angle = Util.angle(0, 0, velocity.x, velocity.y) - 90
+            vel_magnitude = Util.distance(0, 0, velocity.x, velocity.y)
+            self.velocity = Velocity.new(
+              Util.offset_x(vel_angle, vel_magnitude),
+              Util.offset_y(vel_angle, vel_magnitude),
+            )
+            #super()
+          end
+        end
+      end
+
+      super()
     end
 
     protected
