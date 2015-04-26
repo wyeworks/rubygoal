@@ -35,22 +35,24 @@ module Rubygoal
 
       if moving?
         next_position = position.add(velocity)
-        blocking = obstacles.select do |obs|
-          obs != self && obs.position.distance(next_position) < 50 &&
-            next_position.distance(destination) > destination.distance(obs.position)
+        blockers = obstacles.select do |obs|
+          obs != self && next_position.distance(destination) > destination.distance(obs.position)
         end
+        blocker = blockers.min { |b| next_position.distance(b.position) }
 
-        if blocking.any?
-          if position.distance(destination) < 60 || blocking.any?(&:moving?)
+        if blocker
+          if position.distance(destination) < 60 || blockers.any? { |b| b.moving? && next_position.distance(b.position) < 50 }
             stop
-          else
+          elsif next_position.distance(blocker.position) < 50
             vel_angle = Util.angle(0, 0, velocity.x, velocity.y) - 90
             vel_magnitude = Util.distance(0, 0, velocity.x, velocity.y)
             self.velocity = Velocity.new(
               Util.offset_x(vel_angle, vel_magnitude),
               Util.offset_y(vel_angle, vel_magnitude),
             )
-            #super()
+          elsif next_position.distance(blocker.position) < 70
+            coef = (next_position.distance(blocker.position) - 40) / 20.0
+            self.velocity = Velocity.new(velocity.x * coef, velocity.y * coef)
           end
         end
       end
