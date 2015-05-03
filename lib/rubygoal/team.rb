@@ -86,7 +86,7 @@ module Rubygoal
           end
           player.move_to positions[name]
         end
-        player.update(game.players)
+        player.update
       end
     end
 
@@ -117,21 +117,21 @@ module Rubygoal
     end
 
     def initialize_players
-      @players = { goalkeeper: GoalKeeperPlayer.new(side) }
+      @players = { goalkeeper: GoalKeeperPlayer.new(game, side) }
 
       unless @coach.valid?
         puts @coach.errors
         raise "Invalid team definition: #{@coach.name}"
       end
 
-      @players[@coach.captain_player.name] = CaptainPlayer.new(side)
+      @players[@coach.captain_player.name] = CaptainPlayer.new(game, side)
 
       @coach.players_by_type(:fast).each do |player_def|
-        @players[player_def.name] = FastPlayer.new(side)
+        @players[player_def.name] = FastPlayer.new(game, side)
       end
 
       @coach.players_by_type(:average).each do |player_def|
-        @players[player_def.name] = AveragePlayer.new(side)
+        @players[player_def.name] = AveragePlayer.new(game, side)
       end
 
       players_to_initial_position

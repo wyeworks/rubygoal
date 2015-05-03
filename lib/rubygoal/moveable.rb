@@ -42,15 +42,15 @@ module Rubygoal
       end
     end
 
-    private
-
-    attr_reader :speed
-    attr_accessor :destination
-
     def stop
       self.destination = nil
       self.velocity = Velocity.new(0, 0)
     end
+
+    private
+
+    attr_reader :speed
+    attr_accessor :destination
 
     def reset_rotation
       self.rotation = 0

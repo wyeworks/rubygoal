@@ -2,6 +2,7 @@ require 'rubygoal/coordinate'
 require 'rubygoal/moveable'
 require 'rubygoal/configuration'
 require 'rubygoal/util'
+require 'rubygoal/players/player_movement'
 
 module Rubygoal
   class Player
@@ -11,11 +12,12 @@ module Rubygoal
 
     attr_reader :side, :type
 
-    def initialize(side)
+    def initialize(game, side)
       super()
 
       @time_to_kick_again = 0
       @side = side
+      @player_movement = PlayerMovement.new(game, self)
     end
 
     def can_kick?(ball)
@@ -30,39 +32,16 @@ module Rubygoal
       reset_waiting_to_kick!
     end
 
-    def update(obstacles)
+    def update
       update_waiting_to_kick!
+      player_movement.update if moving?
 
-      if moving?
-        next_position = position.add(velocity)
-        blockers = obstacles.select do |obs|
-          obs != self && next_position.distance(destination) > destination.distance(obs.position)
-        end
-        blocker = blockers.min { |b| next_position.distance(b.position) }
-
-        if blocker
-          if position.distance(destination) < 60 || blockers.any? { |b| b.moving? && next_position.distance(b.position) < 50 }
-            stop
-          elsif next_position.distance(blocker.position) < 50
-            vel_angle = Util.angle(0, 0, velocity.x, velocity.y) - 90
-            vel_magnitude = Util.distance(0, 0, velocity.x, velocity.y)
-            self.velocity = Velocity.new(
-              Util.offset_x(vel_angle, vel_magnitude),
-              Util.offset_y(vel_angle, vel_magnitude),
-            )
-          elsif next_position.distance(blocker.position) < 70
-            coef = (next_position.distance(blocker.position) - 40) / 20.0
-            self.velocity = Velocity.new(velocity.x * coef, velocity.y * coef)
-          end
-        end
-      end
-
-      super()
+      super
     end
 
     protected
 
-    attr_accessor :time_to_kick_again
+    attr_accessor :time_to_kick_again, :player_movement
 
     private
 
