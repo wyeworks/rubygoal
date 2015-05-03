@@ -26,7 +26,7 @@ module Rubygoal::Gui
     LABEL_IMAGE_WIDTH     = 669
 
     def initialize(game)
-      super(WINDOW_WIDTH, WINDOW_HEIGHT, true)
+      super(WINDOW_WIDTH, WINDOW_HEIGHT, false)
       self.caption = "Ruby Goal"
 
       @game = game
