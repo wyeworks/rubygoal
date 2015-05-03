@@ -47,8 +47,7 @@ module Rubygoal
     def decelerate(elapsed_time)
       coef = deceleration_coef(elapsed_time)
 
-      velocity.x *= coef
-      velocity.y *= coef
+      self.velocity = velocity.mult(coef)
     end
 
     def deceleration_coef(elapsed_time)

@@ -88,20 +88,11 @@ module Rubygoal
       # have velocity = 0, so we add 0.5 to still be in movement
       deceleration_coef = (distance_to_run * 0.5) / close_range_distance + 0.5
 
-      player.velocity = Velocity.new(
-        velocity.x * deceleration_coef,
-        velocity.y * deceleration_coef
-      )
+      player.velocity = velocity.mult(deceleration_coef)
     end
 
     def position_after_update
-      custom_frame_rate = 1 / 60.0
-      coef = elapsed_time / custom_frame_rate
-
-      Position.new(
-        position.x + velocity.x * coef,
-        position.y + velocity.y * coef
-      )
+      player.position_after_update(elapsed_time)
     end
   end
 end

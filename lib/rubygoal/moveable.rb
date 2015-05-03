@@ -38,13 +38,21 @@ module Rubygoal
         stop
         reset_rotation
       else
-        update_position(elapsed_time)
+        self.position = position_after_update(elapsed_time)
       end
     end
 
     def stop
       self.destination = nil
       self.velocity = Velocity.new(0, 0)
+    end
+
+    def position_after_update(elapsed_time)
+      custom_frame_rate = 1 / 60.0
+      coef = elapsed_time / custom_frame_rate
+      movement = velocity.mult(coef)
+
+      position.add(movement)
     end
 
     private
@@ -54,14 +62,6 @@ module Rubygoal
 
     def reset_rotation
       self.rotation = 0
-    end
-
-    def update_position(elapsed_time)
-      custom_frame_rate = 1 / 60.0
-      coef = elapsed_time / custom_frame_rate
-
-      position.x += velocity.x * coef
-      position.y += velocity.y * coef
     end
   end
 end
