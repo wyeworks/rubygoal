@@ -31,14 +31,14 @@ module Rubygoal
       velocity.y = Util.offset_y(rotation, speed)
     end
 
-    def update
+    def update(elapsed_time)
       return unless moving?
 
       if destination && distance(destination) < MIN_DISTANCE
         stop
         reset_rotation
       else
-        self.position = position.add(velocity)
+        update_position(elapsed_time)
       end
     end
 
@@ -54,6 +54,14 @@ module Rubygoal
 
     def reset_rotation
       self.rotation = 0
+    end
+
+    def update_position(elapsed_time)
+      custom_frame_rate = 1 / 60.0
+      coef = elapsed_time / custom_frame_rate
+
+      position.x += velocity.x * coef
+      position.y += velocity.y * coef
     end
   end
 end

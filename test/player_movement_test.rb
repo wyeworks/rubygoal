@@ -17,7 +17,7 @@ module Rubygoal
       other_player.position = Position.new(170, 0)
 
       player.move_to(Position.new(500, 0))
-      player_movement.update
+      player_movement.update(elapsed_time)
 
       assert_equal Velocity.new(3.5, 0), player.velocity
     end
@@ -27,7 +27,7 @@ module Rubygoal
       other_player.position = Position.new(149, 0)
 
       player.move_to(Position.new(500, 0))
-      player_movement.update
+      player_movement.update(elapsed_time)
 
       assert_in_delta Velocity.new(2.5, -2.5), player.velocity, 0.1
     end
@@ -37,7 +37,7 @@ module Rubygoal
       other_player.position = Position.new(169, 0)
 
       player.move_to(Position.new(500, 0))
-      player_movement.update
+      player_movement.update(elapsed_time)
 
       assert_in_delta Velocity.new(3.1, 0), player.velocity, 0.1
     end
@@ -47,7 +47,7 @@ module Rubygoal
       other_player.position = Position.new(149, 0)
 
       player.move_to(Position.new(160, 0))
-      player_movement.update
+      player_movement.update(elapsed_time)
 
       assert_equal Velocity.new(0, 0), player.velocity
     end
@@ -58,7 +58,7 @@ module Rubygoal
 
       player.move_to(Position.new(500, 0))
       other_player.move_to(Position.new(150, 500))
-      player_movement.update
+      player_movement.update(elapsed_time)
 
       assert_equal Velocity.new(0, 0), player.velocity
     end
@@ -66,5 +66,9 @@ module Rubygoal
     private
 
     attr_reader :player_movement, :player, :other_player
+
+    def elapsed_time
+      1 / 60.0
+    end
   end
 end

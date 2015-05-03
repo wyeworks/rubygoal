@@ -37,8 +37,8 @@ module Rubygoal
         update_goal
       else
         update_remaining_time
-        team_home.update(match_data(:home))
-        team_away.update(match_data(:away))
+        team_home.update(elapsed_time, match_data(:home))
+        team_away.update(elapsed_time, match_data(:away))
         update_ball
       end
 
@@ -84,7 +84,7 @@ module Rubygoal
     end
 
     def update_ball
-      ball.update
+      ball.update(elapsed_time)
       if ball.goal?
         update_score
         goal.start_celebration

@@ -26,11 +26,11 @@ module Rubygoal
       self.position = Field.center_position
     end
 
-    def update
+    def update(elapsed_time)
       super
 
       prevent_out_of_bounds
-      decelerate
+      decelerate(elapsed_time)
     end
 
     private
@@ -44,13 +44,18 @@ module Rubygoal
       end
     end
 
-    def decelerate
-      velocity.x *= deceleration_coef
-      velocity.y *= deceleration_coef
+    def decelerate(elapsed_time)
+      coef = deceleration_coef(elapsed_time)
+
+      velocity.x *= coef
+      velocity.y *= coef
     end
 
-    def deceleration_coef
-      Rubygoal.configuration.deceleration_coef
+    def deceleration_coef(elapsed_time)
+      custom_frame_rate = 1 / 60.0
+      time_coef = elapsed_time / custom_frame_rate
+
+      Rubygoal.configuration.deceleration_coef ** time_coef
     end
   end
 end

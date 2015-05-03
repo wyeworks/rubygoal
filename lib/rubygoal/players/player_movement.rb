@@ -6,8 +6,6 @@ module Rubygoal
     CLOSE_TO_DESTINATION   = 60
     PLAYERS_CLOSE_DISTANCE = 70
 
-    attr_reader :game, :player
-
     extend Forwardable
     def_delegators :player, :position, :velocity, :destination
 
@@ -16,7 +14,9 @@ module Rubygoal
       @player = player
     end
 
-    def update
+    def update(elapsed_time)
+      self.elapsed_time = elapsed_time
+
       if blocking_player
         if close_to_destination? || any_moving_and_very_close_player?
           player.stop
@@ -29,6 +29,9 @@ module Rubygoal
     end
 
     private
+
+    attr_reader :game, :player
+    attr_accessor :elapsed_time
 
     def game_players_except_me
       game.players - [player]
@@ -92,7 +95,13 @@ module Rubygoal
     end
 
     def position_after_update
-      position.add(velocity)
+      custom_frame_rate = 1 / 60.0
+      coef = elapsed_time / custom_frame_rate
+
+      Position.new(
+        position.x + velocity.x * coef,
+        position.y + velocity.y * coef
+      )
     end
   end
 end
