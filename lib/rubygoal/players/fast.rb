@@ -1,3 +1,5 @@
+require 'rubygoal/player'
+
 module Rubygoal
   class FastPlayer < Player
     def initialize(*args)

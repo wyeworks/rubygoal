@@ -2,6 +2,7 @@ require 'rubygoal/coordinate'
 require 'rubygoal/moveable'
 require 'rubygoal/configuration'
 require 'rubygoal/util'
+
 require 'rubygoal/players/player_movement'
 
 module Rubygoal
@@ -37,6 +38,11 @@ module Rubygoal
       player_movement.update(elapsed_time) if moving?
 
       super
+    end
+
+    def side_move_to(position)
+      move_to(position)
+      reset_rotation
     end
 
     protected
@@ -79,7 +85,3 @@ module Rubygoal
     end
   end
 end
-
-require 'rubygoal/players/average'
-require 'rubygoal/players/fast'
-require 'rubygoal/players/captain'

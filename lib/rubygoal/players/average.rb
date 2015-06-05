@@ -1,4 +1,4 @@
-require 'rubygoal/team'
+require 'rubygoal/player'
 
 module Rubygoal
   class AveragePlayer < Player
@@ -13,6 +13,4 @@ module Rubygoal
       @type = :average
     end
   end
-
-  GoalKeeperPlayer = AveragePlayer
 end

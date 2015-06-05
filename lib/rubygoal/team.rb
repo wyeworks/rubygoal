@@ -2,7 +2,10 @@ require 'forwardable'
 
 require 'rubygoal/formation'
 require 'rubygoal/field'
-require 'rubygoal/player'
+require 'rubygoal/players/average'
+require 'rubygoal/players/fast'
+require 'rubygoal/players/captain'
+require 'rubygoal/players/goalkeeper'
 
 module Rubygoal
   class Team
@@ -66,7 +69,7 @@ module Rubygoal
 
       player_to_move = nil
       min_distance_to_ball = INFINITE
-      players.values.each do |player|
+      players_list.each do |player|
         pass_or_shoot(player) if player.can_kick?(ball)
 
         distance_to_ball = player.distance(ball.position)
@@ -79,6 +82,19 @@ module Rubygoal
       player_to_move.move_to(ball.position)
 
       players.each do |name, player|
+        if name == :goalkeeper
+          if player != player_to_move
+            x1, y1 = Field.goal_position(side).x, Field.goal_position(side).y
+            x2, y2 = ball.position.x, ball.position.y
+            a = (y2 - y1) / (x2 - x1)
+
+            pos = Position.new(positions[name].x, a * (positions[name].x - x1) + y1)
+            player.side_move_to(pos)
+            player.update(elapsed_time)
+            next
+          end
+        end
+
         if player != player_to_move
           unless positions[name]
             puts positions.keys.inspect
