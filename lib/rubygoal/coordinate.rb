@@ -23,7 +23,7 @@ module Rubygoal
 
   class Velocity < Coordinate
     def nonzero?
-      x != 0 && y != 0
+      x != 0 || y != 0
     end
   end
 end

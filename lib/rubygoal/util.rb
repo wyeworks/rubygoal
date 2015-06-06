@@ -25,6 +25,12 @@ module Rubygoal
           angle
         end
       end
+
+      def y_intercept_with_line(x, pos1, pos2)
+        slope = (pos2.y - pos1.y) / (pos2.x - pos1.x)
+
+        Position.new(x, slope * (x - pos1.x) + pos1.y)
+      end
     end
   end
 end

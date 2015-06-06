@@ -12,6 +12,7 @@ module Rubygoal
     include Moveable
 
     attr_reader :side, :type
+    attr_accessor :initial_position
 
     def initialize(game, side)
       super()
@@ -38,11 +39,6 @@ module Rubygoal
       player_movement.update(elapsed_time) if moving?
 
       super
-    end
-
-    def side_move_to(position)
-      move_to(position)
-      reset_rotation
     end
 
     protected

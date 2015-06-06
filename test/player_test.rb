@@ -120,9 +120,5 @@ module Rubygoal
     private
 
     attr_reader :game, :player
-
-    def elapsed_time
-      1 / 60.0
-    end
   end
 end

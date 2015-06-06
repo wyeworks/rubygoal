@@ -53,7 +53,8 @@ module Rubygoal
 
       players.values.each_with_index do |player, index|
         field_position = initial_positions[index]
-        player.position = Field.absolute_position(field_position, side)
+        player.initial_position = Field.absolute_position(field_position, side)
+        player.position = player.initial_position
       end
     end
 
@@ -84,12 +85,7 @@ module Rubygoal
       players.each do |name, player|
         if name == :goalkeeper
           if player != player_to_move
-            x1, y1 = Field.goal_position(side).x, Field.goal_position(side).y
-            x2, y2 = ball.position.x, ball.position.y
-            a = (y2 - y1) / (x2 - x1)
-
-            pos = Position.new(positions[name].x, a * (positions[name].x - x1) + y1)
-            player.side_move_to(pos)
+            player.move_to_cover_goal(ball)
             player.update(elapsed_time)
             next
           end
