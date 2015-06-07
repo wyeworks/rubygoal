@@ -17,9 +17,9 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
   gem.version       = Rubygoal::VERSION.to_s
 
-  gem.required_ruby_version = '>= 1.9.3'
+  gem.required_ruby_version = '>= 2.2.2'
 
-  gem.add_dependency 'gosu', '~> 0.8'
+  gem.add_dependency 'gosu', '~> 0.9'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'timecop'
   gem.add_development_dependency 'minitest-reporters'
