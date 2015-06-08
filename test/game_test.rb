@@ -58,7 +58,7 @@ module Rubygoal
       @game.update
 
       remaining_time = Rubygoal.configuration.game_time - elapsed_time
-      assert_in_delta remaining_time, @game.time, 0.01
+      assert_in_delta remaining_time, @game.time, 0.05
     end
 
     def test_players
