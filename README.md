@@ -18,9 +18,10 @@ Ubuntu/Debian:
 
 ```bash
 # Gosu's dependencies for both C++ and Ruby
-sudo apt-get install build-essential freeglut3-dev libfreeimage-dev libgl1-mesa-dev \
-                     libopenal-dev libpango1.0-dev libsdl-ttf2.0-dev libsndfile-dev \
-                     libxinerama-dev
+sudo apt-get install build-essential libsdl2-dev libsdl2-ttf-dev
+libpango1.0-dev \
+                     libgl1-mesa-dev libfreeimage-dev libopenal-dev
+                     libsndfile-dev
 ```
 
 For other distros:  https://github.com/jlnr/gosu/wiki/Getting-Started-on-Linux
