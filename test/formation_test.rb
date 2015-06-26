@@ -22,25 +22,27 @@ module Rubygoal
       expected_positions = {
         average1: Position.new(232, 156),
         average2: Position.new(232, 312),
-        average3: Position.new(232, 624),
-        average4: Position.new(232, 780),
+        average3: Position.new(232, 625),
+        average4: Position.new(232, 782),
         average5: Position.new(697, 156),
-        average6: Position.new(697, 780),
-        captain: Position.new(1160, 312),
+        average6: Position.new(697, 782),
+        captain: Position.new(1162, 312),
         fast1: Position.new(697, 312),
-        fast2: Position.new(697, 624),
-        fast3: Position.new(1160, 624)
+        fast2: Position.new(697, 625),
+        fast3: Position.new(1162, 625)
       }
 
-      assert_equal expected_positions, @formation.players_position
+      expected_positions.each do |name, pos|
+        assert_in_delta pos, @formation.players_position[name], 1
+      end
     end
 
     def test_custom_default_positions
       @formation.lineup do
         lines do
-          defenders 180
-          midfielders 600
-          attackers 900
+          defenders 13
+          midfielders 43
+          attackers 65
         end
 
         defenders :average1, :average2, :none, :average3, :average4
@@ -49,29 +51,31 @@ module Rubygoal
 
         custom_position do
           player :fast3
-          position 400, 100
+          position 30, 10
         end
         custom_position do
           player :average5
-          position 800, field_height / 2
+          position 60, 50
         end
       end
 
       expected_positions = {
-        average1: Position.new(180, 156),
-        average2: Position.new(180, 312),
-        average3: Position.new(180, 624),
-        average4: Position.new(180, 780),
-        average6: Position.new(600, 780),
-        captain: Position.new(900, 312),
+        average1: Position.new(181, 156),
+        average2: Position.new(181, 312),
+        average3: Position.new(181, 625),
+        average4: Position.new(181, 781),
+        average6: Position.new(600, 781),
+        captain: Position.new(906, 312),
         fast1: Position.new(600, 312),
-        fast2: Position.new(600, 624),
+        fast2: Position.new(600, 625),
 
-        fast3: Position.new(400, 100),
-        average5: Position.new(800, 469)
+        fast3: Position.new(418, 94),
+        average5: Position.new(836, 469)
       }
 
-      assert_equal expected_positions, @formation.players_position
+      expected_positions.each do |name, pos|
+        assert_in_delta pos, @formation.players_position[name], 1
+      end
     end
   end
 end

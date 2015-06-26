@@ -44,7 +44,7 @@ module Rubygoal
           formation.lineup do
             custom_position do
               player my_players[index].name
-              position Field::WIDTH - opponent_pos.x, Field::HEIGHT - opponent_pos.y
+              position opponent_pos.x, 100.0 - opponent_pos.y
             end
           end
         end

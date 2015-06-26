@@ -7,6 +7,8 @@ module Rubygoal
         @score  = score
         @result = result
         @positions = positions
+
+        convert_positions_to_percentages
       end
 
       def draw?
@@ -19,6 +21,17 @@ module Rubygoal
 
       def losing?
         result == :lose
+      end
+
+      private
+
+      def convert_positions_to_percentages
+        @positions = positions.each_with_object({}) do |(name, pos), hash|
+          hash[name] = Position.new(
+            pos.x / Field::WIDTH * 100.0,
+            pos.y / Field::HEIGHT * 100.0,
+          )
+        end
       end
     end
 

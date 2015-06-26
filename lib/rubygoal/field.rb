@@ -7,8 +7,8 @@ require 'rubygoal/teams/away'
 require 'rubygoal/match'
 module Rubygoal
   module Field
-    WIDTH               = 1394
-    HEIGHT              = 938
+    WIDTH               = 1394.0
+    HEIGHT              = 938.0
     OFFSET              = Position.new(262, 112)
     GOAL_HEIGHT         = 275
     CLOSE_GOAL_DISTANCE = 275

@@ -10,11 +10,11 @@ module Rubygoal
       private
 
       def field_width
-        Field::WIDTH
+        100.0
       end
 
       def field_height
-        Field::HEIGHT
+        100.0
       end
     end
 
@@ -36,8 +36,8 @@ module Rubygoal
         define_line(method, args.first)
       end
 
-      def define_line(name, position)
-        lines[name] = position
+      def define_line(name, x_position)
+        lines[name] = x_position / 100.0 * Field::WIDTH
       end
     end
 
@@ -60,7 +60,14 @@ module Rubygoal
       end
 
       def position(x, y)
-        self.player_position = Position.new(x, y)
+        self.player_position = position_from_percentages(Position.new(x, y))
+      end
+
+      def position_from_percentages(position_in_percentages)
+        Position.new(
+          position_in_percentages.x / 100.0 * Field::WIDTH,
+          position_in_percentages.y / 100.0 * Field::HEIGHT
+        )
       end
     end
   end
