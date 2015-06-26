@@ -27,17 +27,14 @@ module Rubygoal
 
       def convert_positions_to_percentages
         @positions = positions.each_with_object({}) do |(name, pos), hash|
-          hash[name] = Position.new(
-            pos.x / Field::WIDTH * 100.0,
-            pos.y / Field::HEIGHT * 100.0,
-          )
+          hash[name] = Field.position_to_percentages(pos)
         end
       end
     end
 
-    attr_reader :me, :other, :time
+    attr_reader :me, :other, :time, :ball
 
-    def self.create_for(side, time, score_home, score_away, positions_home, positions_away)
+    def self.create_for(side, time, score_home, score_away, ball_position, positions_home, positions_away)
       case side
       when :home
         my_score = score_home
@@ -51,10 +48,10 @@ module Rubygoal
         other_positions = positions_home
       end
 
-      Match.new(my_score, other_score, my_positions, other_positions, time)
+      Match.new(my_score, other_score, ball_position, my_positions, other_positions, time)
     end
 
-    def initialize(my_score, other_score, my_positions, other_positions, time)
+    def initialize(my_score, other_score, ball_position, my_positions, other_positions, time)
       @me = Match::Team.new(
         my_score,
         result(my_score, other_score),
@@ -66,6 +63,7 @@ module Rubygoal
         other_positions
       )
       @time = time
+      @ball = Field.position_to_percentages(ball_position)
     end
 
     private

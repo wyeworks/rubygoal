@@ -127,6 +127,7 @@ module Rubygoal
         time,
         score_home,
         score_away,
+        ball.position,
         players_position(:home),
         players_position(:away)
       )
