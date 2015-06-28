@@ -4,7 +4,6 @@ require 'rubygoal/ball'
 require 'rubygoal/coach_loader'
 require 'rubygoal/teams/home'
 require 'rubygoal/teams/away'
-require 'rubygoal/match'
 module Rubygoal
   module Field
     WIDTH               = 1394.0

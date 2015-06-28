@@ -6,6 +6,7 @@ require 'rubygoal/players/average'
 require 'rubygoal/players/fast'
 require 'rubygoal/players/captain'
 require 'rubygoal/players/goalkeeper'
+require 'rubygoal/match_data'
 
 module Rubygoal
   class Team
