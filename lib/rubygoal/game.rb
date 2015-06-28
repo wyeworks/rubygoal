@@ -26,6 +26,9 @@ module Rubygoal
       @time = Rubygoal.configuration.game_time
       @score_home = 0
       @score_away = 0
+
+      @match_data_factory_home = MatchData::HomeFactory.new(self)
+      @match_data_factory_away = MatchData::AwayFactory.new(self)
     end
 
     def update
@@ -37,8 +40,8 @@ module Rubygoal
         update_goal
       else
         update_remaining_time
-        team_home.update(elapsed_time, match_data(:home))
-        team_away.update(elapsed_time, match_data(:away))
+        team_home.update(elapsed_time, match_data_factory_home.create)
+        team_away.update(elapsed_time, match_data_factory_away.create)
         update_ball
       end
 
@@ -60,7 +63,8 @@ module Rubygoal
 
     private
 
-    attr_reader :font, :home_team_label, :away_team_label
+    attr_reader :font, :home_team_label, :away_team_label,
+                :match_data_factory_home, :match_data_factory_away
 
     def initialize_coaches
       @coach_home = CoachLoader.new(:home).coach
@@ -131,11 +135,6 @@ module Rubygoal
         players_position(:home),
         players_position(:away)
       )
-    end
-
-    def players_position(side)
-      team = side == :home ? team_home : team_away
-      team.players_position
     end
 
     def end_match!

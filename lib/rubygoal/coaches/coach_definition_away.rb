@@ -36,7 +36,7 @@ module Rubygoal
           end
           custom_position do
             player :captain
-            position 60, 50
+            position match.ball.x, match.ball.y
           end
         end
       elsif match.me.losing?

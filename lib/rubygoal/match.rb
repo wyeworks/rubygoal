@@ -1,5 +1,88 @@
 module Rubygoal
-  class Match
+  class MatchData
+    class Factory
+      extend Forwardable
+      def_delegators :game, :ball, :score_home, :score_away, :time,
+                     :team_home, :team_away
+
+      def initialize(game)
+        @game = game
+      end
+
+      def create
+        MatchData.new(
+          my_score,
+          other_score,
+          ball_match_position,
+          my_positions,
+          other_positions,
+          time
+        )
+      end
+
+      private
+
+      attr_reader :game
+
+      def ball_field_position
+        Field.field_position(ball.position, side)
+      end
+
+      def ball_match_position
+        Field.position_to_percentages(ball_field_position)
+      end
+    end
+
+    class HomeFactory < Factory
+
+      private
+
+      def side
+        :home
+      end
+
+      def my_score
+        score_home
+      end
+
+      def other_score
+        score_away
+      end
+
+      def my_positions
+        team_home.players_position
+      end
+
+      def other_positions
+        team_away.players_position
+      end
+    end
+
+    class AwayFactory < Factory
+
+      private
+
+      def side
+        :away
+      end
+
+      def my_score
+        score_away
+      end
+
+      def other_score
+        score_home
+      end
+
+      def my_positions
+        team_away.players_position
+      end
+
+      def other_positions
+        team_home.players_position
+      end
+    end
+
     class Team
       attr_reader :score, :result, :positions
 
@@ -33,40 +116,20 @@ module Rubygoal
     end
 
     attr_reader :me, :other, :time, :ball
-
-    def self.create_for(side, time, score_home, score_away, ball_position, positions_home, positions_away)
-      case side
-      when :home
-        my_score = score_home
-        other_score = score_away
-        my_positions = positions_home
-        other_positions = positions_away
-      when :away
-        my_score = score_away
-        other_score = score_home
-        my_positions = positions_away
-        other_positions = positions_home
-      end
-
-      Match.new(my_score, other_score, ball_position, my_positions, other_positions, time)
-    end
-
     def initialize(my_score, other_score, ball_position, my_positions, other_positions, time)
-      @me = Match::Team.new(
+      @me = MatchData::Team.new(
         my_score,
         result(my_score, other_score),
         my_positions
       )
-      @other = Match::Team.new(
+      @other = MatchData::Team.new(
         other_score,
         result(other_score, my_score),
         other_positions
       )
       @time = time
-      @ball = Field.position_to_percentages(ball_position)
+      @ball = ball_position
     end
-
-    private
 
     def result(my_score, other_score)
       if my_score > other_score
