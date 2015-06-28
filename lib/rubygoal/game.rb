@@ -19,7 +19,7 @@ module Rubygoal
       @team_home = HomeTeam.new(self, coach_home)
       @team_away = AwayTeam.new(self, coach_away)
 
-      @goal = Goal.new(self)
+      @goal = Goal.new
 
       @state = :playing
 

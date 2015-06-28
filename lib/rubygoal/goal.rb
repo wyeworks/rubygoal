@@ -2,7 +2,7 @@ require 'rubygoal/configuration'
 
 module Rubygoal
   class Goal
-    def initialize(game)
+    def initialize
       @celebration_time = 0
     end
 
