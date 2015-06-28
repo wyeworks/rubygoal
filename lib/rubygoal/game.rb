@@ -16,10 +16,8 @@ module Rubygoal
 
       @ball = Ball.new
 
-      @team_home =
-        HomeTeam.new(self, coach_home, MatchData::HomeFactory.new(self))
-      @team_away =
-        AwayTeam.new(self, coach_away, MatchData::AwayFactory.new(self))
+      @team_home = HomeTeam.new(self, coach_home)
+      @team_away = AwayTeam.new(self, coach_away)
 
       @goal = Goal.new
 

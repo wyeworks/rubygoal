@@ -3,7 +3,8 @@ require 'test_helper'
 module Rubygoal
   class MatchDataTest < Minitest::Test
     def test_home_team_is_winning
-      match_data = create_home_match_data(
+      match_data = create_match_data(
+        :home,
         score_home: 2,
         score_away: 0
       )
@@ -13,7 +14,8 @@ module Rubygoal
     end
 
     def test_home_team_is_losing
-      match_data = create_home_match_data(
+      match_data = create_match_data(
+        :home,
         score_home: 1,
         score_away: 3
       )
@@ -23,7 +25,8 @@ module Rubygoal
     end
 
     def test_away_team_is_winning
-      match_data = create_away_match_data(
+      match_data = create_match_data(
+        :away,
         score_home: 0,
         score_away: 2
       )
@@ -33,7 +36,8 @@ module Rubygoal
     end
 
     def test_away_team_is_losing
-      match_data = create_away_match_data(
+      match_data = create_match_data(
+        :away,
         score_home: 3,
         score_away: 1
       )
@@ -43,7 +47,8 @@ module Rubygoal
     end
 
     def test_home_team_is_a_draw
-      match_data = create_home_match_data(
+      match_data = create_match_data(
+        :home,
         score_home: 1,
         score_away: 1
       )
@@ -53,7 +58,8 @@ module Rubygoal
     end
 
     def test_away_team_is_a_draw
-      match_data = create_away_match_data(
+      match_data = create_match_data(
+        :away,
         score_home: 1,
         score_away: 1
       )
@@ -63,7 +69,8 @@ module Rubygoal
     end
 
     def test_match_info_includes_time
-      match_data = create_away_match_data(
+      match_data = create_match_data(
+        :away,
         time: 100
       )
 
@@ -71,7 +78,8 @@ module Rubygoal
     end
 
     def test_match_info_includes_player_positions
-      match_data = create_away_match_data(
+      match_data = create_match_data(
+        :away,
         home_players_positions: {
           name: Position.new(Field::WIDTH, Field::HEIGHT)
         },
@@ -85,7 +93,8 @@ module Rubygoal
     end
 
     def test_home_match_info_includes_ball_position
-      match_data = create_home_match_data(
+      match_data = create_match_data(
+        :home,
         ball_position: Field.absolute_position(
           Position.new(Field::WIDTH / 4, Field::HEIGHT / 2),
           :home
@@ -96,7 +105,8 @@ module Rubygoal
     end
 
     def test_away_match_info_includes_ball_position
-      match_data = create_away_match_data(
+      match_data = create_match_data(
+        :away,
         ball_position: Field.absolute_position(
           Position.new(Field::WIDTH / 4, Field::HEIGHT / 2),
           :away
@@ -108,13 +118,8 @@ module Rubygoal
 
     private
 
-    def create_home_match_data(game_options)
-      MatchData::HomeFactory.new(game_test_double(game_options))
-        .create
-    end
-
-    def create_away_match_data(game_options)
-      MatchData::AwayFactory.new(game_test_double(game_options))
+    def create_match_data(side, game_options)
+      MatchData::Factory.new(game_test_double(game_options), side)
         .create
     end
 

@@ -38,12 +38,12 @@ module Rubygoal
       initial_player_positions.first
     end
 
-    def initialize(game, coach, match_data_factory)
+    def initialize(game, coach)
       @game    = game
       @players = {}
       @coach   = coach
 
-      @match_data_factory = match_data_factory
+      @match_data_factory = MatchData::Factory.new(game, side)
 
       initialize_lineup_values
       initialize_players

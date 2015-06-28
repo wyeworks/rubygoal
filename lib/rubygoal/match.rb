@@ -5,8 +5,9 @@ module Rubygoal
       def_delegators :game, :ball_position, :score_home, :score_away, :time,
                      :home_players_positions, :away_players_positions
 
-      def initialize(game)
+      def initialize(game, side)
         @game = game
+        @side = side
       end
 
       def create
@@ -22,7 +23,27 @@ module Rubygoal
 
       private
 
-      attr_reader :game
+      attr_reader :game, :side
+
+      def other_side
+        side == :home ? :away : :home
+      end
+
+      def my_score
+        send("score_#{side}")
+      end
+
+      def other_score
+        send("score_#{other_side}")
+      end
+
+      def my_positions
+        send("#{side}_players_positions")
+      end
+
+      def other_positions
+        send("#{other_side}_players_positions")
+      end
 
       def ball_field_position
         Field.field_position(ball_position, side)
@@ -30,56 +51,6 @@ module Rubygoal
 
       def ball_match_position
         Field.position_to_percentages(ball_field_position)
-      end
-    end
-
-    class HomeFactory < Factory
-
-      private
-
-      def side
-        :home
-      end
-
-      def my_score
-        score_home
-      end
-
-      def other_score
-        score_away
-      end
-
-      def my_positions
-        home_players_positions
-      end
-
-      def other_positions
-        away_players_positions
-      end
-    end
-
-    class AwayFactory < Factory
-
-      private
-
-      def side
-        :away
-      end
-
-      def my_score
-        score_away
-      end
-
-      def other_score
-        score_home
-      end
-
-      def my_positions
-        away_players_positions
-      end
-
-      def other_positions
-        home_players_positions
       end
     end
 
