@@ -4,14 +4,10 @@ require 'rubygoal/ball'
 require 'rubygoal/coach_loader'
 require 'rubygoal/teams/home'
 require 'rubygoal/teams/away'
-require 'rubygoal/match'
-require 'rubygoal/coaches/coach_home'
-require 'rubygoal/coaches/coach_away'
-
 module Rubygoal
   module Field
-    WIDTH               = 1394
-    HEIGHT              = 938
+    WIDTH               = 1394.0
+    HEIGHT              = 938.0
     OFFSET              = Position.new(262, 112)
     GOAL_HEIGHT         = 275
     CLOSE_GOAL_DISTANCE = 275
@@ -49,6 +45,37 @@ module Rubygoal
             )
           )
         end
+      end
+
+      def field_position(absolute_position, side)
+        case side
+        when :home
+          absolute_position.add(
+            Position.new(
+              - OFFSET.x,
+              - OFFSET.y
+            )
+          )
+        when :away
+          Position.new(
+            WIDTH - (absolute_position.x - OFFSET.x),
+            HEIGHT - (absolute_position.y - OFFSET.y)
+          )
+        end
+      end
+
+      def position_from_percentages(position_in_percentages)
+        Position.new(
+          position_in_percentages.x / 100.0 * Field::WIDTH,
+          position_in_percentages.y / 100.0 * Field::HEIGHT
+        )
+      end
+
+      def position_to_percentages(position)
+        Position.new(
+          position.x / Field::WIDTH * 100,
+          position.y / Field::HEIGHT * 100
+        )
       end
 
       def position_side(position)

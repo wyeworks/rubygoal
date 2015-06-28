@@ -8,14 +8,6 @@ module Rubygoal
       @away_team = game.team_away
     end
 
-    def test_default_home_coach
-      assert_instance_of CoachHome, @home_team.coach
-    end
-
-    def test_default_away_coach
-      assert_instance_of CoachAway, @away_team.coach
-    end
-
     def test_home_initial_player_positions
       expected = [
         Position.new(312, 581),
@@ -62,19 +54,6 @@ module Rubygoal
       goalkeeper = @away_team.players[:goalkeeper]
 
       assert_equal Position.new(1606, 581), goalkeeper.position
-    end
-
-    def test_initial_lineup
-      expected = [
-        [:average1, :none, :average2, :none, :none    ],
-        [:average3, :none, :fast1,    :none, :captain ],
-        [:none,     :none, :none,     :none, :none    ],
-        [:average4, :none, :fast2,    :none, :fast3   ],
-        [:average5, :none, :average6, :none, :none    ]
-      ]
-
-      assert_equal expected, @home_team.formation.lineup
-      assert_equal expected, @away_team.formation.lineup
     end
 
     private

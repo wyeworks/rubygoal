@@ -1,6 +1,9 @@
 require 'rubygoal/coordinate'
 require 'rubygoal/moveable'
 require 'rubygoal/configuration'
+require 'rubygoal/util'
+
+require 'rubygoal/players/player_movement'
 
 module Rubygoal
   class Player
@@ -9,12 +12,14 @@ module Rubygoal
     include Moveable
 
     attr_reader :side, :type
+    attr_accessor :initial_position
 
-    def initialize(side)
+    def initialize(game, side)
       super()
 
       @time_to_kick_again = 0
       @side = side
+      @player_movement = PlayerMovement.new(game, self)
     end
 
     def can_kick?(ball)
@@ -29,14 +34,16 @@ module Rubygoal
       reset_waiting_to_kick!
     end
 
-    def update
-      update_waiting_to_kick!
+    def update(elapsed_time)
+      update_waiting_to_kick(elapsed_time)
+      player_movement.update(elapsed_time) if moving?
+
       super
     end
 
     protected
 
-    attr_accessor :time_to_kick_again
+    attr_accessor :time_to_kick_again, :player_movement
 
     private
 
@@ -50,9 +57,8 @@ module Rubygoal
       self.time_to_kick_again = Rubygoal.configuration.kick_again_delay
     end
 
-    def update_waiting_to_kick!
-      # TODO Make it time-based rather than counting ticks
-      self.time_to_kick_again -= 1 if waiting_to_kick_again?
+    def update_waiting_to_kick(time_elapsed)
+      self.time_to_kick_again -= time_elapsed if waiting_to_kick_again?
     end
 
     def control_ball?(ball)
@@ -75,7 +81,3 @@ module Rubygoal
     end
   end
 end
-
-require 'rubygoal/players/average'
-require 'rubygoal/players/fast'
-require 'rubygoal/players/captain'

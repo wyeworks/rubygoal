@@ -7,7 +7,7 @@ module Rubygoal
                   :deceleration_coef, :initial_player_positions, :game_time,
                   :average_lower_error, :average_upper_error, :average_speed,
                   :fast_lower_error, :fast_upper_error, :fast_speed,
-                  :captain_error, :captain_speed
+                  :captain_error, :captain_speed, :debug_output
   end
 
   class << self
@@ -27,7 +27,7 @@ module Rubygoal
     config.fast_players_count    = 3
 
     config.kick_strength         = 20
-    config.kick_again_delay      = 60
+    config.kick_again_delay      = 1
     config.distance_control_ball = 30
     config.deceleration_coef     = 0.95
 
@@ -43,5 +43,6 @@ module Rubygoal
     config.captain_speed         = 4.5
 
     config.game_time             = 120
+    config.debug_output          = true
   end
 end

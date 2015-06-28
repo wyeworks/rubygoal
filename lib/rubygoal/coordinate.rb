@@ -10,6 +10,10 @@ module Rubygoal
       self.class.new(x + coordinate.x, y + coordinate.y)
     end
 
+    def mult(coeficient)
+      self.class.new(x * coeficient, y * coeficient)
+    end
+
     def to_s
       "(#{x}, #{y})"
     end
@@ -19,7 +23,7 @@ module Rubygoal
 
   class Velocity < Coordinate
     def nonzero?
-      x != 0 && y != 0
+      x != 0 || y != 0
     end
   end
 end

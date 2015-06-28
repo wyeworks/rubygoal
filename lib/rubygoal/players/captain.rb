@@ -1,3 +1,5 @@
+require 'rubygoal/player'
+
 module Rubygoal
   class CaptainPlayer < Player
     def initialize(*args)

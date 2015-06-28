@@ -6,7 +6,7 @@ require 'rubygoal/util'
 module Rubygoal::Gui
   class Players
     extend Forwardable
-    def_delegators :player, :type, :side, :position, :destination, :angle, :moving?
+    def_delegators :player, :type, :side, :position, :destination, :rotation, :moving?
 
     def initialize(window, player)
       @player = player
@@ -14,14 +14,7 @@ module Rubygoal::Gui
     end
 
     def draw
-      if moving?
-        angle = Rubygoal::Util.angle(position.x, position.y, destination.x, destination.y)
-        angle -= 180
-      else
-        angle = 0.0
-      end
-
-      image.draw_rot(position.x, position.y, 1, angle)
+      image.draw_rot(position.x, position.y, 1, rotation - 180)
     end
 
     private

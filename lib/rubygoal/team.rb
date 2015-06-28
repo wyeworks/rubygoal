@@ -2,7 +2,11 @@ require 'forwardable'
 
 require 'rubygoal/formation'
 require 'rubygoal/field'
-require 'rubygoal/player'
+require 'rubygoal/players/average'
+require 'rubygoal/players/fast'
+require 'rubygoal/players/captain'
+require 'rubygoal/players/goalkeeper'
+require 'rubygoal/match_data'
 
 module Rubygoal
   class Team
@@ -40,6 +44,8 @@ module Rubygoal
       @players = {}
       @coach   = coach
 
+      @match_data_factory = MatchData::Factory.new(game, side)
+
       initialize_lineup_values
       initialize_players
       initialize_formation
@@ -50,12 +56,15 @@ module Rubygoal
 
       players.values.each_with_index do |player, index|
         field_position = initial_positions[index]
-        player.position = Field.absolute_position(field_position, side)
+        player.initial_position = Field.absolute_position(field_position, side)
+        player.position = player.initial_position
       end
     end
 
-    def update(match)
-      self.formation = coach.formation(match)
+    def update(elapsed_time)
+      match_data = match_data_factory.create
+      self.formation = coach.formation(match_data)
+
       unless formation.valid?
         puts formation.errors
         raise "Invalid formation: #{coach.name}"
@@ -65,7 +74,7 @@ module Rubygoal
 
       player_to_move = nil
       min_distance_to_ball = INFINITE
-      players.values.each do |player|
+      players_list.each do |player|
         pass_or_shoot(player) if player.can_kick?(ball)
 
         distance_to_ball = player.distance(ball.position)
@@ -78,6 +87,14 @@ module Rubygoal
       player_to_move.move_to(ball.position)
 
       players.each do |name, player|
+        if name == :goalkeeper
+          if player != player_to_move
+            player.move_to_cover_goal(ball)
+            player.update(elapsed_time)
+            next
+          end
+        end
+
         if player != player_to_move
           unless positions[name]
             puts positions.keys.inspect
@@ -85,61 +102,51 @@ module Rubygoal
           end
           player.move_to positions[name]
         end
-        player.update
+        player.update(elapsed_time)
       end
-    end
-
-    def lineup_for_opponent
-      formation.lineup_for_opponent(players)
     end
 
     def players_list
       players.values
     end
 
+    def players_position
+      players.each_with_object({}) do |(name, player), hash|
+        next if name == :goalkeeper
+        hash[name] = Field.field_position(player.position, side)
+      end
+    end
+
     private
 
-    attr_reader :game, :lineup_step_x, :lineup_step_y, :lineup_offset_x
+    attr_reader :game, :match_data_factory
     attr_writer :formation
 
-
     def initialize_lineup_values
-      @lineup_offset_x = 30
-      @lineup_step_x = Field::WIDTH / 6
-      @lineup_step_y = Field::HEIGHT / 6
-
       @average_players_count = 6
       @fast_players_count = 3
     end
 
     def initialize_formation
-      average_players = @coach.players[:average]
-      fast_players = @coach.players[:fast]
-      captain_players = @coach.players[:captain]
-      @formation = Formation.new
-      @formation.lineup = [
-        [average_players[0], :none, average_players[1], :none, :none              ],
-        [average_players[2], :none, fast_players[0],    :none, captain_players[0] ],
-        [:none,              :none, :none,              :none, :none              ],
-        [average_players[3], :none, fast_players[1],    :none, fast_players[2]    ],
-        [average_players[4], :none, average_players[5], :none, :none              ]
-      ]
+      @formation = @coach.initial_formation
     end
 
     def initialize_players
-      @players = {goalkeeper: GoalKeeperPlayer.new(side)}
+      @players = { goalkeeper: GoalKeeperPlayer.new(game, side) }
 
       unless @coach.valid?
         puts @coach.errors
         raise "Invalid team definition: #{@coach.name}"
       end
 
-      @players[@coach.players[:captain].first] = CaptainPlayer.new(side)
-      @coach.players[:fast].each do |name|
-        @players[name] = FastPlayer.new(side)
+      @players[@coach.captain_player.name] = CaptainPlayer.new(game, side)
+
+      @coach.players_by_type(:fast).each do |player_def|
+        @players[player_def.name] = FastPlayer.new(game, side)
       end
-      @coach.players[:average].each do |name|
-        @players[name] = AveragePlayer.new(side)
+
+      @coach.players_by_type(:average).each do |player_def|
+        @players[player_def.name] = AveragePlayer.new(game, side)
       end
 
       players_to_initial_position
@@ -187,7 +194,6 @@ module Rubygoal
     end
 
     def update_positions(formation)
-      lineup = formation.lineup
       field_goalkeeper_pos = Team.initial_player_positions.first
       goalkeeper_position = Field.absolute_position(field_goalkeeper_pos, side)
 
@@ -195,18 +201,12 @@ module Rubygoal
         goalkeeper: goalkeeper_position
       }
 
-      lineup.each_with_index do |row, y|
-        row.each_with_index do |player_name, x|
-          self.positions[player_name] = lineup_to_position(x, y) if player_name != :none
-        end
+      formation.players_position.each do |player_name, pos|
+        self.positions[player_name] = lineup_to_position(pos)
       end
     end
 
-    def lineup_to_position(x, y)
-      field_position = Position.new(
-        (x + 1) * lineup_step_x - lineup_offset_x,
-        (y + 1) * lineup_step_y
-      )
+    def lineup_to_position(field_position)
       Field.absolute_position(field_position, side)
     end
   end

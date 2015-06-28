@@ -19,7 +19,7 @@ module Rubygoal
       @team_home = HomeTeam.new(self, coach_home)
       @team_away = AwayTeam.new(self, coach_away)
 
-      @goal = Goal.new(self)
+      @goal = Goal.new
 
       @state = :playing
 
@@ -37,8 +37,8 @@ module Rubygoal
         update_goal
       else
         update_remaining_time
-        team_home.update(match_data(:home))
-        team_away.update(match_data(:away))
+        team_home.update(elapsed_time)
+        team_away.update(elapsed_time)
         update_ball
       end
 
@@ -53,6 +53,18 @@ module Rubygoal
       goal.celebrating?
     end
 
+    def home_players_positions
+      team_home.players_position
+    end
+
+    def away_players_positions
+      team_away.players_position
+    end
+
+    def ball_position
+      ball.position
+    end
+
     protected
 
     attr_writer :time, :score_home, :score_away
@@ -63,11 +75,13 @@ module Rubygoal
     attr_reader :font, :home_team_label, :away_team_label
 
     def initialize_coaches
-      @coach_home = CoachLoader.get(CoachHome)
-      @coach_away = CoachLoader.get(CoachAway)
+      @coach_home = CoachLoader.new(:home).coach
+      @coach_away = CoachLoader.new(:away).coach
 
-      puts "Home coach: #{@coach_home.name}"
-      puts "Away coach: #{@coach_away.name}"
+      if debug_output?
+        puts "Home coach: #{@coach_home.name}"
+        puts "Away coach: #{@coach_away.name}"
+      end
     end
 
     def update_elapsed_time
@@ -82,7 +96,7 @@ module Rubygoal
     end
 
     def update_ball
-      ball.update
+      ball.update(elapsed_time)
       if ball.goal?
         update_score
         goal.start_celebration
@@ -100,7 +114,7 @@ module Rubygoal
     end
 
     def update_score
-      if Field.position_side(ball.position) == :home
+      if Field.position_side(ball_position) == :home
         self.score_away += 1
       else
         self.score_home += 1
@@ -119,24 +133,17 @@ module Rubygoal
       [team_home, team_away]
     end
 
-    def match_data(side)
-      Match.create_for(
-        side,
-        time,
-        score_home,
-        score_away,
-        team_home.lineup_for_opponent,
-        team_away.lineup_for_opponent
-      )
-    end
-
     def end_match!
       self.state = :ended
-      puts_score
+      puts_score if debug_output?
     end
 
     def puts_score
       puts "#{coach_home.name} #{score_home} - #{score_away} #{coach_away.name}"
+    end
+
+    def debug_output?
+      Rubygoal.configuration.debug_output
     end
   end
 end

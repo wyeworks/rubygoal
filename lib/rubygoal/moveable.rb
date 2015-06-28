@@ -5,13 +5,14 @@ module Rubygoal
   module Moveable
     MIN_DISTANCE = 10
 
-    attr_accessor :position, :velocity
+    attr_accessor :position, :velocity, :rotation
 
     def initialize
       @position = Position.new(0, 0)
       @velocity = Velocity.new(0, 0)
       @speed = 0
       @destination = nil
+      @rotation = 0
     end
 
     def moving?
@@ -25,20 +26,33 @@ module Rubygoal
     def move_to(destination)
       self.destination = destination
 
-      angle = Util.angle(position.x, position.y, destination.x, destination.y)
-      velocity.x = Util.offset_x(angle, speed)
-      velocity.y = Util.offset_y(angle, speed)
+      self.rotation = Util.angle(position.x, position.y, destination.x, destination.y)
+      velocity.x = Util.offset_x(rotation, speed)
+      velocity.y = Util.offset_y(rotation, speed)
     end
 
-    def update
+    def update(elapsed_time)
       return unless moving?
 
       if destination && distance(destination) < MIN_DISTANCE
         stop
+        reset_rotation
       else
-        position.x += velocity.x
-        position.y += velocity.y
+        self.position = position_after_update(elapsed_time)
       end
+    end
+
+    def stop
+      self.destination = nil
+      self.velocity = Velocity.new(0, 0)
+    end
+
+    def position_after_update(elapsed_time)
+      custom_frame_rate = 1 / 60.0
+      coef = elapsed_time / custom_frame_rate
+      movement = velocity.mult(coef)
+
+      position.add(movement)
     end
 
     private
@@ -46,9 +60,8 @@ module Rubygoal
     attr_reader :speed
     attr_accessor :destination
 
-    def stop
-      self.destination = nil
-      self.velocity = Velocity.new(0, 0)
+    def reset_rotation
+      self.rotation = 0
     end
   end
 end
