@@ -60,14 +60,7 @@ module Rubygoal
       end
 
       def position(x, y)
-        self.player_position = position_from_percentages(Position.new(x, y))
-      end
-
-      def position_from_percentages(position_in_percentages)
-        Position.new(
-          position_in_percentages.x / 100.0 * Field::WIDTH,
-          position_in_percentages.y / 100.0 * Field::HEIGHT
-        )
+        self.player_position = Field.position_from_percentages(Position.new(x, y))
       end
     end
   end
