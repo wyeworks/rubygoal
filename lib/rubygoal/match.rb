@@ -2,8 +2,8 @@ module Rubygoal
   class MatchData
     class Factory
       extend Forwardable
-      def_delegators :game, :ball, :score_home, :score_away, :time,
-                     :team_home, :team_away
+      def_delegators :game, :ball_position, :score_home, :score_away, :time,
+                     :home_players_positions, :away_players_positions
 
       def initialize(game)
         @game = game
@@ -25,7 +25,7 @@ module Rubygoal
       attr_reader :game
 
       def ball_field_position
-        Field.field_position(ball.position, side)
+        Field.field_position(ball_position, side)
       end
 
       def ball_match_position
@@ -50,11 +50,11 @@ module Rubygoal
       end
 
       def my_positions
-        team_home.players_position
+        home_players_positions
       end
 
       def other_positions
-        team_away.players_position
+        away_players_positions
       end
     end
 
@@ -75,11 +75,11 @@ module Rubygoal
       end
 
       def my_positions
-        team_away.players_position
+        away_players_positions
       end
 
       def other_positions
-        team_home.players_position
+        home_players_positions
       end
     end
 
@@ -116,6 +116,7 @@ module Rubygoal
     end
 
     attr_reader :me, :other, :time, :ball
+
     def initialize(my_score, other_score, ball_position, my_positions, other_positions, time)
       @me = MatchData::Team.new(
         my_score,

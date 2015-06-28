@@ -38,10 +38,12 @@ module Rubygoal
       initial_player_positions.first
     end
 
-    def initialize(game, coach)
+    def initialize(game, coach, match_data_factory)
       @game    = game
       @players = {}
       @coach   = coach
+
+      @match_data_factory = match_data_factory
 
       initialize_lineup_values
       initialize_players
@@ -58,8 +60,9 @@ module Rubygoal
       end
     end
 
-    def update(elapsed_time, match)
-      self.formation = coach.formation(match)
+    def update(elapsed_time)
+      match_data = match_data_factory.create
+      self.formation = coach.formation(match_data)
 
       unless formation.valid?
         puts formation.errors
@@ -115,9 +118,8 @@ module Rubygoal
 
     private
 
-    attr_reader :game
+    attr_reader :game, :match_data_factory
     attr_writer :formation
-
 
     def initialize_lineup_values
       @average_players_count = 6

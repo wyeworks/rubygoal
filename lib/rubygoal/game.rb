@@ -16,8 +16,10 @@ module Rubygoal
 
       @ball = Ball.new
 
-      @team_home = HomeTeam.new(self, coach_home)
-      @team_away = AwayTeam.new(self, coach_away)
+      @team_home =
+        HomeTeam.new(self, coach_home, MatchData::HomeFactory.new(self))
+      @team_away =
+        AwayTeam.new(self, coach_away, MatchData::AwayFactory.new(self))
 
       @goal = Goal.new
 
@@ -26,9 +28,6 @@ module Rubygoal
       @time = Rubygoal.configuration.game_time
       @score_home = 0
       @score_away = 0
-
-      @match_data_factory_home = MatchData::HomeFactory.new(self)
-      @match_data_factory_away = MatchData::AwayFactory.new(self)
     end
 
     def update
@@ -40,8 +39,8 @@ module Rubygoal
         update_goal
       else
         update_remaining_time
-        team_home.update(elapsed_time, match_data_factory_home.create)
-        team_away.update(elapsed_time, match_data_factory_away.create)
+        team_home.update(elapsed_time)
+        team_away.update(elapsed_time)
         update_ball
       end
 
@@ -56,6 +55,18 @@ module Rubygoal
       goal.celebrating?
     end
 
+    def home_players_positions
+      team_home.players_position
+    end
+
+    def away_players_positions
+      team_away.players_position
+    end
+
+    def ball_position
+      ball.position
+    end
+
     protected
 
     attr_writer :time, :score_home, :score_away
@@ -63,8 +74,7 @@ module Rubygoal
 
     private
 
-    attr_reader :font, :home_team_label, :away_team_label,
-                :match_data_factory_home, :match_data_factory_away
+    attr_reader :font, :home_team_label, :away_team_label
 
     def initialize_coaches
       @coach_home = CoachLoader.new(:home).coach
@@ -106,7 +116,7 @@ module Rubygoal
     end
 
     def update_score
-      if Field.position_side(ball.position) == :home
+      if Field.position_side(ball_position) == :home
         self.score_away += 1
       else
         self.score_home += 1
@@ -123,18 +133,6 @@ module Rubygoal
 
     def teams
       [team_home, team_away]
-    end
-
-    def match_data(side)
-      Match.create_for(
-        side,
-        time,
-        score_home,
-        score_away,
-        ball.position,
-        players_position(:home),
-        players_position(:away)
-      )
     end
 
     def end_match!
