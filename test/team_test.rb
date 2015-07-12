@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'fixtures/mirror_strategy_coach_definition'
 
 module Rubygoal
   class TeamTest < Minitest::Test
@@ -46,6 +47,31 @@ module Rubygoal
 
       expected_positions.each do |name, pos|
         assert_in_delta pos, @away_team.players_position[name], 1
+      end
+    end
+
+    def test_default_opponent_positions_for_initial_positions
+      home_coach = Coach.new(MirrorStrategyCoachDefinition.new)
+      away_coach = Coach.new(TestAwayCoachDefinition.new)
+      game = Game.new(home_coach, away_coach)
+
+      home_team = game.team_home
+
+      expected_positions = {
+        average1: Position.new(232 / 2, 750),
+        average2: Position.new(232 / 2, 563),
+        average3: Position.new(232 / 2, 375),
+        average4: Position.new(232 / 2, 187),
+        average5: Position.new(697 / 2, 750),
+        average6: Position.new(697 / 2, 563),
+        fast1: Position.new(697 / 2, 375),
+        fast2: Position.new(697 / 2, 187),
+        fast3: Position.new(1162 / 2, 625),
+        captain: Position.new(1162 / 2, 312)
+      }
+
+      expected_positions.each do |name, pos|
+        assert_in_delta pos, home_team.players_position[name], 1
       end
     end
 

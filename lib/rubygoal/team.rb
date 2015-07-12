@@ -128,6 +128,8 @@ module Rubygoal
       @coach.players_by_type(:average).each do |player_def|
         @players[player_def.name] = AveragePlayer.new(game, side)
       end
+
+      initialize_player_positions
     end
 
     def pass_or_shoot(player)
@@ -169,6 +171,12 @@ module Rubygoal
       target = Field.goal_position(opponent_side)
       target.y += offset
       target
+    end
+
+    def initialize_player_positions
+      Field.default_player_field_positions.each_with_index do |pos, index|
+        players.values[index].position = lineup_to_position(pos)
+      end
     end
 
     def update_positions(formation)

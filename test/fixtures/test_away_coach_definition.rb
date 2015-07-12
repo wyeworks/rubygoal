@@ -25,7 +25,7 @@ module Rubygoal
       formation.lineup do
         defenders :away_average1, :away_fast1, :none, :away_fast3, :away_average5
         midfielders :away_average2, :away_average3, :away_captain, :away_average4, :away_average6
-        attackers :none, :none, :away_fast2, :none, :none
+        attackers :away_fast2
       end
 
       formation

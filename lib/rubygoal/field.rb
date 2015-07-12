@@ -111,18 +111,22 @@ module Rubygoal
       end
 
       def default_player_field_positions
+        defenders = Field::WIDTH / 6
+        midfielders = Field::WIDTH / 2
+        attackers = Field::WIDTH * 5 / 6
+
         [
-          Position.new(50, 469),
-          Position.new(236, 106),
-          Position.new(236, 286),
-          Position.new(236, 646),
-          Position.new(236, 826),
-          Position.new(436, 106),
-          Position.new(436, 286),
-          Position.new(436, 646),
-          Position.new(436, 826),
-          Position.new(616, 436),
-          Position.new(616, 496)
+          Position.new(50, Field::HEIGHT / 2),
+          Position.new(defenders, Field::HEIGHT / 5),
+          Position.new(defenders, Field::HEIGHT * 2 / 5),
+          Position.new(defenders, Field::HEIGHT * 3 / 5),
+          Position.new(defenders, Field::HEIGHT * 4 / 5),
+          Position.new(midfielders, Field::HEIGHT / 5),
+          Position.new(midfielders, Field::HEIGHT * 2 / 5),
+          Position.new(midfielders, Field::HEIGHT * 3 / 5),
+          Position.new(midfielders, Field::HEIGHT * 4 / 5),
+          Position.new(attackers, Field::HEIGHT / 3),
+          Position.new(attackers, Field::HEIGHT * 2 / 3)
         ]
       end
     end
