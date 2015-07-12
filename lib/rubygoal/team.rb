@@ -14,7 +14,6 @@ module Rubygoal
     attr_accessor :goalkeeper, :positions
 
     INFINITE = 100_000
-    GOALKEEPER_FIELD_POSITION = Position.new(50, 469)
 
     extend Forwardable
     def_delegators :coach, :name
@@ -173,10 +172,8 @@ module Rubygoal
     end
 
     def update_positions(formation)
-      # TODO repeated code
-      goalkeeper_position = Field.absolute_position(GOALKEEPER_FIELD_POSITION, side)
       self.positions = {
-        goalkeeper: goalkeeper_position
+        goalkeeper: goalkeeper_default_position
       }
 
       formation.players_position.each do |player_name, pos|
@@ -185,23 +182,36 @@ module Rubygoal
     end
 
     def update_positions_in_half_field(formation)
-      goalkeeper_position = Field.absolute_position(GOALKEEPER_FIELD_POSITION, side)
-      players[:goalkeeper].initial_position = goalkeeper_position
-      players[:goalkeeper].position = goalkeeper_position
+      goalkeeper.initial_position = goalkeeper_default_position
+      goalkeeper.position = goalkeeper_default_position
       self.positions = {
-        goalkeeper: goalkeeper_position
+        goalkeeper: goalkeeper_default_position
       }
 
       formation.players_position.each do |player_name, pos|
         pos.x *= 0.5
-        self.positions[player_name] = lineup_to_position(pos)
-        players[player_name].initial_position = lineup_to_position(pos)
-        players[player_name].position = players[player_name].initial_position
+        pos = lineup_to_position(pos)
+
+        player = players[player_name]
+
+        self.positions[player_name] = pos
+        player.initial_position = pos
+        player.position = pos
       end
     end
 
     def lineup_to_position(field_position)
       Field.absolute_position(field_position, side)
+    end
+
+    def goalkeeper
+      players[:goalkeeper]
+    end
+
+    def goalkeeper_default_position
+      lineup_to_position(
+        Field.default_player_field_positions.first
+      )
     end
   end
 end

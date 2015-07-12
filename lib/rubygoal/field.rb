@@ -109,6 +109,22 @@ module Rubygoal
         goal_position = Field.goal_position(side)
         goal_position.distance(position) < CLOSE_GOAL_DISTANCE
       end
+
+      def default_player_field_positions
+        [
+          Position.new(50, 469),
+          Position.new(236, 106),
+          Position.new(236, 286),
+          Position.new(236, 646),
+          Position.new(236, 826),
+          Position.new(436, 106),
+          Position.new(436, 286),
+          Position.new(436, 646),
+          Position.new(436, 826),
+          Position.new(616, 436),
+          Position.new(616, 496)
+        ]
+      end
     end
   end
 end

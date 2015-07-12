@@ -8,12 +8,6 @@ module Rubygoal
       @game = Game.new(home_coach, away_coach)
 
       @player = game.players.first
-
-      initial_pos = Field.absolute_position(
-        Team::GOALKEEPER_FIELD_POSITION,
-        :home
-      )
-      @player.position = initial_pos
     end
 
     def test_goalkeeper_is_already_covering_goal
