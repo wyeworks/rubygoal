@@ -14,26 +14,11 @@ module Rubygoal
     attr_accessor :goalkeeper, :positions
 
     INFINITE = 100_000
+    GOALKEEPER_FIELD_POSITION = Position.new(50, 469)
 
     extend Forwardable
     def_delegators :coach, :name
     def_delegators :game, :ball
-
-    def self.initial_player_positions
-      [
-        Position.new(50, 469),
-        Position.new(236, 106),
-        Position.new(236, 286),
-        Position.new(236, 646),
-        Position.new(236, 826),
-        Position.new(436, 106),
-        Position.new(436, 286),
-        Position.new(436, 646),
-        Position.new(436, 826),
-        Position.new(616, 436),
-        Position.new(616, 496)
-      ]
-    end
 
     def self.goalkeeper_position
       initial_player_positions.first
@@ -52,13 +37,9 @@ module Rubygoal
     end
 
     def players_to_initial_position
-      initial_positions = Team.initial_player_positions
-
-      players.values.each_with_index do |player, index|
-        field_position = initial_positions[index]
-        player.initial_position = Field.absolute_position(field_position, side)
-        player.position = player.initial_position
-      end
+      match_data = match_data_factory.create
+      formation = coach.formation(match_data)
+      update_positions_in_half_field(formation)
     end
 
     def update(elapsed_time)
@@ -148,8 +129,6 @@ module Rubygoal
       @coach.players_by_type(:average).each do |player_def|
         @players[player_def.name] = AveragePlayer.new(game, side)
       end
-
-      players_to_initial_position
     end
 
     def pass_or_shoot(player)
@@ -194,15 +173,30 @@ module Rubygoal
     end
 
     def update_positions(formation)
-      field_goalkeeper_pos = Team.initial_player_positions.first
-      goalkeeper_position = Field.absolute_position(field_goalkeeper_pos, side)
-
+      # TODO repeated code
+      goalkeeper_position = Field.absolute_position(GOALKEEPER_FIELD_POSITION, side)
       self.positions = {
         goalkeeper: goalkeeper_position
       }
 
       formation.players_position.each do |player_name, pos|
         self.positions[player_name] = lineup_to_position(pos)
+      end
+    end
+
+    def update_positions_in_half_field(formation)
+      goalkeeper_position = Field.absolute_position(GOALKEEPER_FIELD_POSITION, side)
+      players[:goalkeeper].initial_position = goalkeeper_position
+      players[:goalkeeper].position = goalkeeper_position
+      self.positions = {
+        goalkeeper: goalkeeper_position
+      }
+
+      formation.players_position.each do |player_name, pos|
+        pos.x *= 0.5
+        self.positions[player_name] = lineup_to_position(pos)
+        players[player_name].initial_position = lineup_to_position(pos)
+        players[player_name].position = players[player_name].initial_position
       end
     end
 

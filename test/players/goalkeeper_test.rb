@@ -9,7 +9,7 @@ module Rubygoal
       @player = home_team.players.values.first
 
       initial_pos = Field.absolute_position(
-        Team.initial_player_positions.first,
+        Team::GOALKEEPER_FIELD_POSITION,
         :home
       )
       @player.position = initial_pos

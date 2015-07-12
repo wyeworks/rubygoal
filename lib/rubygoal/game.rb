@@ -26,6 +26,8 @@ module Rubygoal
       @time = Rubygoal.configuration.game_time
       @score_home = 0
       @score_away = 0
+
+      reinitialize_players
     end
 
     def update
