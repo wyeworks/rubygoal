@@ -3,10 +3,11 @@ require 'test_helper'
 module Rubygoal
   class GaolKeeperPlayerTest < Minitest::Test
     def setup
-      @game = Game.new
-      home_team = game.team_home
+      home_coach = Coach.new(TestHomeCoachDefinition.new)
+      away_coach = Coach.new(TestAwayCoachDefinition.new)
+      @game = Game.new(home_coach, away_coach)
 
-      @player = home_team.players.values.first
+      @player = game.players.first
 
       initial_pos = Field.absolute_position(
         Team::GOALKEEPER_FIELD_POSITION,

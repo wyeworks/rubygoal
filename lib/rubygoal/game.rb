@@ -11,8 +11,14 @@ module Rubygoal
                 :coach_home, :coach_away,
                 :score_home, :score_away
 
-    def initialize
-      initialize_coaches
+    def initialize(coach_home, coach_away)
+      @coach_home = coach_home
+      @coach_away = coach_away
+
+      if debug_output?
+        puts "Home coach: #{@coach_home.name}"
+        puts "Away coach: #{@coach_away.name}"
+      end
 
       @ball = Ball.new
 
@@ -75,16 +81,6 @@ module Rubygoal
     private
 
     attr_reader :font, :home_team_label, :away_team_label
-
-    def initialize_coaches
-      @coach_home = CoachLoader.new(:home).coach
-      @coach_away = CoachLoader.new(:away).coach
-
-      if debug_output?
-        puts "Home coach: #{@coach_home.name}"
-        puts "Away coach: #{@coach_away.name}"
-      end
-    end
 
     def update_elapsed_time
       self.last_time ||= Time.now

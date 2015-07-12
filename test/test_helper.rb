@@ -2,6 +2,8 @@ require 'minitest/autorun'
 require "minitest/reporters"
 
 require 'rubygoal/game'
+require 'fixtures/test_home_coach_definition'
+require 'fixtures/test_away_coach_definition'
 
 # Ensure backward compatibility with Minitest 4
 Minitest::Test = MiniTest::Unit::TestCase unless defined?(Minitest::Test)

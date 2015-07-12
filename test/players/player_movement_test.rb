@@ -3,7 +3,9 @@ require 'test_helper'
 module Rubygoal
   class PlayerMovementTest < Minitest::Test
     def setup
-      game = Game.new
+      home_coach = Coach.new(TestHomeCoachDefinition.new)
+      away_coach = Coach.new(TestAwayCoachDefinition.new)
+      game = Game.new(home_coach, away_coach)
       home_team = game.team_home
 
       @player = home_team.players.values[0]

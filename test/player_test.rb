@@ -3,10 +3,11 @@ require 'test_helper'
 module Rubygoal
   class PlayerTest < Minitest::Test
     def setup
-      @game = Game.new
-      home_team = game.team_home
+      home_coach = Coach.new(TestHomeCoachDefinition.new)
+      away_coach = Coach.new(TestAwayCoachDefinition.new)
+      @game = Game.new(home_coach, away_coach)
 
-      @player = home_team.players.values.first
+      @player = game.players.first
       @player.send(:time_to_kick_again=, 0)
     end
 

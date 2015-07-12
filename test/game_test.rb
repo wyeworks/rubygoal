@@ -4,7 +4,9 @@ require 'timecop'
 module Rubygoal
   class GameTest < Minitest::Test
     def setup
-      @game = Game.new
+      home_coach = Coach.new(TestHomeCoachDefinition.new)
+      away_coach = Coach.new(TestAwayCoachDefinition.new)
+      @game = Game.new(home_coach, away_coach)
     end
 
     def test_initial_score
