@@ -11,17 +11,13 @@ require 'rubygoal/match_data'
 module Rubygoal
   class Team
     attr_reader :players, :side, :opponent_side, :coach, :formation
-    attr_accessor :goalkeeper, :positions
+    attr_accessor :goalkeeper
 
     INFINITE = 100_000
 
     extend Forwardable
     def_delegators :coach, :name
     def_delegators :game, :ball
-
-    def self.goalkeeper_position
-      initial_player_positions.first
-    end
 
     def initialize(game, coach)
       @game    = game
@@ -75,13 +71,7 @@ module Rubygoal
           end
         end
 
-        if player != player_to_move
-          unless positions[name]
-            puts positions.keys.inspect
-            raise "Undefined position for #{name}"
-          end
-          player.move_to positions[name]
-        end
+        player.move_to_coach_position unless player == player_to_move
         player.update(elapsed_time)
       end
     end
@@ -180,21 +170,16 @@ module Rubygoal
     end
 
     def update_positions(formation)
-      self.positions = {
-        goalkeeper: goalkeeper_default_position
-      }
+      goalkeeper.coach_defined_position = goalkeeper_default_position
 
       formation.players_position.each do |player_name, pos|
-        self.positions[player_name] = lineup_to_position(pos)
+        players[player_name].coach_defined_position = lineup_to_position(pos)
       end
     end
 
     def update_positions_in_half_field(formation)
-      goalkeeper.initial_position = goalkeeper_default_position
+      goalkeeper.coach_defined_position = goalkeeper_default_position
       goalkeeper.position = goalkeeper_default_position
-      self.positions = {
-        goalkeeper: goalkeeper_default_position
-      }
 
       formation.players_position.each do |player_name, pos|
         pos.x *= 0.5
@@ -202,8 +187,7 @@ module Rubygoal
 
         player = players[player_name]
 
-        self.positions[player_name] = pos
-        player.initial_position = pos
+        player.coach_defined_position = pos
         player.position = pos
       end
     end

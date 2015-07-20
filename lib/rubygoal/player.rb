@@ -12,7 +12,7 @@ module Rubygoal
     include Moveable
 
     attr_reader :side, :type
-    attr_accessor :initial_position
+    attr_accessor :coach_defined_position
 
     def initialize(game, side)
       super()
@@ -32,6 +32,10 @@ module Rubygoal
 
       ball.move(direction, strength)
       reset_waiting_to_kick!
+    end
+
+    def move_to_coach_position
+      move_to(coach_defined_position)
     end
 
     def update(elapsed_time)

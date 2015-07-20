@@ -13,7 +13,7 @@ module Rubygoal
 
     def position_to_cover_goal(ball)
       Util.y_intercept_with_line(
-        initial_position.x,
+        coach_defined_position.x,
         Field.goal_position(side),
         ball.position
       )
