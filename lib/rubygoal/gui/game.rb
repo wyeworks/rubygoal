@@ -63,6 +63,9 @@ module Rubygoal::Gui
     def button_down(id)
       if id == Gosu::KbEscape
         close
+      elsif id == Gosu::KbSpace
+        require 'byebug'
+        byebug
       end
     end
 

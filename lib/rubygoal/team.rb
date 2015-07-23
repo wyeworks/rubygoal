@@ -53,6 +53,8 @@ module Rubygoal
       players_list.each do |player|
         pass_or_shoot(player) if player.can_kick?(ball)
 
+        next if player == players[:goalkeeper]
+
         distance_to_ball = player.distance(ball.position)
         if min_distance_to_ball > distance_to_ball
           min_distance_to_ball = distance_to_ball
@@ -127,9 +129,35 @@ module Rubygoal
       # or we don't have a better option
       target = shoot_target
 
-      unless Field.close_to_goal?(player.position, opponent_side)
-        if teammate = nearest_forward_teammate(player)
-          target = teammate.position
+      if side == :home && player == players[:goalkeeper]
+
+        #require 'byebug'
+        #byebug
+
+
+        angle_options = [0, Math::PI / 4, -Math::PI / 4, Math::PI / 2, -Math::PI / 2]
+        #angle_options = [Math::PI / 2]
+
+        angle_options.each do |angle|
+
+          goalkeeper_clear_zone = Field::OFFSET.x + 500
+
+          line = Util.line_equation(ball.position, angle)
+          target = Position.new(goalkeeper_clear_zone, line[:a] * goalkeeper_clear_zone + line[:b])
+
+          positions = game.team_away.players_list.map(&:position)
+          positions = positions.select { |p| p.x < goalkeeper_clear_zone }
+
+          safe_pass = positions.all? { |p| Util.distance_point_to_line(p, line) > 60 }
+
+          break if safe_pass
+        end
+      else
+        # player is not the goalkeeper
+        unless Field.close_to_goal?(player.position, opponent_side)
+          if teammate = nearest_forward_teammate(player)
+            target = teammate.position
+          end
         end
       end
 
