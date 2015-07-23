@@ -31,6 +31,20 @@ module Rubygoal
 
         Position.new(x, slope * (x - pos1.x) + pos1.y)
       end
+
+      def line_equation(point, angle)
+        a = Math.tan(angle)
+        b = point.y - a * point.x
+
+        { a: a, b: b }
+      end
+
+      def distance_point_to_line(point, line)
+        quotient = (point.x * line[:a] - point.y + line[:b]).abs
+        divisor = Math.sqrt(line[:a] ** 2 + 1)
+
+        quotient / divisor
+      end
     end
   end
 end
