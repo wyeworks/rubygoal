@@ -4,7 +4,6 @@ require 'rubygoal/util'
 
 module Rubygoal
   class GoalKeeperPlayer < AveragePlayer
-
     def move_to_cover_goal(ball)
       move_without_rotation_to(position_to_cover_goal(ball))
     end

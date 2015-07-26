@@ -34,7 +34,7 @@ module Rubygoal
     def players_to_initial_position
       match_data = match_data_factory.create
       formation = coach.formation(match_data)
-      update_positions_in_half_field(formation)
+      restart_player_positions_in_own_field(formation)
     end
 
     def update(elapsed_time)
@@ -46,7 +46,7 @@ module Rubygoal
         raise "Invalid formation: #{coach.name}"
       end
 
-      update_positions(formation)
+      update_coach_defined_positions(formation)
 
       player_to_move = nil
       min_distance_to_ball = INFINITE
@@ -166,21 +166,17 @@ module Rubygoal
     def initialize_player_positions
       Field.default_player_field_positions.each_with_index do |pos, index|
         players.values[index].position = lineup_to_position(pos)
+        players.values[index].coach_defined_position = lineup_to_position(pos)
       end
     end
 
-    def update_positions(formation)
-      goalkeeper.coach_defined_position = goalkeeper_default_position
-
+    def update_coach_defined_positions(formation)
       formation.players_position.each do |player_name, pos|
         players[player_name].coach_defined_position = lineup_to_position(pos)
       end
     end
 
-    def update_positions_in_half_field(formation)
-      goalkeeper.coach_defined_position = goalkeeper_default_position
-      goalkeeper.position = goalkeeper_default_position
-
+    def restart_player_positions_in_own_field(formation)
       formation.players_position.each do |player_name, pos|
         pos.x *= 0.5
         pos = lineup_to_position(pos)
@@ -198,12 +194,6 @@ module Rubygoal
 
     def goalkeeper
       players[:goalkeeper]
-    end
-
-    def goalkeeper_default_position
-      lineup_to_position(
-        Field.default_player_field_positions.first
-      )
     end
   end
 end
