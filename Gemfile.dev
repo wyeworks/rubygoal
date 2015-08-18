@@ -1,0 +1,4 @@
+source 'https://rubygems.org'
+
+gem "rubygoal", path: 'gui'
+gem "rubygoal-core", path: '.'

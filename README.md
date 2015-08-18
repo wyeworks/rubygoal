@@ -47,6 +47,14 @@ Run the game with your home and away `Coach` implementations
 rubygoal coach_1.rb coach_2.rb
 ```
 
+If you want to run the game from the source code, clone the project and
+run the following commands:
+
+```bash
+BUNDLE_GEMFILE=Gemfile.dev bundle install
+BUNDLE_GEMFILE=Gemfile.dev bundle exec ruby gui/bin/rubygoal
+```
+
 ## How do i write my own coach class?
 
 Take a look to the already defined `Coach` at `lib/rubygoal/coaches`.
