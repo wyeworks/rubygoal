@@ -78,6 +78,10 @@ module Rubygoal
       ball.position
     end
 
+    def recorded_game
+      recorder.to_hash if record_game?
+    end
+
     protected
 
     attr_writer :time, :score_home, :score_away

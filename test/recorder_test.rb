@@ -20,18 +20,18 @@ module Rubygoal
         away: 'Test Away Team'
       }
 
-      assert_equal expected_teams, recorder.to_json[:teams]
+      assert_equal expected_teams, recorder.to_hash[:teams]
     end
 
     def test_initial_recorded_frames
-      assert_equal [], recorder.to_json[:frames]
+      assert_equal [], recorder.to_hash[:frames]
     end
 
     def test_recorded_frame_after_first_update
       @game.update
 
       ball_position = Field.center_position
-      frames = recorder.to_json[:frames]
+      frames = recorder.to_hash[:frames]
 
       assert_equal 1, frames.count
       assert_in_delta 120, frames.first[:time], 0.001
@@ -53,7 +53,7 @@ module Rubygoal
         Timecop.travel(time)
       end
 
-      frames = recorder.to_json[:frames]
+      frames = recorder.to_hash[:frames]
 
       assert_equal 21, frames.count
       assert_in_delta 120, frames.first[:time], 0.001

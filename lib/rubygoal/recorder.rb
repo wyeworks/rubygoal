@@ -11,7 +11,7 @@ module Rubygoal
       @frames << record_frame
     end
 
-    def to_json
+    def to_hash
       {
         teams: {
           home: @game.coach_home.name,
