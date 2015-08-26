@@ -8,7 +8,7 @@ module Rubygoal
     end
 
     def update
-      @frames << record_frame
+      @frames << frame_info
     end
 
     def to_hash
@@ -25,15 +25,29 @@ module Rubygoal
 
     attr_reader :game, :frames
 
-    def record_frame
+    def frame_info
       {
         time: @game.time,
         score: { home: @game.score_home, away: @game.score_away },
         ball: {
           x: @game.ball.position.x,
           y: @game.ball.position.y
-        }
+        },
+        teams: teams_info
       }
+    end
+
+    def teams_info
+      {
+        home_player_positions:
+          absolute_positions(@game.home_players_positions, :home),
+        away_player_positions:
+          absolute_positions(@game.away_players_positions, :away)
+      }
+    end
+
+    def absolute_positions(player_positions, side)
+      player_positions.values.map { |pos| Field.absolute_position(pos, side) }
     end
   end
 end

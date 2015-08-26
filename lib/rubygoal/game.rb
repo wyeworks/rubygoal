@@ -40,7 +40,7 @@ module Rubygoal
     end
 
     def update
-      return if state == :ended
+      return if ended?
 
       update_elapsed_time
 
@@ -80,6 +80,10 @@ module Rubygoal
 
     def recorded_game
       recorder.to_hash if record_game?
+    end
+
+    def ended?
+      state == :ended
     end
 
     protected

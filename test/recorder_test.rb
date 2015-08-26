@@ -45,6 +45,32 @@ module Rubygoal
       )
     end
 
+    def test_recorded_frame_with_11_values_for_player_positions
+      @game.update
+
+      first_frame = recorder.to_hash[:frames].first
+      home_player_positions = first_frame[:teams][:home_player_positions]
+      away_player_positions = first_frame[:teams][:away_player_positions]
+
+      assert_equal 11, home_player_positions.count
+      assert_equal 11, away_player_positions.count
+    end
+
+    def test_recorded_frame_with_absolute_player_positions
+      @game.update
+
+      first_frame = recorder.to_hash[:frames].first
+      home_player_positions = first_frame[:teams][:home_player_positions]
+      away_player_positions = first_frame[:teams][:away_player_positions]
+
+      goalkeeper_field_pos = Position.new(50, Field::HEIGHT / 2)
+      goalkeeper_pos_home = Field.absolute_position(goalkeeper_field_pos, :home)
+      goalkeeper_pos_away = Field.absolute_position(goalkeeper_field_pos, :away)
+
+      assert_equal goalkeeper_pos_home, home_player_positions.first
+      assert_equal goalkeeper_pos_away, away_player_positions.first
+    end
+
     def test_recorded_frame_some_updates
       time = Time.now
       21.times do
