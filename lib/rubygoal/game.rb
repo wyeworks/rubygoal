@@ -21,7 +21,7 @@ module Rubygoal
         puts "Away coach: #{@coach_away.name}"
       end
 
-      @recorder = Recorder.new(self)
+      @recorder = Recorder.new(self) if record_game?
 
       @ball = Ball.new
 
@@ -53,7 +53,7 @@ module Rubygoal
         update_ball
       end
 
-      recorder.update
+      recorder.update if record_game?
 
       end_match! if time <= 0
     end
@@ -145,6 +145,10 @@ module Rubygoal
 
     def debug_output?
       Rubygoal.configuration.debug_output
+    end
+
+    def record_game?
+      Rubygoal.configuration.record_game
     end
   end
 end

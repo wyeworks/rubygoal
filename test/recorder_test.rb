@@ -6,6 +6,8 @@ require 'rubygoal/recorder'
 module Rubygoal
   class RecorderTest < Minitest::Test
     def setup
+      Rubygoal.configuration.record_game = true
+
       home_coach = Coach.new(TestHomeCoachDefinition.new)
       away_coach = Coach.new(TestAwayCoachDefinition.new)
       @game = Game.new(home_coach, away_coach)
