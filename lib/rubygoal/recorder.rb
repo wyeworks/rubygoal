@@ -33,21 +33,15 @@ module Rubygoal
           x: @game.ball.position.x,
           y: @game.ball.position.y
         },
-        teams: teams_info
+        home_players: team_info(@game.team_home),
+        away_players: team_info(@game.team_away)
       }
     end
 
-    def teams_info
-      {
-        home_player_positions:
-          absolute_positions(@game.home_players_positions, :home),
-        away_player_positions:
-          absolute_positions(@game.away_players_positions, :away)
-      }
-    end
-
-    def absolute_positions(player_positions, side)
-      player_positions.values.map { |pos| Field.absolute_position(pos, side) }
+    def team_info(team)
+      team.players.map do |_, player|
+        player.position.to_hash.merge(angle: player.rotation)
+      end
     end
   end
 end

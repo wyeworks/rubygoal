@@ -17,6 +17,10 @@ module Rubygoal
     def to_s
       "(#{x}, #{y})"
     end
+
+    def to_hash
+      { x: x, y: y }
+    end
   end
 
   class Position < Coordinate; end
