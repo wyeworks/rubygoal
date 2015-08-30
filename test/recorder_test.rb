@@ -56,7 +56,7 @@ module Rubygoal
       assert_equal 11, away_players.count
     end
 
-    def test_recorded_frame_with_absolute_player_positions
+    def test_recorded_frame_with_detailed_player_info
       @game.update
 
       first_frame = recorder.to_hash[:frames].first
@@ -68,12 +68,22 @@ module Rubygoal
       goalkeeper_pos_away = Field.absolute_position(goalkeeper_field_pos, :away)
 
       assert_equal(
-        { x: goalkeeper_pos_home.x, y: goalkeeper_pos_home.y, angle: 0 },
+        {
+          x: goalkeeper_pos_home.x,
+          y: goalkeeper_pos_home.y,
+          angle: 0,
+          type: :average
+        },
         home_players.first
       )
       assert_equal(
-        { x: goalkeeper_pos_away.x, y: goalkeeper_pos_away.y, angle: 0 },
-         away_players.first
+        {
+          x: goalkeeper_pos_away.x,
+          y: goalkeeper_pos_away.y,
+          angle: 0,
+          type: :average
+        },
+        away_players.first
       )
     end
 

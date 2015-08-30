@@ -40,7 +40,10 @@ module Rubygoal
 
     def team_info(team)
       team.players.map do |_, player|
-        player.position.to_hash.merge(angle: player.rotation)
+        player.position.to_hash.merge(
+          angle: player.rotation,
+          type:  player.type
+        )
       end
     end
   end
