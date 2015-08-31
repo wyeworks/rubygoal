@@ -66,5 +66,19 @@ module Rubygoal
     def test_players
       assert_equal 22, @game.players.size
     end
+
+    def test_recorded_game
+      Rubygoal.configuration.record_game = true
+      home_coach = Coach.new(TestHomeCoachDefinition.new)
+      away_coach = Coach.new(TestAwayCoachDefinition.new)
+      game = Game.new(home_coach, away_coach)
+
+      expected_teams = {
+        home: 'Test Home Team',
+        away: 'Test Away Team'
+      }
+
+      assert_equal expected_teams, game.recorded_game[:teams]
+    end
   end
 end

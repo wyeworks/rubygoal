@@ -25,6 +25,20 @@ module Rubygoal
 
       attr_reader :game, :side
 
+      def remove_goalkeeper_position(positions)
+        positions.tap do |ps|
+          ps.delete(:goalkeeper)
+        end
+      end
+
+      def home_players_positions
+        remove_goalkeeper_position(game.home_players_positions)
+      end
+
+      def away_players_positions
+        remove_goalkeeper_position(game.away_players_positions)
+      end
+
       def other_side
         side == :home ? :away : :home
       end

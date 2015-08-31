@@ -7,7 +7,7 @@ module Rubygoal
                   :deceleration_coef, :initial_player_positions, :game_time,
                   :average_lower_error, :average_upper_error, :average_speed,
                   :fast_lower_error, :fast_upper_error, :fast_speed,
-                  :captain_error, :captain_speed, :debug_output
+                  :captain_error, :captain_speed, :debug_output, :record_game
   end
 
   class << self
@@ -44,5 +44,6 @@ module Rubygoal
 
     config.game_time             = 120
     config.debug_output          = true
+    config.record_game           = false
   end
 end

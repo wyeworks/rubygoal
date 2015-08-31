@@ -3,11 +3,12 @@ require 'forwardable'
 require 'rubygoal/coordinate'
 require 'rubygoal/field'
 require 'rubygoal/goal'
+require 'rubygoal/recorder'
 
 module Rubygoal
   class Game
     attr_reader :team_home, :team_away, :ball,
-                :time, :goal,
+                :time, :goal, :recorder,
                 :coach_home, :coach_away,
                 :score_home, :score_away
 
@@ -19,6 +20,8 @@ module Rubygoal
         puts "Home coach: #{@coach_home.name}"
         puts "Away coach: #{@coach_away.name}"
       end
+
+      @recorder = Recorder.new(self) if record_game?
 
       @ball = Ball.new
 
@@ -37,7 +40,7 @@ module Rubygoal
     end
 
     def update
-      return if state == :ended
+      return if ended?
 
       update_elapsed_time
 
@@ -49,6 +52,8 @@ module Rubygoal
         team_away.update(elapsed_time)
         update_ball
       end
+
+      recorder.update if record_game?
 
       end_match! if time <= 0
     end
@@ -73,14 +78,20 @@ module Rubygoal
       ball.position
     end
 
+    def recorded_game
+      recorder.to_hash if record_game?
+    end
+
+    def ended?
+      state == :ended
+    end
+
     protected
 
     attr_writer :time, :score_home, :score_away
     attr_accessor :state, :last_time, :elapsed_time
 
     private
-
-    attr_reader :font, :home_team_label, :away_team_label
 
     def update_elapsed_time
       self.last_time ||= Time.now
@@ -142,6 +153,10 @@ module Rubygoal
 
     def debug_output?
       Rubygoal.configuration.debug_output
+    end
+
+    def record_game?
+      Rubygoal.configuration.record_game
     end
   end
 end

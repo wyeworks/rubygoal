@@ -92,6 +92,18 @@ module Rubygoal
       assert_equal({ name: Position.new(100, 100) }, match_data.other.positions)
     end
 
+    def test_match_info_exclude_goalkeeper_position
+      match_data = create_match_data(
+        :home,
+        home_players_positions: {
+          goalkeeper: Position.new(Field::WIDTH, Field::HEIGHT),
+          name:       Position.new(Field::WIDTH, Field::HEIGHT)
+        },
+      )
+
+      assert_equal({ name: Position.new(100, 100) }, match_data.me.positions)
+    end
+
     def test_home_match_info_includes_ball_position
       match_data = create_match_data(
         :home,

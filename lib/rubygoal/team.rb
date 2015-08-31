@@ -82,7 +82,6 @@ module Rubygoal
 
     def players_position
       players.each_with_object({}) do |(name, player), hash|
-        next if name == :goalkeeper
         hash[name] = Field.field_position(player.position, side)
       end
     end
