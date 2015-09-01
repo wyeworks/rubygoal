@@ -17,7 +17,7 @@ module Rubygoal
 
       while !game.ended? do
         game.update
-        time += 1.0 / 60
+        time += 1.0 / 60.0
         Timecop.travel(time)
       end
     end

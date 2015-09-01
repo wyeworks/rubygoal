@@ -31,11 +31,11 @@ module Rubygoal
 
     def frame_info
       {
-        time: @game.time,
+        time: @game.time.round(0),
         score: { home: @game.score_home, away: @game.score_away },
         ball: {
-          x: @game.ball.position.x,
-          y: @game.ball.position.y
+          x: @game.ball.position.x.round(0),
+          y: @game.ball.position.y.round(0)
         },
         home_players: team_info(@game.team_home),
         away_players: team_info(@game.team_away)
@@ -44,10 +44,12 @@ module Rubygoal
 
     def team_info(team)
       team.players.map do |_, player|
-        player.position.to_hash.merge(
-          angle: player.rotation,
+        {
+          x:     player.position.x.round(0),
+          y:     player.position.y.round(0),
+          angle: player.rotation.round(0),
           type:  player.type
-        )
+        }
       end
     end
   end
