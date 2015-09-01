@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = 'https://github.com/wyeworks/rubygoal'
   gem.license       = 'Apache License 2.0'
 
-  gem.files         = Dir['README.md', 'LICENSE', 'lib/**/*', 'test/**/*']
+  gem.files         = Dir['README.md', 'LICENSE', 'bin/**/*', 'lib/**/*', 'test/**/*']
   gem.test_files    = Dir['test/**/*']
 
   gem.name          = 'rubygoal-core'

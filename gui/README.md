@@ -32,26 +32,48 @@ For other distros:  https://github.com/jlnr/gosu/wiki/Getting-Started-on-Linux
 gem install rubygoal
 ```
 
-Run the game with example `Coach`
+Run the game with example `CoachDefinition`
 ```bash
 rubygoal
 ```
 
-Run the game with your custom `Coach` implementation
+Run the game with your custom `CoachDefinition` implementation
 ```bash
 rubygoal coach_1.rb
 ```
 
-Run the game with your home and away `Coach` implementations
+Run the game with your home and away `CoachDefinition` implementations
 ```bash
 rubygoal coach_1.rb coach_2.rb
 ```
 
+If you want to run the game from the source code, clone the project and
+run the following commands:
+
+```bash
+BUNDLE_GEMFILE=Gemfile.dev bundle install
+BUNDLE_GEMFILE=Gemfile.dev bundle exec ruby gui/bin/rubygoal [coach_file] [coach_file]
+```
+
+Also, you can simulate a game without the GUI by running
+
+```bash
+bundle install
+bundle exec ruby bin/rubygoal [coach_file] [coach_file]
+```
+
+When you simuate a game, a JSON file is created in the same folder. You
+could run this using our experiment webcomponent to play Rubygoal in the
+web: https://github.com/jmbejar/rubygoal-webplayer
+
 ## How do i write my own coach class?
 
-Take a look to the already defined `Coach` at `lib/rubygoal/coaches`.
-Specially pay attention to the file `lib/rubygoal/coaches/template.rb`
+You can find a complete guide explaining how to program a coach in
+www.rubygoal.com
 
+Aditionally, you can take a look to the already defined `CoachDefinition` at
+`lib/rubygoal/coach_definition`.
+Specially pay attention to the example coaches in `lib/rubygoal/coaches/`
 
 
 ## Legal

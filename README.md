@@ -52,8 +52,19 @@ run the following commands:
 
 ```bash
 BUNDLE_GEMFILE=Gemfile.dev bundle install
-BUNDLE_GEMFILE=Gemfile.dev bundle exec ruby gui/bin/rubygoal
+BUNDLE_GEMFILE=Gemfile.dev bundle exec ruby gui/bin/rubygoal [coach_file] [coach_file]
 ```
+
+Also, you can simulate a game without the GUI by running
+
+```bash
+bundle install
+bundle exec ruby bin/rubygoal [coach_file] [coach_file]
+```
+
+When you simuate a game, a JSON file is created in the same folder. You
+could run this using our experiment webcomponent to play Rubygoal in the
+web: https://github.com/jmbejar/rubygoal-webplayer
 
 ## How do i write my own coach class?
 

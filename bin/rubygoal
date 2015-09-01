@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+# -*- mode: ruby -*-
+
+require 'rubygoal/simulator'
+
+simulator = Rubygoal::Simulator.new
+simulator.simulate
+
+timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+file = File.new("recorded_game_#{timestamp}.json", 'w')
+JSON.dump(simulator.recorded_game, file)
+
+p "Match recorded in #{file.path}"
+
+
