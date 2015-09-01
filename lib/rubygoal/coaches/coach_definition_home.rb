@@ -34,7 +34,7 @@ module Rubygoal
         formation.defenders :none, :rolan, :cacerez, :gimenez, :none
         formation.midfielders :arevalo, :lodeiro, :godin, :none, :pereira
         formation.attackers :suarez, :none, :none, :cavani, :rodriguez
-      else
+      elsif match.time < 20 && match.me.winning?
         # Mirror opponent players
 
         opponent = match.other.positions
@@ -47,6 +47,26 @@ module Rubygoal
               position opponent_pos.x, 100.0 - opponent_pos.y
             end
           end
+        end
+      else
+        formation.lineup do
+          if match.ball.x < 50
+            lines do
+              defenders 10
+              midfielders 30
+              attackers 50
+            end
+          else
+            lines do
+              defenders 30
+              midfielders 50
+              attackers 70
+            end
+          end
+
+          defenders :pereira, :cacerez, :gimenez, :godin, :rodriguez
+          midfielders :lodeiro, :none, :rolan, :none, :arevalo
+          attackers :none, :cavani, :none, :suarez, :none
         end
       end
 

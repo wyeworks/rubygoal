@@ -5,7 +5,7 @@ module Rubygoal
   class CoachDefinitionAway < CoachDefinition
 
     team do
-      name "Marruecos"
+      name "Argentina"
     end
 
     def formation(match)
