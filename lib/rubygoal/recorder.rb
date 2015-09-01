@@ -17,6 +17,10 @@ module Rubygoal
           home: @game.coach_home.name,
           away: @game.coach_away.name
         },
+        score: {
+          home: @game.score_home,
+          away: @game.score_away
+        },
         frames: @frames
       }
     end

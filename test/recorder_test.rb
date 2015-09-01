@@ -23,6 +23,15 @@ module Rubygoal
       assert_equal expected_teams, recorder.to_hash[:teams]
     end
 
+    def test_recorded_score
+      expected_score = {
+        home: 0,
+        away: 0
+      }
+
+      assert_equal expected_score, recorder.to_hash[:score]
+    end
+
     def test_initial_recorded_frames
       assert_equal [], recorder.to_hash[:frames]
     end
