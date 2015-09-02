@@ -86,6 +86,10 @@ module Rubygoal
       state == :ended
     end
 
+    def team_names
+      [coach_home.name, coach_away.name]
+    end
+
     protected
 
     attr_writer :time, :score_home, :score_away

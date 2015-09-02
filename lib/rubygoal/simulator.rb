@@ -5,7 +5,7 @@ require 'rubygoal/game'
 module Rubygoal
   class Simulator
     extend Forwardable
-    def_delegators :game, :recorded_game
+    def_delegators :game, :recorded_game, :team_names
 
     def initialize
       Rubygoal.configuration.record_game = true
