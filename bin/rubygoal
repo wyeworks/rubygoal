@@ -7,7 +7,7 @@ simulator = Rubygoal::Simulator.new
 simulator.simulate
 
 timestamp = Time.now.strftime("%Y%m%d%H%M%S")
-team_names = simulator.team_names.join("_")
+team_names = simulator.team_names.join("_").gsub(' ', '_')
 
 file = File.new("Game_#{team_names}_#{timestamp}.json", 'w')
 JSON.dump(simulator.recorded_game, file)
