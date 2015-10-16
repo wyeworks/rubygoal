@@ -45,7 +45,7 @@ module Rubygoal
           player.position.x.round(0),
           player.position.y.round(0),
           player.rotation.round(0),
-          player.type
+          player.type[0]
         ]
       end
     end

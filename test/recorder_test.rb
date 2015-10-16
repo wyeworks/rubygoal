@@ -78,7 +78,7 @@ module Rubygoal
           goalkeeper_pos_home.x,
           goalkeeper_pos_home.y,
           0,
-          :average
+          "a"
         ],
         home_players.first
       )
@@ -87,7 +87,7 @@ module Rubygoal
           goalkeeper_pos_away.x,
           goalkeeper_pos_away.y,
           0,
-          :average
+          "a"
         ],
         away_players.first
       )
