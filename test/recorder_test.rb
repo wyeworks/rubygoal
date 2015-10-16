@@ -46,7 +46,7 @@ module Rubygoal
         frames.first[:score]
       )
       assert_equal(
-        { x: ball_position.x, y: ball_position.y},
+        [ball_position.x, ball_position.y],
         frames.first[:ball]
       )
     end

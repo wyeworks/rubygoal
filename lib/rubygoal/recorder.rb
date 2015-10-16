@@ -30,10 +30,10 @@ module Rubygoal
       {
         time: @game.time.round(0),
         score: [@game.score_home, @game.score_away],
-        ball: {
-          x: @game.ball.position.x.round(0),
-          y: @game.ball.position.y.round(0)
-        },
+        ball: [
+          @game.ball.position.x.round(0),
+          @game.ball.position.y.round(0)
+        ],
         home_players: team_info(@game.team_home),
         away_players: team_info(@game.team_away)
       }
