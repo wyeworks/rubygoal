@@ -34,8 +34,8 @@ module Rubygoal
           @game.ball.position.x.round(0),
           @game.ball.position.y.round(0)
         ],
-        home_players: team_info(@game.team_home),
-        away_players: team_info(@game.team_away)
+        home: team_info(@game.team_home),
+        away: team_info(@game.team_away)
       }
     end
 

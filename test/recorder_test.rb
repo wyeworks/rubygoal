@@ -55,8 +55,8 @@ module Rubygoal
       @game.update
 
       first_frame = recorder.to_hash[:frames].first
-      home_players = first_frame[:home_players]
-      away_players = first_frame[:away_players]
+      home_players = first_frame[:home]
+      away_players = first_frame[:away]
 
       assert_equal 11, home_players.count
       assert_equal 11, away_players.count
@@ -66,8 +66,8 @@ module Rubygoal
       @game.update
 
       first_frame = recorder.to_hash[:frames].first
-      home_players = first_frame[:home_players]
-      away_players = first_frame[:away_players]
+      home_players = first_frame[:home]
+      away_players = first_frame[:away]
 
       goalkeeper_field_pos = Position.new(50, Field::HEIGHT / 2)
       goalkeeper_pos_home = Field.absolute_position(goalkeeper_field_pos, :home)
