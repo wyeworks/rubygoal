@@ -74,21 +74,21 @@ module Rubygoal
       goalkeeper_pos_away = Field.absolute_position(goalkeeper_field_pos, :away)
 
       assert_equal(
-        {
-          x: goalkeeper_pos_home.x,
-          y: goalkeeper_pos_home.y,
-          angle: 0,
-          type: :average
-        },
+        [
+          goalkeeper_pos_home.x,
+          goalkeeper_pos_home.y,
+          0,
+          :average
+        ],
         home_players.first
       )
       assert_equal(
-        {
-          x: goalkeeper_pos_away.x,
-          y: goalkeeper_pos_away.y,
-          angle: 0,
-          type: :average
-        },
+        [
+          goalkeeper_pos_away.x,
+          goalkeeper_pos_away.y,
+          0,
+          :average
+        ],
         away_players.first
       )
     end

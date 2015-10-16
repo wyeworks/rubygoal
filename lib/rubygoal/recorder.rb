@@ -41,12 +41,12 @@ module Rubygoal
 
     def team_info(team)
       team.players.map do |_, player|
-        {
-          x:     player.position.x.round(0),
-          y:     player.position.y.round(0),
-          angle: player.rotation.round(0),
-          type:  player.type
-        }
+        [
+          player.position.x.round(0),
+          player.position.y.round(0),
+          player.rotation.round(0),
+          player.type
+        ]
       end
     end
   end
