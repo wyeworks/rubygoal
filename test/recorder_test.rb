@@ -24,10 +24,7 @@ module Rubygoal
     end
 
     def test_recorded_score
-      expected_score = {
-        home: 0,
-        away: 0
-      }
+      expected_score = [0, 0]
 
       assert_equal expected_score, recorder.to_hash[:score]
     end
@@ -45,7 +42,7 @@ module Rubygoal
       assert_equal 1, frames.count
       assert_in_delta 120, frames.first[:time], 0.001
       assert_equal(
-        { home: 0, away: 0 },
+        [0, 0],
         frames.first[:score]
       )
       assert_equal(
