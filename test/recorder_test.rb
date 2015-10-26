@@ -24,10 +24,7 @@ module Rubygoal
     end
 
     def test_recorded_score
-      expected_score = {
-        home: 0,
-        away: 0
-      }
+      expected_score = [0, 0]
 
       assert_equal expected_score, recorder.to_hash[:score]
     end
@@ -45,11 +42,11 @@ module Rubygoal
       assert_equal 1, frames.count
       assert_in_delta 120, frames.first[:time], 0.001
       assert_equal(
-        { home: 0, away: 0 },
+        [0, 0],
         frames.first[:score]
       )
       assert_equal(
-        { x: ball_position.x, y: ball_position.y},
+        [ball_position.x, ball_position.y],
         frames.first[:ball]
       )
     end
@@ -58,8 +55,8 @@ module Rubygoal
       @game.update
 
       first_frame = recorder.to_hash[:frames].first
-      home_players = first_frame[:home_players]
-      away_players = first_frame[:away_players]
+      home_players = first_frame[:home]
+      away_players = first_frame[:away]
 
       assert_equal 11, home_players.count
       assert_equal 11, away_players.count
@@ -69,29 +66,29 @@ module Rubygoal
       @game.update
 
       first_frame = recorder.to_hash[:frames].first
-      home_players = first_frame[:home_players]
-      away_players = first_frame[:away_players]
+      home_players = first_frame[:home]
+      away_players = first_frame[:away]
 
       goalkeeper_field_pos = Position.new(50, Field::HEIGHT / 2)
       goalkeeper_pos_home = Field.absolute_position(goalkeeper_field_pos, :home)
       goalkeeper_pos_away = Field.absolute_position(goalkeeper_field_pos, :away)
 
       assert_equal(
-        {
-          x: goalkeeper_pos_home.x,
-          y: goalkeeper_pos_home.y,
-          angle: 0,
-          type: :average
-        },
+        [
+          goalkeeper_pos_home.x,
+          goalkeeper_pos_home.y,
+          0,
+          "a"
+        ],
         home_players.first
       )
       assert_equal(
-        {
-          x: goalkeeper_pos_away.x,
-          y: goalkeeper_pos_away.y,
-          angle: 0,
-          type: :average
-        },
+        [
+          goalkeeper_pos_away.x,
+          goalkeeper_pos_away.y,
+          0,
+          "a"
+        ],
         away_players.first
       )
     end

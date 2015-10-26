@@ -17,10 +17,7 @@ module Rubygoal
           home: @game.coach_home.name,
           away: @game.coach_away.name
         },
-        score: {
-          home: @game.score_home,
-          away: @game.score_away
-        },
+        score: [@game.score_home, @game.score_away],
         frames: @frames
       }
     end
@@ -32,24 +29,24 @@ module Rubygoal
     def frame_info
       {
         time: @game.time.round(0),
-        score: { home: @game.score_home, away: @game.score_away },
-        ball: {
-          x: @game.ball.position.x.round(0),
-          y: @game.ball.position.y.round(0)
-        },
-        home_players: team_info(@game.team_home),
-        away_players: team_info(@game.team_away)
+        score: [@game.score_home, @game.score_away],
+        ball: [
+          @game.ball.position.x.round(0),
+          @game.ball.position.y.round(0)
+        ],
+        home: team_info(@game.team_home),
+        away: team_info(@game.team_away)
       }
     end
 
     def team_info(team)
       team.players.map do |_, player|
-        {
-          x:     player.position.x.round(0),
-          y:     player.position.y.round(0),
-          angle: player.rotation.round(0),
-          type:  player.type
-        }
+        [
+          player.position.x.round(0),
+          player.position.y.round(0),
+          player.rotation.round(0),
+          player.type[0]
+        ]
       end
     end
   end
