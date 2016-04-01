@@ -9,10 +9,10 @@ module Rubygoal
     end
 
     team do
-      name js_coach.JS[:name]
+      name js_coach.JS.name()
 
       players do
-        js_coach.JS[:players].each do |player|
+        js_coach.JS.players().each do |player|
           player_name = player.JS[:name].to_sym
           case player.JS[:type]
           when 'captain'
