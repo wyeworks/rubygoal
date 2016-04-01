@@ -5,13 +5,17 @@ module Rubygoal
 
   class CoachDefinitionHome < CoachDefinition
 
+    def self.js_coach
+      `WyeGoal.homeCoach`
+    end
+
     team do
-      name `JSGoal.HomeCoachDefinition.name`
+      name js_coach.JS[:name]
 
       players do
-        10.times do |i|
-          player_name = `JSGoal.HomeCoachDefinition.players[#{i}].name`.to_sym
-          case `JSGoal.HomeCoachDefinition.players[#{i}].type`
+        js_coach.JS[:players].each do |player|
+          player_name = player.JS[:name].to_sym
+          case player.JS[:type]
           when 'captain'
             captain player_name
           when 'fast'
@@ -24,24 +28,26 @@ module Rubygoal
     end
 
     def formation(match)
-      result = %x{
-        JSGoal.HomeCoachDefinition.formation({
-          me: {
-            winning: #{match.me.winning?},
-            losing: #{match.me.losing?},
-            drawing: #{match.me.draw?}
-          },
-          other: {
-            winning: #{match.other.winning?},
-            losing: #{match.other.losing?},
-            drawing: #{match.other.draw?}
-          },
-          ball: {
-            x: #{match.ball.x},
-            y: #{match.ball.y}
+      result = self.class.js_coach.JS.formation(
+        %x{
+          {
+            me: {
+              winning: #{match.me.winning?},
+              losing: #{match.me.losing?},
+              drawing: #{match.me.draw?}
+            },
+            other: {
+              winning: #{match.other.winning?},
+              losing: #{match.other.losing?},
+              drawing: #{match.other.draw?}
+            },
+            ball: {
+              x: #{match.ball.x},
+              y: #{match.ball.y}
+            }
           }
-        });
-      }
+        }
+      )
 
       formation = Formation.new
       formation.defenders(*(result.JS[:defenders].map(&:to_sym)))
