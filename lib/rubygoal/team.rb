@@ -155,7 +155,8 @@ module Rubygoal
     def shoot_target
       # Do not kick always to the center, look for the sides of the goal
       limit = Field::GOAL_HEIGHT / 2
-      offset = Random.rand(-limit..limit)
+      #offset = Random.rand(-limit..limit)
+      offset = `Math.random()`.to_f * 2 * limit - limit
 
       target = Field.goal_position(opponent_side)
       target.y += offset

@@ -39,10 +39,11 @@ module Rubygoal
       reinitialize_players
     end
 
-    def update
+    def update(elapsed_time = Time.now)
+      self.elapsed_time = elapsed_time
       return if ended?
 
-      update_elapsed_time
+      #update_elapsed_time
 
       if celebrating_goal?
         update_goal
@@ -97,12 +98,12 @@ module Rubygoal
 
     private
 
-    def update_elapsed_time
-      self.last_time ||= Time.now
+    #def update_elapsed_time
+      #self.last_time ||= Time.now
 
-      self.elapsed_time = Time.now - last_time
-      self.last_time = Time.now
-    end
+      #self.elapsed_time = Time.now - last_time
+      #self.last_time = Time.now
+    #end
 
     def update_remaining_time
       self.time -= elapsed_time

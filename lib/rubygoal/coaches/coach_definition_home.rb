@@ -2,75 +2,54 @@ require 'rubygoal/coach_definition'
 require 'rubygoal/formation'
 
 module Rubygoal
+
   class CoachDefinitionHome < CoachDefinition
 
     team do
-      name "Colombia"
+      name `JSGoal.HomeCoachDefinition.name`
 
       players do
-        captain :godin
-
-        fast :cavani
-        fast :rolan
-        fast :suarez
-
-        average :pereira
-        average :gimenez
-        average :arevalo
-        average :lodeiro
-        average :cacerez
-        average :rodriguez
+        10.times do |i|
+          player_name = `JSGoal.HomeCoachDefinition.players[#{i}].name`.to_sym
+          case `JSGoal.HomeCoachDefinition.players[#{i}].type`
+          when 'captain'
+            captain player_name
+          when 'fast'
+            fast player_name
+          when 'average'
+            average player_name
+          end
+        end
       end
     end
 
     def formation(match)
+      result = %x{
+        JSGoal.HomeCoachDefinition.formation({
+          me: {
+            winning: #{match.me.winning?},
+            losing: #{match.me.losing?},
+            drawing: #{match.me.draw?}
+          },
+          other: {
+            winning: #{match.other.winning?},
+            losing: #{match.other.losing?},
+            drawing: #{match.other.draw?}
+          },
+          ball: {
+            x: #{match.ball.x},
+            y: #{match.ball.y}
+          }
+        });
+      }
+
       formation = Formation.new
-
-      #if match.me.winning?
-        #formation.defenders :pereira, :cacerez, :gimenez, :godin, :rodriguez
-        #formation.midfielders :lodeiro, :none, :rolan, :none, :arevalo
-        #formation.attackers :none, :cavani, :none, :suarez, :none
-      #elsif match.time < 20
-        formation.defenders :none, :rolan, :cacerez, :gimenez, :none
-        formation.midfielders :arevalo, :lodeiro, :godin, :none, :pereira
-        formation.attackers :suarez, :none, :none, :cavani, :rodriguez
-      #elsif match.time < 20 && match.me.winning?
-        ## Mirror opponent players
-
-        #opponent = match.other.positions
-        #my_players = players
-
-        #opponent.each_with_index do |(opponent_name, opponent_pos), index|
-          #formation.lineup do
-            #custom_position do
-              #player my_players[index].name
-              #position opponent_pos.x, 100.0 - opponent_pos.y
-            #end
-          #end
-        #end
-      #else
-        #formation.lineup do
-          #if match.ball.x < 50
-            #lines do
-              #defenders 10
-              #midfielders 30
-              #attackers 60
-            #end
-          #else
-            #lines do
-              #defenders 30
-              #midfielders 55
-              #attackers 80
-            #end
-          #end
-
-          #defenders :pereira, :cacerez, :gimenez, :godin, :rodriguez
-          #midfielders :lodeiro, :none, :rolan, :none, :arevalo
-          #attackers :none, :cavani, :none, :suarez, :none
-        #end
-      #end
+      formation.defenders(*(result.JS[:defenders].map(&:to_sym)))
+      formation.midfielders(*(result.JS[:midfielders].map(&:to_sym)))
+      formation.attackers(*(result.JS[:attackers].map(&:to_sym)))
 
       formation
     end
+
   end
 end

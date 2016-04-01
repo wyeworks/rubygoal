@@ -70,8 +70,11 @@ module Rubygoal
     end
 
     def random_strength
-      error_range = (1 - error)..(1 + error)
-      error_coef = Random.rand(error_range)
+      #error_range = (1 - error)..(1 + error)
+      #error_coef = Random.rand(error_range)
+
+      error_coef = `Math.random()`.to_f * 2 * error + 1 - error
+
       Rubygoal.configuration.kick_strength * error_coef
     end
 
@@ -81,7 +84,8 @@ module Rubygoal
       max_angle_error = STRAIGHT_ANGLE * error
       angle_error_range = -max_angle_error..max_angle_error
 
-      direction += Random.rand(angle_error_range)
+      direction += `Math.random()`.to_f * 2 * max_angle_error - max_angle_error
+      #direction += Random.rand(angle_error_range)
     end
   end
 end

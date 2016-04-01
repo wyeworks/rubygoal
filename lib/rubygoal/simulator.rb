@@ -1,5 +1,3 @@
-require 'timecop'
-require 'json'
 require 'rubygoal/game'
 
 module Rubygoal
@@ -13,12 +11,10 @@ module Rubygoal
     end
 
     def simulate
-      time = Time.now
+      time = 1.0 / 20.0
 
       while !game.ended? do
-        game.update
-        time += 1.0 / 60.0
-        Timecop.travel(time)
+        game.update(time)
       end
     end
 
