@@ -2,33 +2,23 @@ require 'rubygoal/coach_definition'
 require 'rubygoal/formation'
 
 module Rubygoal
-
   class CoachDefinitionHome < CoachDefinition
 
-    def self.js_coach
-      `WyeGoal.homeCoach`
+    def name
+      js_coach.JS.name()
     end
 
-    team do
-      name js_coach.JS.name()
+    def players
+      js_coach.JS.players().map do |player|
+        name = player.JS[:name].to_sym
+        type = player.JS[:type].to_sym
 
-      players do
-        js_coach.JS.players().each do |player|
-          player_name = player.JS[:name].to_sym
-          case player.JS[:type]
-          when 'captain'
-            captain player_name
-          when 'fast'
-            fast player_name
-          when 'average'
-            average player_name
-          end
-        end
+        PlayerDefinition.new(name, type)
       end
     end
 
     def formation(match)
-      result = self.class.js_coach.JS.formation(
+      result = js_coach.JS.formation(
         %x{
           {
             me: {
@@ -57,5 +47,10 @@ module Rubygoal
       formation
     end
 
+    private
+
+    def js_coach
+      `WyeGoal.homeCoach`
+    end
   end
 end
