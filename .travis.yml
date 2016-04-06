@@ -2,3 +2,6 @@ language: ruby
 rvm:
   - "2.2.2"
 sudo: false
+branches:
+  except:
+    - rubygoal-opal-experiment
