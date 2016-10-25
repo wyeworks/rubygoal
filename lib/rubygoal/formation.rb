@@ -8,23 +8,27 @@ module Rubygoal
       @players_position = {}
 
       @lines_definition = {
-        defenders: Field::WIDTH / 6,
-        def_midfielders: Field::WIDTH / 3,
-        midfielders: Field::WIDTH / 2,
-        att_midfielders: Field::WIDTH / 3 * 2,
-        attackers: Field::WIDTH / 6 * 5,
+        defenders: { position: Field::WIDTH / 6, players: [] },
+        def_midfielders: { position: Field::WIDTH / 3, players: [] },
+        midfielders: { position: Field::WIDTH / 2, players: [] },
+        att_midfielders: { position: Field::WIDTH / 3 * 2, players: [] },
+        attackers: { position: Field::WIDTH / 6 * 5, players: [] },
       }
     end
 
     def method_missing(method, *args)
       line_name = method.to_s.chomp('=').to_sym
       if lines_definition[line_name]
-        set_players_in_custom_line(lines_definition[line_name], args)
+        lines_definition[line_name][:players] = args
       end
     end
 
     def lineup(&block)
       instance_eval(&block)
+
+      lines_definition.each do |line_name, line_definition|
+        set_players_in_custom_line(line_definition[:position], line_definition[:players])
+      end
     end
 
     def errors
