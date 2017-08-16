@@ -55,10 +55,11 @@ module Rubygoal
       position.add(movement)
     end
 
+    attr_accessor :destination
+
     private
 
     attr_reader :speed
-    attr_accessor :destination
 
     def reset_rotation
       self.rotation = 0
