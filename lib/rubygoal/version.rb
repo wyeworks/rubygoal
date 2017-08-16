@@ -1,3 +1,3 @@
 module Rubygoal
-  VERSION = Gem::Version.new '1.0.0'
+  VERSION = Gem::Version.new '1.1.0'
 end

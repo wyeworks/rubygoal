@@ -18,6 +18,6 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.2.2'
 
-  gem.add_dependency 'rubygoal-core', '1.0.0'
+  gem.add_dependency 'rubygoal-core', '~> 1.1'
   gem.add_dependency 'gosu', '~> 0.9'
 end
