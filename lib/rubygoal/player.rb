@@ -20,7 +20,6 @@ module Rubygoal
       @time_to_kick_again = 0
       @side = side
       @player_movement = PlayerMovement.new(game, self)
-      @game = game
       @name = name
     end
 
