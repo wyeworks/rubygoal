@@ -11,16 +11,17 @@ module Rubygoal
 
     include Moveable
 
-    attr_reader :side, :type
+    attr_reader :side, :type, :name
     attr_accessor :coach_defined_position
 
-    def initialize(game, side)
+    def initialize(game, side, name)
       super()
 
       @time_to_kick_again = 0
       @side = side
       @player_movement = PlayerMovement.new(game, self)
       @game = game
+      @name = name
     end
 
     def can_kick?(ball)
@@ -31,8 +32,7 @@ module Rubygoal
       direction = random_direction(target)
       strength = random_strength
 
-      ball.move(direction, strength)
-      ball.last_kick = player_info
+      ball.move(direction, strength, name: name, side: side)
       reset_waiting_to_kick!
     end
 
@@ -84,18 +84,6 @@ module Rubygoal
       angle_error_range = -max_angle_error..max_angle_error
 
       direction += Random.rand(angle_error_range)
-    end
-
-    def player_info
-      team = side == :home ? @game.team_home : @game.team_away
-      player_name = nil
-      team.players.each do |name, player|
-        if player == self
-          player_name = name
-          break
-        end
-      end
-      { name: player_name, side: side }
     end
   end
 end

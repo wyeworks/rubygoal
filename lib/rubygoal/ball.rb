@@ -6,7 +6,7 @@ module Rubygoal
   class Ball
     include Moveable
 
-    attr_accessor :last_kick
+    attr_reader :last_kick
 
     def initialize
       super
@@ -17,11 +17,12 @@ module Rubygoal
       Field.goal?(position)
     end
 
-    def move(direction, speed)
+    def move(direction, speed, kicker)
       self.velocity = Velocity.new(
         Util.offset_x(direction, speed),
         Util.offset_y(direction, speed)
       )
+      @last_kick = kicker
     end
 
     def reinitialize_position
