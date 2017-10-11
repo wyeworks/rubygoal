@@ -101,21 +101,21 @@ module Rubygoal
     end
 
     def initialize_players
-      @players = { goalkeeper: GoalKeeperPlayer.new(game, side) }
+      @players = { goalkeeper: GoalKeeperPlayer.new(game, side, :goalkeeper) }
 
       unless @coach.valid?
         puts @coach.errors
         raise "Invalid team definition: #{@coach.name}"
       end
 
-      @players[@coach.captain_player.name] = CaptainPlayer.new(game, side)
+      @players[@coach.captain_player.name] = CaptainPlayer.new(game, side, @coach.captain_player.name)
 
       @coach.players_by_type(:fast).each do |player_def|
-        @players[player_def.name] = FastPlayer.new(game, side)
+        @players[player_def.name] = FastPlayer.new(game, side, player_def.name)
       end
 
       @coach.players_by_type(:average).each do |player_def|
-        @players[player_def.name] = AveragePlayer.new(game, side)
+        @players[player_def.name] = AveragePlayer.new(game, side, player_def.name)
       end
 
       initialize_player_positions
@@ -140,12 +140,11 @@ module Rubygoal
       nearest_teammate = nil
 
       (players.values - [player]).each do |teammate|
-        if teammate_is_on_front?(player, teammate)
-          dist = player.distance(teammate.position)
-          if min_dist > dist
-            nearest_teammate = teammate
-            min_dist = dist
-          end
+        next unless teammate_is_on_front?(player, teammate)
+        dist = player.distance(teammate.position)
+        if min_dist > dist
+          nearest_teammate = teammate
+          min_dist = dist
         end
       end
 
