@@ -20,6 +20,7 @@ module Rubygoal
       @time_to_kick_again = 0
       @side = side
       @player_movement = PlayerMovement.new(game, self)
+      @game = game
     end
 
     def can_kick?(ball)
@@ -31,6 +32,7 @@ module Rubygoal
       strength = random_strength
 
       ball.move(direction, strength)
+      ball.last_kick = player_info
       reset_waiting_to_kick!
     end
 
@@ -82,6 +84,18 @@ module Rubygoal
       angle_error_range = -max_angle_error..max_angle_error
 
       direction += Random.rand(angle_error_range)
+    end
+
+    def player_info
+      team = side == :home ? @game.team_home : @game.team_away
+      player_name = nil
+      team.players.each do |name, player|
+        if player == self
+          player_name = name
+          break
+        end
+      end
+      { name: player_name, side: side }
     end
   end
 end

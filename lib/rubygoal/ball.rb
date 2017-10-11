@@ -6,6 +6,8 @@ module Rubygoal
   class Ball
     include Moveable
 
+    attr_accessor :last_kick
+
     def initialize
       super
       reinitialize_position
@@ -24,6 +26,7 @@ module Rubygoal
 
     def reinitialize_position
       self.position = Field.center_position
+      @last_kick = nil
     end
 
     def update(elapsed_time)
@@ -36,12 +39,8 @@ module Rubygoal
     private
 
     def prevent_out_of_bounds
-      if Field.out_of_bounds_width?(position)
-        velocity.x *= -1
-      end
-      if Field.out_of_bounds_height?(position)
-        velocity.y *= -1
-      end
+      velocity.x *= -1 if Field.out_of_bounds_width?(position)
+      velocity.y *= -1 if Field.out_of_bounds_height?(position)
     end
 
     def decelerate(elapsed_time)
@@ -54,7 +53,7 @@ module Rubygoal
       custom_frame_rate = 1 / 60.0
       time_coef = elapsed_time / custom_frame_rate
 
-      Rubygoal.configuration.deceleration_coef ** time_coef
+      Rubygoal.configuration.deceleration_coef**time_coef
     end
   end
 end

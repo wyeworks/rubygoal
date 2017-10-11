@@ -35,7 +35,8 @@ module Rubygoal
           @game.ball.position.y.round(0)
         ],
         home: team_info(@game.team_home),
-        away: team_info(@game.team_away)
+        away: team_info(@game.team_away),
+        last_kick: last_kick_info
       }
     end
 
@@ -47,6 +48,12 @@ module Rubygoal
           player.rotation.round(0),
           player.type[0]
         ]
+      end
+    end
+
+    def last_kick_info
+      if @game.ball.last_kick
+        [@game.ball.last_kick[:name], @game.ball.last_kick[:side]]
       end
     end
   end
