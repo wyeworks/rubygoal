@@ -27,7 +27,7 @@ module Rubygoal
     attr_reader :game, :frames
 
     def frame_info
-      {
+      frame = {
         time: @game.time.round(0),
         score: [@game.score_home, @game.score_away],
         ball: [
@@ -35,9 +35,11 @@ module Rubygoal
           @game.ball.position.y.round(0)
         ],
         home: team_info(@game.team_home),
-        away: team_info(@game.team_away),
-        last_kick: last_kick_info
+        away: team_info(@game.team_away)
       }
+      last_kick_info(frame) if Rubygoal.configuration.record_last_kick
+
+      frame
     end
 
     def team_info(team)
@@ -51,9 +53,12 @@ module Rubygoal
       end
     end
 
-    def last_kick_info
+    def last_kick_info(frame)
       if @game.ball.last_kick
-        [@game.ball.last_kick[:name], @game.ball.last_kick[:side]]
+        frame[:last_kick] = [
+          @game.ball.last_kick[:name],
+          @game.ball.last_kick[:side]
+        ]
       end
     end
   end
