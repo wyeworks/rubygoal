@@ -109,7 +109,7 @@ module Rubygoal
     end
 
     def test_recorded_frame_with_last_kick
-      Rubygoal.configuration.record_last_kick = true
+      Rubygoal.configuration.record_last_kicker = true
       name, player = @game.team_home.players.first
       player.position = @game.ball.position
       player.kick(@game.ball, Position.new(100, 100))
@@ -117,9 +117,9 @@ module Rubygoal
 
       last_frame = recorder.to_hash[:frames].last
 
-      assert !last_frame[:last_kick].nil?
-      assert_equal name, last_frame[:last_kick][0]
-      assert_equal :home, last_frame[:last_kick][1]
+      assert !last_frame[:last_kicker].nil?
+      assert_equal name, last_frame[:last_kicker][0]
+      assert_equal :home, last_frame[:last_kicker][1]
     end
 
     private

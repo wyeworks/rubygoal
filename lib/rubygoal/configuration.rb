@@ -8,7 +8,7 @@ module Rubygoal
                   :average_lower_error, :average_upper_error, :average_speed,
                   :fast_lower_error, :fast_upper_error, :fast_speed,
                   :captain_error, :captain_speed, :debug_output, :record_game,
-                  :record_last_kick
+                  :record_last_kicker
   end
 
   class << self
@@ -46,6 +46,6 @@ module Rubygoal
     config.game_time             = 120
     config.debug_output          = true
     config.record_game           = false
-    config.record_last_kick      = false
+    config.record_last_kicker    = false
   end
 end

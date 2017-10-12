@@ -5,8 +5,7 @@ require 'rubygoal/moveable'
 module Rubygoal
   class Ball
     include Moveable
-
-    attr_reader :last_kick
+    attr_reader :last_kicker
 
     def initialize
       super
@@ -22,12 +21,12 @@ module Rubygoal
         Util.offset_x(direction, speed),
         Util.offset_y(direction, speed)
       )
-      @last_kick = kicker
+      self.last_kicker = kicker
     end
 
     def reinitialize_position
       self.position = Field.center_position
-      @last_kick = nil
+      self.last_kicker = nil
     end
 
     def update(elapsed_time)
@@ -38,6 +37,8 @@ module Rubygoal
     end
 
     private
+
+    attr_writer :last_kicker
 
     def prevent_out_of_bounds
       velocity.x *= -1 if Field.out_of_bounds_width?(position)
@@ -54,7 +55,7 @@ module Rubygoal
       custom_frame_rate = 1 / 60.0
       time_coef = elapsed_time / custom_frame_rate
 
-      Rubygoal.configuration.deceleration_coef**time_coef
+      Rubygoal.configuration.deceleration_coef ** time_coef
     end
   end
 end

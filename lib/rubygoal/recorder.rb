@@ -37,7 +37,7 @@ module Rubygoal
         home: team_info(@game.team_home),
         away: team_info(@game.team_away)
       }
-      last_kick_info(frame) if Rubygoal.configuration.record_last_kick
+      last_kicker_info(frame) if Rubygoal.configuration.record_last_kicker
 
       frame
     end
@@ -53,11 +53,11 @@ module Rubygoal
       end
     end
 
-    def last_kick_info(frame)
-      if @game.ball.last_kick
-        frame[:last_kick] = [
-          @game.ball.last_kick[:name],
-          @game.ball.last_kick[:side]
+    def last_kicker_info(frame)
+      if @game.ball.last_kicker
+        frame[:last_kicker] = [
+          @game.ball.last_kicker[:name],
+          @game.ball.last_kicker[:side]
         ]
       end
     end
