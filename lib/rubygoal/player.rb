@@ -11,15 +11,16 @@ module Rubygoal
 
     include Moveable
 
-    attr_reader :side, :type
+    attr_reader :side, :type, :name
     attr_accessor :coach_defined_position
 
-    def initialize(game, side)
+    def initialize(game, side, name)
       super()
 
       @time_to_kick_again = 0
       @side = side
       @player_movement = PlayerMovement.new(game, self)
+      @name = name
     end
 
     def can_kick?(ball)
@@ -30,7 +31,7 @@ module Rubygoal
       direction = random_direction(target)
       strength = random_strength
 
-      ball.move(direction, strength)
+      ball.move(direction, strength, name: name, side: side)
       reset_waiting_to_kick!
     end
 
