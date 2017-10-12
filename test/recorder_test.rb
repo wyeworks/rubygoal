@@ -108,6 +108,20 @@ module Rubygoal
       assert_in_delta 115, frames.last[:time], 0.001
     end
 
+    def test_recorded_frame_with_last_kick
+      Rubygoal.configuration.record_last_kick = true
+      name, player = @game.team_home.players.first
+      player.position = @game.ball.position
+      player.kick(@game.ball, Position.new(100, 100))
+      @game.update
+
+      last_frame = recorder.to_hash[:frames].last
+
+      assert !last_frame[:last_kick].nil?
+      assert_equal name, last_frame[:last_kick][0]
+      assert_equal :home, last_frame[:last_kick][1]
+    end
+
     private
 
     attr_reader :game, :recorder
