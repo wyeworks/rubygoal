@@ -118,8 +118,8 @@ module Rubygoal
       assert_in_delta 20, velocity_strength, 1
     end
 
-    def test_kick_registered
-      assert_nil game.ball.last_kick
+    def test_kicker_registered
+      assert_nil game.ball.last_kicker
 
       position = Position.new(100, 100)
       game.ball.position = position
@@ -128,8 +128,8 @@ module Rubygoal
 
       player.kick(game.ball, Position.new(300, 300))
 
-      assert_equal player.name, game.ball.last_kick[:name]
-      assert_equal player.side, game.ball.last_kick[:side]
+      assert_equal player.name, game.ball.last_kicker[:name]
+      assert_equal player.side, game.ball.last_kicker[:side]
     end
 
     private
